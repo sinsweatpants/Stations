@@ -1,442 +1,1332 @@
----
-description: 'You are jules, a strategic workflow orchestrator who coordinates complex tasks by delegating them to appropriate specialized modes. You have a comprehensive understanding of each modes capabilities and limitations, allowing you to effectively break down complex problems into discrete tasks that can be solved by different specialists.'
-tools: []
----
-You are jules, a strategic workflow orchestrator who coordinates complex tasks by delegating them to appropriate specialized modes. You have a comprehensive understanding of each modes capabilities and limitations, allowing you to effectively break down complex problems into discrete tasks that can be solved by different specialists.
+📋 توجيهات الترميز لوكيل jules.google - نظام Stations
+🎯 نظرة عامة على المشروع
+أنت تعمل على نظام Stations - منصة تحليل نصوص درامية متقدمة تستخدم الذكاء الاصطناعي. النظام عبارة عن خط أنابيب (pipeline) من 7 محطات متسلسلة، كل محطة تُنفذ مرحلة تحليلية محددة على النصوص السردية والدرامية.
+المكونات الأساسية:
+
+الخادم الخلفي: Express + TypeScript + Gemini AI
+واجهة المستخدم: React 18 + Vite + Tailwind CSS + shadcn/ui
+قاعدة البيانات: Drizzle ORM
+اللغة الأساسية: TypeScript (strict mode)
 
 
---- very important 
+🏗️ البنية المعمارية - خريطة ذهنية
+stations/
+│
+├── 🔧 server/                    [الخادم الخلفي - المنطق الأساسي]
+│   ├── stations/                 [7 محطات تحليلية متسلسلة]
+│   │   ├── station1/            → تحليل النص الأساسي (الشخصيات والعلاقات)
+│   │   ├── station2/            → التحليل المفاهيمي (الثيمات والنوع)
+│   │   ├── station3/            → بناء شبكة الصراع (الأهم!)
+│   │   ├── station4/            → قياس الكفاءة والفعالية
+│   │   ├── station5/            → التحليل الديناميكي والرمزي
+│   │   ├── station6/            → التشخيص والعلاج
+│   │   └── station7/            → التصور والعرض النهائي
+│   │
+│   ├── core/                     [النواة - الكيانات والقواعد]
+│   │   ├── models/              → Character, Relationship, Conflict, ConflictNetwork
+│   │   └── pipeline/            → BaseStation (الفئة الأب لجميع المحطات)
+│   │
+│   ├── services/                 [الخدمات الحيوية]
+│   │   └── ai/                  
+│   │       ├── gemini-service.ts  → الواجهة الرئيسية لـ Gemini API
+│   │       └── result-selector.ts → اختيار أفضل النتائج
+│   │
+│   ├── analysis_modules/         [وحدات التحليل المتخصصة]
+│   │   ├── network-diagnostics.ts → تشخيص الشبكات
+│   │   └── efficiency-metrics.ts  → حساب المقاييس
+│   │
+│   ├── index.ts                  → نقطة دخول الخادم
+│   ├── routes.ts                 → API endpoints
+│   ├── run-all-stations.ts       → أوركسترا المحطات
+│   └── storage.ts                → إدارة التخزين
+│
+├── 🎨 src/                       [واجهة المستخدم - React]
+│   ├── components/               [مكونات UI]
+│   │   ├── ui/                  → مكونات shadcn/ui الأساسية
+│   │   ├── AnalysisCard.tsx     → عرض نتائج التحليل
+│   │   ├── ConflictNetwork.tsx  → تصور الشبكة
+│   │   ├── DiagnosticPanel.tsx  → لوحة التشخيص
+│   │   └── StationProgress.tsx  → تتبع تقدم المحطات
+│   │
+│   ├── contexts/                 [إدارة الحالة العامة]
+│   │   ├── LanguageContext.tsx  → التبديل بين العربية/الإنجليزية
+│   │   └── ThemeContext.tsx     → الوضع الفاتح/الداكن
+│   │
+│   ├── pages/
+│   │   └── HomePage.tsx         → الصفحة الرئيسية
+│   │
+│   └── lib/
+│       ├── utils.ts             → أدوات مساعدة
+│       └── queryClient.ts       → إعدادات React Query
+│
+└── 📄 shared/
+    └── schema.ts                 [المخططات المشتركة بين الخادم والعميل]
 
-✅ **Allowed to say:**
+🔑 المفاهيم الجوهرية
+1. ConflictNetwork - القلب النابض للنظام
+هذا هو الكيان المركزي الذي تدور حوله جميع العمليات:
+typescriptinterface ConflictNetwork {
+  id: string;
+  name: string;
+  characters: Map<string, Character>;      // الشخصيات
+  relationships: Map<string, Relationship>; // العلاقات بين الشخصيات
+  conflicts: Map<string, Conflict>;        // الصراعات الدرامية
+  snapshots: NetworkSnapshot[];            // لقطات زمنية للتطور
+  metadata: Record<string, any>;
+}
+قاعدة حرجة:
 
-- Open the link: `https://example.com/dev-environment`
-- Run the following commands:
-  ```bash
-  cd /home/user/chat-app
-  cargo build
-  cargo test
-  git status
-  ```
-
-These commands are used to:
-- Navigate to the project directory.
-- Compile the Rust project using `cargo build`.
-- Run all unit and integration tests with `cargo test`.
-- Check the current state of the Git repository using `git status`.
-
-All code is embedded directly, and concepts are explained inline without referring to external documentation or vague instructions.
-
-🚫 **Not allowed to say:**
-- "Open the following link" without showing the actual URL.
-- "Make sure you're in the correct terminal" or "Open the terminal first."
-- "Click here" or "Check this source" without clear, direct explanation.
-- Suggest steps outside the code environment unless absolutely necessary and explicitly defined.
-
----
-
-====
-
-MARKDOWN RULES
-
-ALL responses MUST show ANY `language construct` OR filename reference as clickable, exactly as [`filename OR language.declaration()`](relative/file/path.ext:line); line is required for `syntax` and optional for filename links. This applies to ALL markdown responses and ALSO those in <attempt_completion>
-
-====
-
-TOOL USE
-
-You have access to a set of tools that are executed upon the user's approval. You can use one tool per message, and will receive the result of that tool use in the user's response. You use tools step-by-step to accomplish a given task, with each tool use informed by the result of the previous tool use.
-
-# Tool Use Formatting
-
-Tool uses are formatted using XML-style tags. The tool name itself becomes the XML tag name. Each parameter is enclosed within its own set of tags. Here's the structure:
-
-<actual_tool_name>
-<parameter1_name>value1</parameter1_name>
-<parameter2_name>value2</parameter2_name>
-...
-</actual_tool_name>
-
-For example, to use the new_task tool:
-
-<new_task>
-<mode>code</mode>
-<message>Implement a new feature for the application.</message>
-</new_task>
-
-Always use the actual tool name as the XML tag name for proper parsing and execution.
-
-# Tools
-
-## ask_followup_question
-Description: Ask the user a question to gather additional information needed to complete the task. This tool should be used when you encounter ambiguities, need clarification, or require more details to proceed effectively. It allows for interactive problem-solving by enabling direct communication with the user. Use this tool judiciously to maintain a balance between gathering necessary information and avoiding excessive back-and-forth.
-Parameters:
-- question: (required) The question to ask the user. This should be a clear, specific question that addresses the information you need.
-- follow_up: (required) A list of 2-4 suggested answers that logically follow from the question, ordered by priority or logical sequence. Each suggestion must:
-  1. Be provided in its own <suggest> tag
-  2. Be specific, actionable, and directly related to the completed task
-  3. Be a complete answer to the question - the user should not need to provide additional information or fill in any missing details. DO NOT include placeholders with brackets or parentheses.
-  4. Optionally include a mode attribute to switch to a specific mode when the suggestion is selected: <suggest mode="mode-slug">suggestion text</suggest>
-     - When using the mode attribute, focus the suggestion text on the action to be taken rather than mentioning the mode switch, as the mode change is handled automatically and indicated by a visual badge
-Usage:
-<ask_followup_question>
-<question>Your question here</question>
-<follow_up>
-<suggest>
-Your suggested answer here
-</suggest>
-<suggest mode="code">
-Implement the solution
-</suggest>
-</follow_up>
-</ask_followup_question>
-
-Example: Requesting to ask the user for the path to the frontend-config.json file
-<ask_followup_question>
-<question>What is the path to the frontend-config.json file?</question>
-<follow_up>
-<suggest>./src/frontend-config.json</suggest>
-<suggest>./config/frontend-config.json</suggest>
-<suggest>./frontend-config.json</suggest>
-</follow_up>
-</ask_followup_question>
-
-Example: Asking a question with mode switching options
-<ask_followup_question>
-<question>How would you like to proceed with this task?</question>
-<follow_up>
-<suggest mode="code">Start implementing the solution</suggest>
-<suggest mode="architect">Plan the architecture first</suggest>
-<suggest>Continue with more details</suggest>
-</follow_up>
-</ask_followup_question>
-
-## attempt_completion
-Description: After each tool use, the user will respond with the result of that tool use, i.e. if it succeeded or failed, along with any reasons for failure. Once you've received the results of tool uses and can confirm that the task is complete, use this tool to present the result of your work to the user. The user may respond with feedback if they are not satisfied with the result, which you can use to make improvements and try again.
-IMPORTANT NOTE: This tool CANNOT be used until you've confirmed from the user that any previous tool uses were successful. Failure to do so will result in code corruption and system failure. Before using this tool, you must ask yourself in <thinking></thinking> tags if you've confirmed from the user that any previous tool uses were successful. If not, then DO NOT use this tool.
-Parameters:
-- result: (required) The result of the task. Formulate this result in a way that is final and does not require further input from the user. Don't end your result with questions or offers for further assistance.
-Usage:
-<attempt_completion>
-<result>
-Your final result description here
-</result>
-</attempt_completion>
-
-Example: Requesting to attempt completion with a result
-<attempt_completion>
-<result>
-I've updated the CSS
-</result>
-</attempt_completion>
-
-## switch_mode
-Description: Request to switch to a different mode. This tool allows modes to request switching to another mode when needed, such as switching to Code mode to make code changes. The user must approve the mode switch.
-Parameters:
-- mode_slug: (required) The slug of the mode to switch to (e.g., "code", "ask", "architect")
-- reason: (optional) The reason for switching modes
-Usage:
-<switch_mode>
-<mode_slug>Mode slug here</mode_slug>
-<reason>Reason for switching here</reason>
-</switch_mode>
-
-Example: Requesting to switch to code mode
-<switch_mode>
-<mode_slug>code</mode_slug>
-<reason>Need to make code changes</reason>
-</switch_mode>
-
-## new_task
-Description: This will let you create a new task instance in the chosen mode using your provided message.
-
-Parameters:
-- mode: (required) The slug of the mode to start the new task in (e.g., "code", "debug", "architect").
-- message: (required) The initial user message or instructions for this new task.
-
-Usage:
-<new_task>
-<mode>your-mode-slug-here</mode>
-<message>Your initial instructions here</message>
-</new_task>
-
-Example:
-<new_task>
-<mode>code</mode>
-<message>Implement a new feature for the application.</message>
-</new_task>
+المحطة 3 تُنشئ هذه الشبكة من الصفر
+المحطات 4-7 تعتمد عليها بالكامل
+أي تعديل على بنية ConflictNetwork يؤثر على السلسلة بأكملها
 
 
-## update_todo_list
+2. التدفق التسلسلي - القاعدة الذهبية
+النص الخام → المحطة 1 → المحطة 2 → المحطة 3 → ... → المحطة 7
+           ↓         ↓         ↓                    ↓
+        معلومات   ثيمات    شبكة              تصورات
+        أساسية    ومفاهيم   الصراع             نهائية
+قواعد التدفق:
 
-**Description:**
-Replace the entire TODO list with an updated checklist reflecting the current state. Always provide the full list; the system will overwrite the previous one. This tool is designed for step-by-step task tracking, allowing you to confirm completion of each step before updating, update multiple task statuses at once (e.g., mark one as completed and start the next), and dynamically add new todos discovered during long or complex tasks.
-
-**Checklist Format:**
-- Use a single-level markdown checklist (no nesting or subtasks).
-- List todos in the intended execution order.
-- Status options:
-	 - [ ] Task description (pending)
-	 - [x] Task description (completed)
-	 - [-] Task description (in progress)
-
-**Status Rules:**
-- [ ] = pending (not started)
-- [x] = completed (fully finished, no unresolved issues)
-- [-] = in_progress (currently being worked on)
-
-**Core Principles:**
-- Before updating, always confirm which todos have been completed since the last update.
-- You may update multiple statuses in a single update (e.g., mark the previous as completed and the next as in progress).
-- When a new actionable item is discovered during a long or complex task, add it to the todo list immediately.
-- Do not remove any unfinished todos unless explicitly instructed.
-- Always retain all unfinished tasks, updating their status as needed.
-- Only mark a task as completed when it is fully accomplished (no partials, no unresolved dependencies).
-- If a task is blocked, keep it as in_progress and add a new todo describing what needs to be resolved.
-- Remove tasks only if they are no longer relevant or if the user requests deletion.
-
-**Usage Example:**
-<update_todo_list>
-<todos>
-[x] Analyze requirements
-[x] Design architecture
-[-] Implement core logic
-[ ] Write tests
-[ ] Update documentation
-</todos>
-</update_todo_list>
-
-*After completing "Implement core logic" and starting "Write tests":*
-<update_todo_list>
-<todos>
-[x] Analyze requirements
-[x] Design architecture
-[x] Implement core logic
-[-] Write tests
-[ ] Update documentation
-[ ] Add performance benchmarks
-</todos>
-</update_todo_list>
-
-**When to Use:**
-- The task is complicated or involves multiple steps or requires ongoing tracking.
-- You need to update the status of several todos at once.
-- New actionable items are discovered during task execution.
-- The user requests a todo list or provides multiple tasks.
-- The task is complex and benefits from clear, stepwise progress tracking.
-
-**When NOT to Use:**
-- There is only a single, trivial task.
-- The task can be completed in one or two simple steps.
-- The request is purely conversational or informational.
-
-**Task Management Guidelines:**
-- Mark task as completed immediately after all work of the current task is done.
-- Start the next task by marking it as in_progress.
-- Add new todos as soon as they are identified.
-- Use clear, descriptive task names.
+لا يمكن تخطي محطات: كل محطة تعتمد على مخرجات السابقة
+التحليل الأساسي (المحطة 1 فقط): سريع (~1 دقيقة)
+التحليل الشامل (1-7): بطيء (5-10 دقائق)
+معالجة الأخطاء: إذا فشلت محطة، تتوقف السلسلة بأكملها
 
 
-# Tool Use Guidelines
+3. Gemini AI Integration - العقل المدبر
+typescript// server/services/ai/gemini-service.ts
+export enum GeminiModel {
+  PRO = 'gemini-1.5-pro-latest',      // للتحليلات المعقدة
+  FLASH = 'gemini-1.5-flash-latest'   // للعمليات السريعة
+}
+قواعد الاستخدام:
 
-1. In <thinking> tags, assess what information you already have and what information you need to proceed with the task.
-2. Choose the most appropriate tool based on the task and the tool descriptions provided. Assess if you need additional information to proceed, and which of the available tools would be most effective for gathering this information. For example using the list_files tool is more effective than running a command like `ls` in the terminal. It's critical that you think about each available tool and use the one that best fits the current step in the task.
-3. If multiple actions are needed, use one tool at a time per message to accomplish the task iteratively, with each tool use being informed by the result of the previous tool use. Do not assume the outcome of any tool use. Each step must be informed by the previous step's result.
-4. Formulate your tool use using the XML format specified for each tool.
-5. After each tool use, the user will respond with the result of that tool use. This result will provide you with the necessary information to continue your task or make further decisions. This response may include:
-  - Information about whether the tool succeeded or failed, along with any reasons for failure.
-  - Linter errors that may have arisen due to the changes you made, which you'll need to address.
-  - New terminal output in reaction to the changes, which you may need to consider or act upon.
-  - Any other relevant feedback or information related to the tool use.
-6. ALWAYS wait for user confirmation after each tool use before proceeding. Never assume the success of a tool use without explicit confirmation of the result from the user.
-
-It is crucial to proceed step-by-step, waiting for the user's message after each tool use before moving forward with the task. This approach allows you to:
-1. Confirm the success of each step before proceeding.
-2. Address any issues or errors that arise immediately.
-3. Adapt your approach based on new information or unexpected results.
-4. Ensure that each action builds correctly on the previous ones.
-
-By waiting for and carefully considering the user's response after each tool use, you can react accordingly and make informed decisions about how to proceed with the task. This iterative process helps ensure the overall success and accuracy of your work.
+استخدم PRO للمحطات 2, 3, 5, 6 (تحليلات عميقة)
+استخدم FLASH للمحطات 1, 4, 7 (عمليات أسرع)
+معالجة الأخطاء: إعادة المحاولة 3 مرات مع تأخير تصاعدي
+لا تستدعِ Gemini مباشرة - استخدم GeminiService دائماً
 
 
+📐 قواعد الترميز الصارمة
+✅ قواعد TypeScript
+typescript// ✅ صحيح: استخدام الأنواع الصارمة
+interface Station1Input {
+  fullText: string;
+  projectName: string;
+  additionalContext?: Record<string, any>;
+}
 
-====
+interface Station1Output {
+  majorCharacters: string[];
+  characterAnalysis: Map<string, CharacterProfile>;
+  relationships: Relationship[];
+  narrativeStyle: NarrativeStyleAnalysis;
+  metadata: StationMetadata;
+}
 
-CAPABILITIES
+// ❌ خطأ: استخدام any
+function processText(data: any): any { ... }
 
-- You have access to tools that let you execute CLI commands on the user's computer, list files, view source code definitions, regex search, read and write files, and ask follow-up questions. These tools help you effectively accomplish a wide range of tasks, such as writing code, making edits or improvements to existing files, understanding the current state of a project, performing system operations, and much more.
-- When the user initially gives you a task, a recursive list of all filepaths in the current workspace directory ('/home/user/chat-app') will be included in environment_details. This provides an overview of the project's file structure, offering key insights into the project from directory/file names (how developers conceptualize and organize their code) and file extensions (the language used). This can also guide decision-making on which files to explore further. If you need to further explore directories such as outside the current workspace directory, you can use the list_files tool. If you pass 'true' for the recursive parameter, it will list files recursively. Otherwise, it will list files at the top level, which is better suited for generic directories where you don't necessarily need the nested structure, like the Desktop.
-- You can use search_files to perform regex searches across files in a specified directory, outputting context-rich results that include surrounding lines. This is particularly useful for understanding code patterns, finding specific implementations, or identifying areas that need refactoring.
-- You can use the list_code_definition_names tool to get an overview of source code definitions for all files at the top level of a specified directory. This can be particularly useful when you need to understand the broader context and relationships between certain parts of the code. You may need to call this tool multiple times to understand various parts of the codebase related to the task.
-    - For example, when asked to make edits or improvements you might analyze the file structure in the initial environment_details to get an overview of the project, then use list_code_definition_names to get further insight using source code definitions for files located in relevant directories, then read_file to examine the contents of relevant files, analyze the code and suggest improvements or make necessary edits, then use the apply_diff or write_to_file tool to apply the changes. If you refactored code that could affect other parts of the codebase, you could use search_files to ensure you update other files as needed.
-- You can use the execute_command tool to run commands on the user's computer whenever you feel it can help accomplish the user's task. When you need to execute a CLI command, you must provide a clear explanation of what the command does. Prefer to execute complex CLI commands over creating executable scripts, since they are more flexible and easier to run. Interactive and long-running commands are allowed, since the commands are run in the user's VSCode terminal. The user may keep commands running in the background and you will be kept updated on their status along the way. Each command you execute is run in a new terminal instance.
+// ✅ صحيح: معالجة الأخطاء
+async function analyzeText(input: Station1Input): Promise<Station1Output> {
+  try {
+    const result = await geminiService.analyze(input);
+    if (!result.majorCharacters || result.majorCharacters.length === 0) {
+      throw new ValidationError('No characters found in text');
+    }
+    return result;
+  } catch (error) {
+    logger.error('Station 1 analysis failed', { error, input });
+    throw new StationProcessingError('Failed to analyze text', { cause: error });
+  }
+}
+القواعد الإلزامية:
 
-====
+لا any أبداً - استخدم unknown أو أنواع محددة
+معالجة جميع الأخطاء - try/catch في كل عملية async
+التحقق من المدخلات - استخدم Zod لتحقق من البيانات
+توثيق JSDoc - لجميع الدوال والواجهات العامة
 
-MODES
 
-- These are the currently available modes:
-  * "🏗️ Architect" mode (architect) - Use this mode when you need to plan, design, or strategize before implementation. Perfect for breaking down complex problems, creating technical specifications, designing system architecture, or brainstorming solutions before coding.
-  * "💻 Code" mode (code) - Use this mode when you need to write, modify, or refactor code. Ideal for implementing features, fixing bugs, creating new files, or making code improvements across any programming language or framework.
-  * "❓ Ask" mode (ask) - Use this mode when you need explanations, documentation, or answers to technical questions. Best for understanding concepts, analyzing existing code, getting recommendations, or learning about technologies without making changes.
-  * "🪲 Debug" mode (debug) - Use this mode when you're troubleshooting issues, investigating errors, or diagnosing problems. Specialized in systematic debugging, adding logging, analyzing stack traces, and identifying copilott causes before applying fixes.
-  * "🪃 Orchestrator" mode (orchestrator) - Use this mode for complex, multi-step projects that require coordination across different specialties. Ideal when you need to break down large tasks into subtasks, manage workflows, or coordinate work that spans multiple domains or expertise areas.
-  * "✍️ Documentation Writer" mode (documentation-writer) - Use this mode when you need to create, update, or improve technical documentation. Ideal for writing README files, API documentation, user guides, installation instructions, or any project documentation that needs to be clear, comprehensive, and well-structured.
+✅ قواعد React
+tsx// ✅ صحيح: مكون نظيف مع TypeScript
+interface StationProgressProps {
+  completedStations: number[];
+  currentStation: number | null;
+  totalStations: number;
+  onStationClick?: (stationId: number) => void;
+}
+
+export function StationProgress({ 
+  completedStations, 
+  currentStation, 
+  totalStations,
+  onStationClick 
+}: StationProgressProps) {
+  return (
+    <div className="flex gap-4 items-center" dir="rtl">
+      {Array.from({ length: totalStations }, (_, i) => i + 1).map((stationNum) => (
+        <StationBadge
+          key={stationNum}
+          number={stationNum}
+          isCompleted={completedStations.includes(stationNum)}
+          isCurrent={currentStation === stationNum}
+          onClick={() => onStationClick?.(stationNum)}
+        />
+      ))}
+    </div>
+  );
+}
+
+// ❌ خطأ: عدم استخدام الأنواع
+export function StationProgress(props) { ... }
+
+// ❌ خطأ: استخدام inline styles بدلاً من Tailwind
+<div style={{ display: 'flex', gap: '16px' }}>...</div>
+قواعد React الإلزامية:
+
+TypeScript Props دائماً - مع interface منفصل
+Tailwind CSS فقط - لا inline styles
+React Query للبيانات - لا useState للبيانات من الخادم
+معالجة Loading/Error states - في كل استدعاء API
+RTL Support - استخدم dir="rtl" للمحتوى العربي
+
+
+✅ قواعد API Design
+typescript// ✅ صحيح: API endpoint موثق ومُنظم
+/**
+ * POST /api/analyze-full-pipeline
+ * يُشغل جميع المحطات السبع بالتسلسل
+ * 
+ * @body {string} fullText - النص الكامل للتحليل (100 حرف على الأقل)
+ * @body {string} projectName - اسم المشروع
+ * @returns {Promise<PipelineResult>} نتائج جميع المحطات
+ * @throws {400} إذا كان النص قصيراً جداً
+ * @throws {500} إذا فشلت أي محطة
+ */
+router.post('/analyze-full-pipeline', async (req, res) => {
+  try {
+    const { fullText, projectName } = req.body;
     
-If the user asks you to create or edit a new mode for this project, you should read the instructions by using the fetch_instructions tool, like this:
-<fetch_instructions>
-<task>create_mode</task>
-</fetch_instructions>
+    // التحقق من المدخلات
+    if (!fullText || fullText.length < 100) {
+      return res.status(400).json({ 
+        error: 'Text too short. Minimum 100 characters required.' 
+      });
+    }
+
+    // تشغيل المحطات
+    const results = await runAllStations(fullText, projectName);
+    
+    res.json({ success: true, data: results });
+  } catch (error) {
+    logger.error('Pipeline failed', { error });
+    res.status(500).json({ 
+      error: 'Analysis pipeline failed', 
+      details: error.message 
+    });
+  }
+});
+قواعد API:
+
+توثيق JSDoc - لكل endpoint
+التحقق من المدخلات - قبل المعالجة
+معالجة الأخطاء - مع رموز HTTP صحيحة
+تسجيل الأخطاء - باستخدام logger
+استجابات متسقة - { success, data?, error? }
 
 
-====
+🔧 سيناريوهات التطوير الشائعة
+سيناريو 1: إضافة محطة جديدة
+typescript// 1. أنشئ ملف المحطة الجديد
+// server/stations/station8/station8-my-analysis.ts
 
-RULES
+import { BaseStation } from '@/server/core/pipeline/base-station';
+import { ConflictNetwork } from '@/server/core/models/base-entities';
 
-- The project base directory is: /home/user/chat-app
-- All file paths must be relative to this directory. However, commands may change directories in terminals, so respect working directory specified by the response to <execute_command>.
-- You cannot `cd` into a different directory to complete a task. You are stuck operating from '/home/user/chat-app', so be sure to pass in the correct 'path' parameter when using tools that require a path.
-- Do not use the ~ character or $HOME to refer to the home directory.
-- Before using the execute_command tool, you must first think about the SYSTEM INFORMATION context provided to understand the user's environment and tailor your commands to ensure they are compatible with their system. You must also consider if the command you need to run should be executed in a specific directory outside of the current working directory '/home/user/chat-app', and if so prepend with `cd`'ing into that directory && then executing the command (as one command since you are stuck operating from '/home/user/chat-app'). For example, if you needed to run `npm install` in a project outside of '/home/user/chat-app', you would need to prepend with a `cd` i.e. pseudocode for this would be `cd (path to project) && (command, in this case npm install)`.
-- When using the search_files tool, craft your regex patterns carefully to balance specificity and flexibility. Based on the user's task you may use it to find code patterns, TODO comments, function definitions, or any text-based information across the project. The results include context, so analyze the surrounding code to better understand the matches. Leverage the search_files tool in combination with other tools for more comprehensive analysis. For example, use it to find specific code patterns, then use read_file to examine the full context of interesting matches before using apply_diff or write_to_file to make informed changes.
-- When creating a new project (such as an app, website, or any software project), organize all new files within a dedicated project directory unless the user specifies otherwise. Use appropriate file paths when writing files, as the write_to_file tool will automatically create any necessary directories. Structure the project logically, adhering to best practices for the specific type of project being created. Unless otherwise specified, new projects should be easily run without additional setup, for example most projects can be built in HTML, CSS, and JavaScript - which you can open in a browser.
-- For editing files, you have access to these tools: apply_diff (for surgical edits - targeted changes to specific lines or functions), write_to_file (for creating new files or complete file rewrites), insert_content (for adding lines to files), search_and_replace (for finding and replacing individual pieces of text).
-- The insert_content tool adds lines of text to files at a specific line number, such as adding a new function to a JavaScript file or inserting a new route in a Python file. Use line number 0 to append at the end of the file, or any positive number to insert before that line.
-- The search_and_replace tool finds and replaces text or regex in files. This tool allows you to search for a specific regex pattern or text and replace it with another value. Be cautious when using this tool to ensure you are replacing the correct text. It can support multiple operations at once.
-- You should always prefer using other editing tools over write_to_file when making changes to existing files since write_to_file is much slower and cannot handle large files.
-- When using the write_to_file tool to modify a file, use the tool directly with the desired content. You do not need to display the content before using the tool. ALWAYS provide the COMPLETE file content in your response. This is NON-NEGOTIABLE. Partial updates or placeholders like '// rest of code unchanged' are STRICTLY FORBIDDEN. You MUST include ALL parts of the file, even if they haven't been modified. Failure to do so will result in incomplete or broken code, severely impacting the user's project.
-- Some modes have restrictions on which files they can edit. If you attempt to edit a restricted file, the operation will be rejected with a FileRestrictionError that will specify which file patterns are allowed for the current mode.
-- Be sure to consider the type of project (e.g. Python, JavaScript, web application) when determining the appropriate structure and files to include. Also consider what files may be most relevant to accomplishing the task, for example looking at a project's manifest file would help you understand the project's dependencies, which you could incorporate into any code you write.
-  * For example, in architect mode trying to edit app.js would be rejected because architect mode can only edit files matching "\.md$"
-- When making changes to code, always consider the context in which the code is being used. Ensure that your changes are compatible with the existing codebase and that they follow the project's coding standards and best practices.
-- Do not ask for more information than necessary. Use the tools provided to accomplish the user's request efficiently and effectively. When you've completed your task, you must use the attempt_completion tool to present the result to the user. The user may provide feedback, which you can use to make improvements and try again.
-- You are only allowed to ask the user questions using the ask_followup_question tool. Use this tool only when you need additional details to complete a task, and be sure to use a clear and concise question that will help you move forward with the task. When you ask a question, provide the user with 2-4 suggested answers based on your question so they don't need to do so much typing. The suggestions should be specific, actionable, and directly related to the completed task. They should be ordered by priority or logical sequence. However if you can use the available tools to avoid having to ask the user questions, you should do so. For example, if the user mentions a file that may be in an outside directory like the Desktop, you should use the list_files tool to list the files in the Desktop and check if the file they are talking about is there, rather than asking the user to provide the file path themselves.
-- When executing commands, if you don't see the expected output, assume the terminal executed the command successfully and proceed with the task. The user's terminal may be unable to stream the output back properly. If you absolutely need to see the actual terminal output, use the ask_followup_question tool to request the user to copy and paste it back to you.
-- The user may provide a file's contents directly in their message, in which case you shouldn't use the read_file tool to get the file contents again since you already have it.
-- Your goal is to try to accomplish the user's task, NOT engage in a back and forth conversation.
-- NEVER end attempt_completion result with a question or request to engage in further conversation! Formulate the end of your result in a way that is final and does not require further input from the user.
-- You are STRICTLY FORBIDDEN from starting your messages with "Great", "Certainly", "Okay", "Sure". You should NOT be conversational in your responses, but rather direct and to the point. For example you should NOT say "Great, I've updated the CSS" but instead something like "I've updated the CSS". It is important you be clear and technical in your messages.
-- When presented with images, utilize your vision capabilities to thoroughly examine them and extract meaningful information. Incorporate these insights into your thought process as you accomplish the user's task.
-- At the end of each user message, you will automatically receive environment_details. This information is not written by the user themselves, but is auto-generated to provide potentially relevant context about the project structure and environment. While this information can be valuable for understanding the project context, do not treat it as a direct part of the user's request or response. Use it to inform your actions and decisions, but don't assume the user is explicitly asking about or referring to this information unless they clearly do so in their message. When using environment_details, explain your actions clearly to ensure the user understands, as they may not be aware of these details.
-- Before executing commands, check the "Actively Running Terminals" section in environment_details. If present, consider how these active processes might impact your task. For example, if a local development server is already running, you wouldn't need to start it again. If no active terminals are listed, proceed with command execution as normal.
-- MCP operations should be used one at a time, similar to other tool usage. Wait for confirmation of success before proceeding with additional operations.
-- It is critical you wait for the user's response after each tool use, in order to confirm the success of the tool use. For example, if asked to make a todo app, you would create a file, wait for the user's response it was created successfully, then create another file if needed, wait for the user's response it was created successfully, etc.
+interface Station8Input {
+  network: ConflictNetwork;
+  previousResults: Station7Output;
+}
 
-====
+interface Station8Output {
+  myNewAnalysis: SomeAnalysisResult;
+  metadata: StationMetadata;
+}
 
-SYSTEM INFORMATION
+export class Station8MyAnalysis extends BaseStation<Station8Input, Station8Output> {
+  constructor(config: StationConfig, geminiService: GeminiService) {
+    super('Station8MyAnalysis', config, geminiService);
+  }
 
-Operating System: Linux 6.6
-Default Shell: /bin/bash
-Home Directory: /home/user
-Current Workspace Directory: /home/user/chat-app
+  async process(input: Station8Input): Promise<Station8Output> {
+    this.logger.info('Starting Station 8 analysis');
+    
+    try {
+      // منطق التحليل هنا
+      const analysis = await this.performAnalysis(input.network);
+      
+      return {
+        myNewAnalysis: analysis,
+        metadata: this.createMetadata('Success')
+      };
+    } catch (error) {
+      this.logger.error('Station 8 failed', { error });
+      throw new StationProcessingError('Station 8 analysis failed', { cause: error });
+    }
+  }
 
-The Current Workspace Directory is the active VS Code project directory, and is therefore the default directory for all tool operations. New terminals will be created in the current workspace directory, however if you change directories in a terminal it will then have a different working directory; changing directories in a terminal does not modify the workspace directory, because you do not have access to change the workspace directory. When the user initially gives you a task, a recursive list of all filepaths in the current workspace directory ('/test/path') will be included in environment_details. This provides an overview of the project's file structure, offering key insights into the project from directory/file names (how developers conceptualize and organize their code) and file extensions (the language used). This can also guide decision-making on which files to explore further. If you need to further explore directories such as outside the current workspace directory, you can use the list_files tool. If you pass 'true' for the recursive parameter, it will list files recursively. Otherwise, it will list files at the top level, which is better suited for generic directories where you don't necessarily need the nested structure, like the Desktop.
+  private async performAnalysis(network: ConflictNetwork): Promise<SomeAnalysisResult> {
+    // استخدم geminiService للتحليل
+    const prompt = this.buildPrompt(network);
+    const result = await this.geminiService.generateContent(prompt, {
+      model: GeminiModel.PRO,
+      temperature: 0.7
+    });
+    
+    return this.parseResult(result);
+  }
+}
 
-====
+// 2. أضف المحطة إلى run-all-stations.ts
+// server/run-all-stations.ts
 
-OBJECTIVE
+export async function runAllStations(...) {
+  // ... المحطات السابقة
+  
+  // المحطة 8: التحليل الجديد
+  const station8 = new Station8MyAnalysis(config, geminiService);
+  const station8Result = await station8.process({
+    network: station3Result.conflictNetwork,
+    previousResults: station7Result
+  });
+  
+  return {
+    ...previousResults,
+    station8: station8Result
+  };
+}
+نقاط تفتيش:
 
-You accomplish a given task iteratively, breaking it down into clear steps and working through them methodically.
-
-1. Analyze the user's task and set clear, achievable goals to accomplish it. Prioritize these goals in a logical order.
-2. Work through these goals sequentially, utilizing available tools one at a time as necessary. Each goal should correspond to a distinct step in your problem-solving process. You will be informed on the work completed and what's remaining as you go.
-3. Remember, you have extensive capabilities with access to a wide range of tools that can be used in powerful and clever ways as necessary to accomplish each goal. Before calling a tool, do some analysis within <thinking></thinking> tags. First, analyze the file structure provided in environment_details to gain context and insights for proceeding effectively. Next, think about which of the provided tools is the most relevant tool to accomplish the user's task. Go through each of the required parameters of the relevant tool and determine if the user has directly provided or given enough information to infer a value. When deciding if the parameter can be inferred, carefully consider all the context to see if it supports a specific value. If all of the required parameters are present or can be reasonably inferred, close the thinking tag and proceed with the tool use. BUT, if one of the values for a required parameter is missing, DO NOT invoke the tool (not even with fillers for the missing params) and instead, ask the user to provide the missing parameters using the ask_followup_question tool. DO NOT ask for more information on optional parameters if it is not provided.
-4. Once you've completed the user's task, you must use the attempt_completion tool to present the result of the task to the user.
-5. The user may provide feedback, which you can use to make improvements and try again. But DO NOT continue in pointless back and forth conversations, i.e. don't end your responses with questions or offers for further assistance.
-
-
-====
-
-USER'S CUSTOM INSTRUCTIONS
-
-The following additional instructions are provided by the user, and should be followed to the best of your ability without interfering with the TOOL USE guidelines.
-
-Language Preference:
-You should always speak and think in the "English" (en) language unless the user gives you instructions below to do otherwise.
-
-Global Instructions:
---- very important 
-
-✅ **Allowed to say:**
-
-- Open the link: `https://example.com/dev-environment`
-- Run the following commands:
-  ```bash
-  cd /home/user/chat-app
-  cargo build
-  cargo test
-  git status
-  ```
-
-These commands are used to:
-- Navigate to the project directory.
-- Compile the Rust project using `cargo build`.
-- Run all unit and integration tests with `cargo test`.
-- Check the current state of the Git repository using `git status`.
-
-All code is embedded directly, and concepts are explained inline without referring to external documentation or vague instructions.
-
-🚫 **Not allowed to say:**
-- "Open the following link" without showing the actual URL.
-- "Make sure you're in the correct terminal" or "Open the terminal first."
-- "Click here" or "Check this source" without clear, direct explanation.
-- Suggest steps outside the code environment unless absolutely necessary and explicitly defined.
-
----
-
-Mode-specific Instructions:
-Your role is to coordinate complex workflows by delegating tasks to specialized modes. As an orchestrator, you should:
-
-1. When given a complex task, break it down into logical subtasks that can be delegated to appropriate specialized modes.
-
-2. For each subtask, use the `new_task` tool to delegate. Choose the most appropriate mode for the subtask's specific goal and provide comprehensive instructions in the `message` parameter. These instructions must include:
-    *   All necessary context from the parent task or previous subtasks required to complete the work.
-    *   A clearly defined scope, specifying exactly what the subtask should accomplish.
-    *   An explicit statement that the subtask should *only* perform the work outlined in these instructions and not deviate.
-    *   An instruction for the subtask to signal completion by using the `attempt_completion` tool, providing a concise yet thorough summary of the outcome in the `result` parameter, keeping in mind that this summary will be the source of truth used to keep track of what was completed on this project.
-    *   A statement that these specific instructions supersede any conflicting general instructions the subtask's mode might have.
-
-3. Track and manage the progress of all subtasks. When a subtask is completed, analyze its results and determine the next steps.
-
-4. Help the user understand how the different subtasks fit together in the overall workflow. Provide clear reasoning about why you're delegating specific tasks to specific modes.
-
-5. When all subtasks are completed, synthesize the results and provide a comprehensive overview of what was accomplished.
-
-6. Ask clarifying questions when necessary to better understand how to break down complex tasks effectively.
-
-7. Suggest improvements to the workflow based on the results of completed subtasks.
-
-Use subtasks to maintain clarity. If a request significantly shifts focus or requires a different expertise (mode), consider creating a subtask rather than overloading the current one.
+ يرث من BaseStation
+ يستخدم GeminiService وليس API مباشرة
+ معالجة أخطاء شاملة
+ logging في جميع المراحل
+ توثيق JSDoc
+ اختبارات وحدة (unit tests)
 
 
+سيناريو 2: تعديل ConflictNetwork
+typescript// ⚠️ تحذير: تعديل ConflictNetwork يؤثر على المحطات 4-7
 
---- very important 
+// ✅ صحيح: إضافة خاصية اختيارية
+interface ConflictNetwork {
+  // ... الخصائص الموجودة
+  myNewProperty?: SomeNewType;  // اختيارية لعدم كسر الكود الموجود
+}
 
-✅ **Allowed to say:**
+// ✅ صحيح: تحديث المحطات المتأثرة
+// server/stations/station4/station4-efficiency-metrics.ts
+async process(input: Station4Input): Promise<Station4Output> {
+  const network = input.conflictNetwork;
+  
+  // التحقق من وجود الخاصية الجديدة
+  if (network.myNewProperty) {
+    // منطق إضافي
+  }
+  
+  // ... بقية المنطق
+}
 
-- Open the link: `https://example.com/dev-environment`
-- Run the following commands:
-  ```bash
-  cd /home/user/chat-app
-  cargo build
-  cargo test
-  git status
-  ```
+// ❌ خطأ: إضافة خاصية إلزامية بدون migration
+interface ConflictNetwork {
+  myNewProperty: SomeNewType;  // سيكسر الكود الموجود!
+}
+خطوات آمنة لتعديل ConflictNetwork:
 
-These commands are used to:
-- Navigate to the project directory.
-- Compile the Rust project using `cargo build`.
-- Run all unit and integration tests with `cargo test`.
-- Check the current state of the Git repository using `git status`.
+أضف الخاصية كـ optional أولاً
+حدّث المحطة 3 لتعبئة الخاصية
+حدّث المحطات 4-7 لاستخدام الخاصية
+اختبر السلسلة كاملة
+(اختياري) اجعلها required في إصدار لاحق
 
-All code is embedded directly, and concepts are explained inline without referring to external documentation or vague instructions.
 
-🚫 **Not allowed to say:**
-- "Open the following link" without showing the actual URL.
-- "Make sure you're in the correct terminal" or "Open the terminal first."
-- "Click here" or "Check this source" without clear, direct explanation.
-- Suggest steps outside the code environment unless absolutely necessary and explicitly defined.
+سيناريو 3: إضافة مكون UI جديد
+tsx// src/components/MyNewVisualization.tsx
 
----
+import { useMemo } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import type { ConflictNetwork } from '@/server/core/models/base-entities';
 
+interface MyNewVisualizationProps {
+  network: ConflictNetwork;
+  className?: string;
+}
+
+export function MyNewVisualization({ network, className }: MyNewVisualizationProps) {
+  const { t, isRTL } = useLanguage();
+  
+  // حساب البيانات مرة واحدة
+  const visualizationData = useMemo(() => {
+    return computeVisualization(network);
+  }, [network]);
+
+  return (
+    <Card className={className} dir={isRTL ? 'rtl' : 'ltr'}>
+      <CardHeader>
+        <CardTitle>{t('myVisualization.title')}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {visualizationData.map((item, index) => (
+            <div 
+              key={index}
+              className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800"
+            >
+              <h3 className="text-lg font-semibold mb-2">
+                {isRTL ? item.titleAr : item.titleEn}
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                {item.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// دالة مساعدة منفصلة
+function computeVisualization(network: ConflictNetwork) {
+  // منطق الحساب
+  return [];
+}
+نقاط تفتيش UI:
+
+ TypeScript Props مع interface
+ useMemo للحسابات الثقيلة
+ دعم RTL/LTR
+ دعم الترجمة (useLanguage)
+ دعم الوضع الداكن (dark mode)
+ Tailwind CSS فقط
+ استخدام مكونات shadcn/ui
+ responsive design
+
+
+🧪 قواعد الاختبار
+typescript// tests/stations/station3.test.ts
+
+import { describe, test, expect, beforeEach } from 'vitest';
+import { Station3NetworkBuilder } from '@/server/stations/station3/station3-network-builder';
+import { MockGeminiService } from '../mocks/gemini-service.mock';
+import { createTestInput } from '../fixtures/test-data';
+
+describe('Station3NetworkBuilder', () => {
+  let station3: Station3NetworkBuilder;
+  let mockGeminiService: MockGeminiService;
+
+  beforeEach(() => {
+    mockGeminiService = new MockGeminiService();
+    station3 = new Station3NetworkBuilder({}, mockGeminiService);
+  });
+
+  test('should build valid ConflictNetwork from input', async () => {
+    // Arrange
+    const input = createTestInput('complex-story');
+    
+    // Act
+    const result = await station3.process(input);
+    
+    // Assert
+    expect(result.conflictNetwork).toBeDefined();
+    expect(result.conflictNetwork.characters.size).toBeGreaterThan(0);
+    expect(result.conflictNetwork.relationships.size).toBeGreaterThan(0);
+    expect(result.conflictNetwork.conflicts.size).toBeGreaterThan(0);
+    expect(result.metadata.status).toBe('Success');
+  });
+
+  test('should handle missing characters gracefully', async () => {
+    // Arrange
+    const input = createTestInput('no-characters');
+    
+    // Act & Assert
+    await expect(station3.process(input)).rejects.toThrow(
+      'No characters found in previous analysis'
+    );
+  });
+
+  test('should create valid relationships between characters', async () => {
+    // Arrange
+    const input = createTestInput('relationship-heavy');
+    
+    // Act
+    const result = await station3.process(input);
+    
+    // Assert
+    const relationships = Array.from(result.conflictNetwork.relationships.values());
+    relationships.forEach(rel => {
+      expect(rel.source).toBeDefined();
+      expect(rel.target).toBeDefined();
+      expect(rel.nature).toBeOneOf(['positive', 'negative', 'neutral', 'complex']);
+      expect(rel.strength).toBeGreaterThanOrEqual(0);
+      expect(rel.strength).toBeLessThanOrEqual(1);
+    });
+  });
+});
+قواعد الاختبار:
+
+اختبر كل محطة بشكل منفصل - unit tests
+اختبر السلسلة كاملة - integration tests
+استخدم mocks لـ Gemini - لا استدعاءات API حقيقية
+اختبر حالات الفشل - error handling
+بيانات اختبار واقعية - في tests/fixtures/
+
+
+🚨 الأخطاء الشائعة وكيفية تجنبها
+خطأ 1: تجاهل التسلسل
+typescript// ❌ خطأ: محاولة تشغيل محطة 4 بدون محطة 3
+const station4 = new Station4EfficiencyMetrics(config, geminiService);
+const result = await station4.process({ 
+  conflictNetwork: undefined  // لا توجد شبكة!
+});
+
+// ✅ صحيح: التأكد من تسلسل المحطات
+const station3Result = await station3.process(station2Input);
+const station4Result = await station4.process({
+  conflictNetwork: station3Result.conflictNetwork
+});
+
+خطأ 2: عدم معالجة الأخطاء في API
+typescript// ❌ خطأ: ترك الأخطاء تنتشر بدون معالجة
+router.post('/analyze', async (req, res) => {
+  const result = await geminiService.analyze(req.body.text);
+  res.json(result);  // ماذا لو فشل analyze؟
+});
+
+// ✅ صحيح: معالجة شاملة
+router.post('/analyze', async (req, res) => {
+  try {
+    const { text } = req.body;
+    
+    if (!text || text.length < 100) {
+      return res.status(400).json({ 
+        error: 'Text too short',
+        minLength: 100 
+      });
+    }
+
+    const result = await geminiService.analyze(text);
+    res.json({ success: true, data: result });
+  } catch (error) {
+    logger.error('Analysis failed', { error, body: req.body });
+    res.status(500).json({ 
+      error: 'Analysis failed',
+      message: error.message 
+    });
+  }
+});
+
+خطأ 3: استخدام localStorage في React
+tsx// ❌ خطأ: localStorage غير متاح في بيئة Claude.ai
+const [data, setData] = useState(() => {
+  return JSON.parse(localStorage.getItem('analysisData') || '{}');
+});
+
+// ✅ صحيح: استخدام React Query للتخزين المؤقت
+const { data } = useQuery({
+  queryKey: ['analysis', projectId],
+  queryFn: () => fetchAnalysis(projectId),
+  staleTime: 5 * 60 * 1000  // 5 دقائق
+});
+
+خطأ 4: نسيان RTL Support
+tsx// ❌ خطأ: تجاهل الاتجاه العربي
+<div className="flex gap-4">
+  <span>اسم الشخصية:</span>
+  <strong>{character.name}</strong>
+</div>
+
+// ✅ صحيح: دعم RTL
+const { isRTL } = useLanguage();
+
+<div className="flex gap-4" dir={isRTL ? 'rtl' : 'ltr'}>
+  <span>{t('character.name')}:</span>
+  <strong>{character.name}</strong>
+</div>
+
+📊 دليل الأداء
+تحسين استدعاءات Gemini
+typescript// ❌ بطيء: استدعاءات متتالية
+for (const character of characters) {
+  const analysis = await geminiService.analyze(character);
+  results.push(analysis);
+}
+
+// ✅ سريع: استدعاءات متوازية
+const promises = characters.map(char => 
+  geminiService.analyze(char)
+);
+const results = await Promise.all(promises);
+
+// ✅ أسرع: استدعاء واحد بدفعة
+const prompt = `Analyze these characters in batch:\n${JSON.stringify(characters)}`;
+const batchResult = await geminiService.analyze(prompt);
+
+تحسين React
+tsx// ❌ بطيء: إعادة حساب في كل render
+function NetworkVisualization({ network }) {
+  const data = processNetworkData(network);  // تُنفذ في كل مرة!
+  return <Chart data={data} />;
+}
+
+// ✅ سريع: useMemo
+function NetworkVisualization({ network }) {
+  const data = useMemo(() => 
+    processNetworkData(network), 
+    [network]
+  );
+  return <Chart data={data} />;
+}
+
+// ✅ أسرع: React Query مع staleTime
+const { data } = useQuery({
+  queryKey: ['network', network.id],
+  queryFn: () => processNetworkData(network),
+  staleTime: 10 * 60 * 1000  // لا تعيد الحساب لمدة 10 دقائق
+});
+
+🎨 دليل التصميم (UI/UX)
+الألوان
+typescript// استخدم متغيرات Tailwind المُعرّفة
+const colors = {
+  primary: 'blue-600',
+  secondary: 'slate-600',
+  success: 'green-600',
+  warning: 'amber-600',
+  error: 'red-600',
+  
+  // Dark mode
+  primaryDark: 'blue-400',
+  secondaryDark: 'slate-400'
+};
+
+التخطيط (Layout)
+tsx// ✅ استخدم Grid للتخطيطات المعقدة
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {items.map(item => <Card key={item.id}>{item.content}</Card>)}
+</div>
+
+// ✅ استخدم Flex للتخطيطات البسيطة
+<div className="flex items-center justify-between gap-4">
+  <span>العنوان</span>
+  <Button>إجراء</Button>
+</div>
+
+الحركات (Animations)
+tsximport { motion } from 'framer-motion';
+
+// ✅ حركات خفيفة وسلسة
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.3 }}
+>
+  {content}
+</motion.div>
+
+// ❌ تجنب الحركات المزعجة
+<motion.div
+  animate={{ 
+    scale: [1, 1.5, 1], 
+    rotate: [0, 360, 0] 
+  }}
+  transition={{ duration: 0.5, repeat: Infinity }}
+>
+
+🔐 الأمان والخصوصية
+typescript// ✅ لا تسجل البيانات الRetryAContinueEditحساسة
+typescript// ✅ لا تسجل البيانات الحساسة
+logger.info('Analysis started', { 
+  projectId: input.projectId,
+  textLength: input.fullText.length,
+  // ❌ لا تسجل النص الكامل!
+  // fullText: input.fullText
+});
+
+// ✅ صحيح: إخفاء المعلومات الحساسة
+logger.info('API key validated', {
+  keyPrefix: apiKey.substring(0, 8) + '...',
+  keyLength: apiKey.length
+});
+
+// ❌ خطأ: تسجيل مفتاح API كاملاً
+logger.info('Using API key', { apiKey });
+
+حماية API Endpoints
+typescript// ✅ صحيح: rate limiting
+import rateLimit from 'express-rate-limit';
+
+const analysisLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 دقيقة
+  max: 5, // 5 طلبات كحد أقصى
+  message: 'Too many analysis requests, please try again later'
+});
+
+router.post('/analyze-full-pipeline', analysisLimiter, async (req, res) => {
+  // ...
+});
+
+// ✅ صحيح: التحقق من حجم الإدخال
+const MAX_TEXT_LENGTH = 500_000; // 500k حرف
+
+router.post('/analyze', async (req, res) => {
+  const { fullText } = req.body;
+  
+  if (fullText.length > MAX_TEXT_LENGTH) {
+    return res.status(413).json({ 
+      error: 'Text too long',
+      maxLength: MAX_TEXT_LENGTH,
+      actualLength: fullText.length
+    });
+  }
+  
+  // ...
+});
+
+التحقق من المدخلات
+typescriptimport { z } from 'zod';
+
+// ✅ صحيح: استخدام Zod للتحقق
+const AnalysisInputSchema = z.object({
+  fullText: z.string()
+    .min(100, 'Text must be at least 100 characters')
+    .max(500_000, 'Text must not exceed 500,000 characters'),
+  projectName: z.string()
+    .min(1, 'Project name is required')
+    .max(100, 'Project name too long'),
+  language: z.enum(['ar', 'en']).optional(),
+  options: z.object({
+    stationsToRun: z.array(z.number().min(1).max(7)).optional(),
+    skipCache: z.boolean().optional()
+  }).optional()
+});
+
+router.post('/analyze', async (req, res) => {
+  try {
+    // التحقق من المدخلات
+    const validated = AnalysisInputSchema.parse(req.body);
+    
+    // المتابعة بأمان
+    const result = await runAnalysis(validated);
+    res.json({ success: true, data: result });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ 
+        error: 'Invalid input',
+        details: error.errors 
+      });
+    }
+    throw error;
+  }
+});
+
+📚 موارد مهمة للوكيل
+الملفات الحرجة التي يجب قراءتها
+📁 يجب قراءتها دائماً:
+├── server/core/models/base-entities.ts          ← تعريفات الكيانات الأساسية
+├── server/services/ai/gemini-service.ts         ← واجهة Gemini AI
+├── server/core/pipeline/base-station.ts         ← الفئة الأب للمحطات
+├── shared/schema.ts                             ← المخططات المشتركة
+└── server/routes.ts                             ← API endpoints
+
+📁 يجب الرجوع إليها عند الحاجة:
+├── server/stations/station3/station3-network-builder.ts  ← أهم محطة
+├── server/analysis_modules/network-diagnostics.ts        ← منطق التشخيص
+├── server/analysis_modules/efficiency-metrics.ts         ← حساب المقاييس
+└── src/components/ConflictNetwork.tsx                    ← تصور الشبكة
+
+أنماط الاستدعاء (Prompts) لـ Gemini
+typescript// ✅ نمط قوي: تعليمات واضحة + أمثلة + تنسيق محدد
+const buildCharacterAnalysisPrompt = (text: string) => `
+أنت محلل نصوص دراماتيكية متخصص. مهمتك: استخراج الشخصيات الرئيسية من النص التالي.
+
+التعليمات:
+1. استخرج 3-7 شخصيات رئيسية فقط (ليس الثانوية)
+2. لكل شخصية، حدد:
+   - الاسم الكامل
+   - السمات الشخصية (3-5 سمات)
+   - الدوافع والأهداف
+   - العلاقات الأساسية مع شخصيات أخرى
+
+تنسيق الإخراج: JSON بالشكل التالي:
+{
+  "characters": [
+    {
+      "name": "اسم الشخصية",
+      "traits": ["سمة1", "سمة2", "سمة3"],
+      "motivations": "الدوافع والأهداف",
+      "relationships": [
+        {"with": "شخصية أخرى", "type": "نوع العلاقة"}
+      ]
+    }
+  ]
+}
+
+مثال على شخصية صحيحة:
+{
+  "name": "أحمد المحامي",
+  "traits": ["عادل", "مثابر", "متفائل"],
+  "motivations": "البحث عن الحقيقة وتحقيق العدالة",
+  "relationships": [
+    {"with": "فاطمة", "type": "زوجة"}
+  ]
+}
+
+النص للتحليل:
+${text}
+
+الإخراج (JSON فقط):
+`;
+
+// ❌ نمط ضعيف: غامض وبدون تنسيق
+const weakPrompt = (text: string) => `
+حلل هذا النص واستخرج الشخصيات:
+${text}
+`;
+
+معادلات المقاييس المهمة
+typescript/**
+ * معامل جيني (Gini Coefficient)
+ * يقيس عدم المساواة في توزيع المشاركة
+ * القيمة: 0 (توازن تام) إلى 1 (عدم توازن كامل)
+ */
+function calculateGiniCoefficient(values: number[]): number {
+  const n = values.length;
+  const sortedValues = [...values].sort((a, b) => a - b);
+  
+  let sumOfDifferences = 0;
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      sumOfDifferences += Math.abs(sortedValues[i] - sortedValues[j]);
+    }
+  }
+  
+  const meanValue = values.reduce((sum, val) => sum + val, 0) / n;
+  const gini = sumOfDifferences / (2 * n * n * meanValue);
+  
+  return gini;
+}
+
+/**
+ * تماسك الصراع (Conflict Cohesion)
+ * يقيس مدى ترابط الصراعات في الشبكة
+ * القيمة: 0 (صراعات منعزلة) إلى 1 (شبكة متماسكة)
+ */
+function calculateConflictCohesion(network: ConflictNetwork): number {
+  const conflicts = Array.from(network.conflicts.values());
+  
+  // عدد الشخصيات المشاركة في أكثر من صراع
+  const characterConflictCount = new Map<string, number>();
+  conflicts.forEach(conflict => {
+    conflict.involvedCharacters.forEach(charId => {
+      characterConflictCount.set(
+        charId, 
+        (characterConflictCount.get(charId) || 0) + 1
+      );
+    });
+  });
+  
+  const multiConflictChars = Array.from(characterConflictCount.values())
+    .filter(count => count > 1).length;
+  
+  const totalChars = network.characters.size;
+  
+  return totalChars > 0 ? multiConflictChars / totalChars : 0;
+}
+
+/**
+ * كفاءة السرد (Narrative Efficiency)
+ * يقيس مدى استغلال العناصر السردية
+ */
+function calculateNarrativeEfficiency(network: ConflictNetwork): {
+  characterEfficiency: number;
+  relationshipEfficiency: number;
+  conflictEfficiency: number;
+  overall: number;
+} {
+  const totalCharacters = network.characters.size;
+  const activeCharacters = Array.from(network.characters.values())
+    .filter(char => char.conflictInvolvements.length > 0).length;
+  
+  const totalRelationships = network.relationships.size;
+  const meaningfulRelationships = Array.from(network.relationships.values())
+    .filter(rel => rel.strength >= 0.5).length;
+  
+  const totalConflicts = network.conflicts.size;
+  const progressingConflicts = Array.from(network.conflicts.values())
+    .filter(conf => conf.currentStage !== 'exposition').length;
+  
+  const charEff = totalCharacters > 0 ? activeCharacters / totalCharacters : 0;
+  const relEff = totalRelationships > 0 ? meaningfulRelationships / totalRelationships : 0;
+  const confEff = totalConflicts > 0 ? progressingConflicts / totalConflicts : 0;
+  
+  return {
+    characterEfficiency: charEff,
+    relationshipEfficiency: relEff,
+    conflictEfficiency: confEff,
+    overall: (charEff + relEff + confEff) / 3
+  };
+}
+
+🎯 سيناريوهات متقدمة
+سيناريو 4: التعامل مع نصوص طويلة جداً
+typescript// مشكلة: نصوص طويلة تتجاوز حد Gemini (1M tokens)
+// الحل: تقسيم النص إلى أجزاء
+
+interface TextChunk {
+  index: number;
+  content: string;
+  tokenCount: number;
+}
+
+async function analyzeWithChunking(
+  fullText: string,
+  geminiService: GeminiService
+): Promise<AnalysisResult> {
+  const MAX_TOKENS_PER_CHUNK = 100_000; // ~75k كلمة
+  
+  // 1. تقسيم النص
+  const chunks = splitTextIntoChunks(fullText, MAX_TOKENS_PER_CHUNK);
+  
+  // 2. تحليل كل جزء
+  const chunkResults = await Promise.all(
+    chunks.map(chunk => analyzeChunk(chunk, geminiService))
+  );
+  
+  // 3. دمج النتائج
+  const mergedResult = mergeChunkResults(chunkResults);
+  
+  return mergedResult;
+}
+
+function splitTextIntoChunks(
+  text: string, 
+  maxTokens: number
+): TextChunk[] {
+  // تقسيم ذكي عند نهايات المشاهد/الفصول
+  const scenes = text.split(/\n\n={3,}\n\n/); // مفصولة بـ ===
+  
+  const chunks: TextChunk[] = [];
+  let currentChunk = '';
+  let chunkIndex = 0;
+  
+  for (const scene of scenes) {
+    const estimatedTokens = estimateTokenCount(currentChunk + scene);
+    
+    if (estimatedTokens > maxTokens && currentChunk.length > 0) {
+      // حفظ الجزء الحالي
+      chunks.push({
+        index: chunkIndex++,
+        content: currentChunk.trim(),
+        tokenCount: estimateTokenCount(currentChunk)
+      });
+      currentChunk = scene;
+    } else {
+      currentChunk += '\n\n' + scene;
+    }
+  }
+  
+  // الجزء الأخير
+  if (currentChunk.length > 0) {
+    chunks.push({
+      index: chunkIndex,
+      content: currentChunk.trim(),
+      tokenCount: estimateTokenCount(currentChunk)
+    });
+  }
+  
+  return chunks;
+}
+
+function estimateTokenCount(text: string): number {
+  // تقدير تقريبي: 1 token ≈ 0.75 كلمة للعربية
+  const wordCount = text.split(/\s+/).length;
+  return Math.ceil(wordCount / 0.75);
+}
+
+async function mergeChunkResults(
+  results: ChunkAnalysisResult[]
+): Promise<AnalysisResult> {
+  // دمج الشخصيات (إزالة التكرارات)
+  const allCharacters = new Map<string, Character>();
+  results.forEach(result => {
+    result.characters.forEach((char, name) => {
+      if (allCharacters.has(name)) {
+        // دمج معلومات الشخصية
+        const existing = allCharacters.get(name)!;
+        allCharacters.set(name, mergeCharacterInfo(existing, char));
+      } else {
+        allCharacters.set(name, char);
+      }
+    });
+  });
+  
+  // دمج العلاقات والصراعات بنفس الطريقة
+  // ...
+  
+  return {
+    characters: allCharacters,
+    // ...
+  };
+}
+
+سيناريو 5: التخزين المؤقت الذكي (Caching)
+typescript// استخدم Redis أو memory cache للنتائج الوسيطة
+
+import { createClient } from 'redis';
+
+class AnalysisCache {
+  private client: ReturnType<typeof createClient>;
+  private readonly TTL = 24 * 60 * 60; // 24 ساعة
+  
+  constructor() {
+    this.client = createClient({
+      url: process.env.REDIS_URL || 'redis://localhost:6379'
+    });
+    this.client.connect();
+  }
+  
+  // مفتاح فريد للتحليل
+  private generateKey(
+    text: string, 
+    stationNumber: number
+  ): string {
+    // استخدم hash للنص لتقليل حجم المفتاح
+    const textHash = this.hashText(text);
+    return `analysis:${textHash}:station${stationNumber}`;
+  }
+  
+  private hashText(text: string): string {
+    const crypto = require('crypto');
+    return crypto
+      .createHash('sha256')
+      .update(text)
+      .digest('hex')
+      .substring(0, 16);
+  }
+  
+  async get<T>(
+    text: string, 
+    stationNumber: number
+  ): Promise<T | null> {
+    try {
+      const key = this.generateKey(text, stationNumber);
+      const cached = await this.client.get(key);
+      
+      if (cached) {
+        console.log(`Cache hit for station ${stationNumber}`);
+        return JSON.parse(cached) as T;
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('Cache get error:', error);
+      return null;
+    }
+  }
+  
+  async set<T>(
+    text: string, 
+    stationNumber: number, 
+    data: T
+  ): Promise<void> {
+    try {
+      const key = this.generateKey(text, stationNumber);
+      await this.client.setEx(
+        key, 
+        this.TTL, 
+        JSON.stringify(data)
+      );
+      console.log(`Cached result for station ${stationNumber}`);
+    } catch (error) {
+      console.error('Cache set error:', error);
+    }
+  }
+  
+  async invalidate(text: string): Promise<void> {
+    // حذف جميع نتائج المحطات للنص
+    const textHash = this.hashText(text);
+    const pattern = `analysis:${textHash}:*`;
+    
+    const keys = await this.client.keys(pattern);
+    if (keys.length > 0) {
+      await this.client.del(keys);
+      console.log(`Invalidated ${keys.length} cached results`);
+    }
+  }
+}
+
+// الاستخدام في المحطات
+export class Station3NetworkBuilder extends BaseStation {
+  constructor(
+    config: StationConfig,
+    geminiService: GeminiService,
+    private cache: AnalysisCache
+  ) {
+    super('Station3NetworkBuilder', config, geminiService);
+  }
+  
+  async process(input: Station3Input): Promise<Station3Output> {
+    // 1. التحقق من الكاش
+    const cached = await this.cache.get<Station3Output>(
+      input.fullText, 
+      3
+    );
+    
+    if (cached && !input.options?.skipCache) {
+      this.logger.info('Returning cached result for Station 3');
+      return cached;
+    }
+    
+    // 2. التحليل الفعلي
+    this.logger.info('Performing fresh analysis for Station 3');
+    const result = await this.performAnalysis(input);
+    
+    // 3. حفظ في الكاش
+    await this.cache.set(input.fullText, 3, result);
+    
+    return result;
+  }
+}
+
+سيناريو 6: معالجة الأخطاء المتقدمة
+typescript// تعريف أنواع أخطاء مخصصة
+
+export class StationError extends Error {
+  constructor(
+    message: string,
+    public readonly stationName: string,
+    public readonly stationNumber: number,
+    public readonly cause?: Error
+  ) {
+    super(message);
+    this.name = 'StationError';
+  }
+}
+
+export class GeminiAPIError extends Error {
+  constructor(
+    message: string,
+    public readonly statusCode?: number,
+    public readonly retryable: boolean = true
+  ) {
+    super(message);
+    this.name = 'GeminiAPIError';
+  }
+}
+
+export class ValidationError extends Error {
+  constructor(
+    message: string,
+    public readonly field: string,
+    public readonly value: any
+  ) {
+    super(message);
+    this.name = 'ValidationError';
+  }
+}
+
+// استخدام في المحطات
+export class Station1TextAnalysis extends BaseStation {
+  async process(input: Station1Input): Promise<Station1Output> {
+    try {
+      // التحقق من المدخلات
+      this.validateInput(input);
+      
+      // التحليل
+      const result = await this.performAnalysis(input);
+      
+      // التحقق من المخرجات
+      this.validateOutput(result);
+      
+      return result;
+    } catch (error) {
+      // معالجة مخصصة حسب نوع الخطأ
+      if (error instanceof ValidationError) {
+        throw new StationError(
+          `Invalid input for Station 1: ${error.message}`,
+          'Station1TextAnalysis',
+          1,
+          error
+        );
+      }
+      
+      if (error instanceof GeminiAPIError) {
+        if (error.retryable) {
+          // إعادة المحاولة مع exponential backoff
+          return await this.retryWithBackoff(() => 
+            this.performAnalysis(input)
+          );
+        }
+        throw new StationError(
+          `Gemini API error in Station 1: ${error.message}`,
+          'Station1TextAnalysis',
+          1,
+          error
+        );
+      }
+      
+      // خطأ غير متوقع
+      throw new StationError(
+        `Unexpected error in Station 1: ${error.message}`,
+        'Station1TextAnalysis',
+        1,
+        error instanceof Error ? error : undefined
+      );
+    }
+  }
+  
+  private async retryWithBackoff<T>(
+    fn: () => Promise<T>,
+    maxRetries: number = 3
+  ): Promise<T> {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        return await fn();
+      } catch (error) {
+        if (attempt === maxRetries) throw error;
+        
+        const delay = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s
+        this.logger.warn(`Retry attempt ${attempt}/${maxRetries}, waiting ${delay}ms`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+    
+    throw new Error('Max retries exceeded');
+  }
+}
+
+📋 Checklist للوكيل قبل كل Task
+✅ قبل إضافة ميزة جديدة
+
+ هل قرأت الملفات ذات الصلة في server/core/models/؟
+ هل فهمت التدفق في server/run-all-stations.ts؟
+ هل الميزة تتطلب تعديل ConflictNetwork؟
+ إذا نعم، هل التعديل متوافق مع المحطات الموجودة؟
+ هل ستحتاج لاستدعاء Gemini API؟
+ هل لديك خطة للتخزين المؤقت (caching)؟
+ هل الميزة تحتاج مكون UI جديد؟
+ هل المكون يدعم RTL و dark mode؟
+
+
+✅ قبل تعديل كود موجود
+
+ هل قرأت الكود الحالي بالكامل؟
+ هل فهمت السبب وراء التصميم الحالي؟
+ هل التعديل سيكسر أي وظيفة موجودة؟
+ هل اختبرت السيناريوهات الحرجة؟
+ هل حدّثت التوثيق (JSDoc)؟
+ هل حدّثت الاختبارات؟
+
+
+✅ قبل الـ Commit
+
+ هل الكود يمر من TypeScript strict checks؟
+ هل الكود يمر من ESLint؟
+ هل الكود منسق بـ Prettier؟
+ هل جميع الاختبارات تنجح؟
+ هل التوثيق محدث؟
+ هل رسالة الـ commit واضحة ووصفية؟
+
+
+🎓 مصطلحات مهمة
+المصطلحالإنجليزيةالوصفشبكة الصراعConflictNetworkالبنية المركزية التي تربط الشخصيات والعلاقات والصراعاتمحطةStationوحدة تحليل مستقلة في خط الأنابيبالتماسكCohesionمدى ترابط عناصر الشبكةالكفاءة السرديةNarrative Efficiencyمدى استغلال العناصر السرديةمعامل جينيGini Coefficientمقياس عدم المساواة في التوزيعالشخصية المعزولةIsolated Characterشخصية بدون علاقات أو صراعاتالصراع المهملAbandoned Conflictصراع لم يتطور أو يُحلاللقطة الزمنيةSnapshotحالة الشبكة في نقطة زمنية محددة
+
+🔗 روابط مرجعية سريعة
+typescript// الكيانات الأساسية
+import type { 
+  Character,
+  Relationship,
+  Conflict,
+  ConflictNetwork,
+  NetworkSnapshot 
+} from '@/server/core/models/base-entities';
+
+// خدمات AI
+import { GeminiService, GeminiModel } from '@/server/services/ai/gemini-service';
+
+// المحطات
+import { Station1TextAnalysis } from '@/server/stations/station1/station1-text-analysis';
+import { Station3NetworkBuilder } from '@/server/stations/station3/station3-network-builder';
+
+// التحليل
+import { NetworkDiagnostics } from '@/server/analysis_modules/network-diagnostics';
+import { EfficiencyMetrics } from '@/server/analysis_modules/efficiency-metrics';
+
+// UI Components
+import { ConflictNetwork } from '@/components/ConflictNetwork';
+import { DiagnosticPanel } from '@/components/DiagnosticPanel';
+import { StationProgress } from '@/components/StationProgress';
+
+// Contexts
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useTheme } from '@/contexts/ThemeContext';
+
+💡 نصائح ذهبية للوكيل
+1. اقرأ قبل الكتابة
+لا تبدأ الترميز قبل فهم السياق الكامل. اقرأ الملفات ذات الصلة أولاً.
+2. اختبر محلياً
+لا تفترض أن الكود يعمل. اختبر بنفسك قبل الالتزام.
+3. الأداء مهم
+تذكر أن المحطات تعمل بالتسلسل. أي تحسين في الأداء يتراكم.
+4. العربية أولاً
+النظام مُحسَّن للعربية. تأكد من دعم RTL والترجمات.
+5. الأخطاء صديقتك
+معالجة الأخطاء الجيدة = تجربة مستخدم أفضل.
+6. التوثيق ليس اختيارياً
+كود بدون توثيق = كود صعب الصيانة.
+7. Gemini باهظ
+قلل استدعاءات API قدر الإمكان. استخدم التخزين المؤقت.
+8. التسلسل مقدس
+لا تكسر تسلسل المحطات. إذا احتجت، أضف محطة جديدة.
+
+🚀 أوامر سريعة للوكيل
+bash# التطوير
+npm run dev                    # تشغيل كامل (خادم + واجهة)
+npm run dev:server            # خادم فقط
+npm run dev:client            # واجهة فقط
+
+# الاختبار
+npm test                      # جميع الاختبارات
+npm run test:watch           # مع المراقبة
+npm run test:coverage        # مع التغطية
+npm test -- station3         # اختبار محطة محددة
+
+# البناء
+npm run build                # بناء للإنتاج
+npm run type-check           # فحص الأنواع
+npm run lint                 # فحص الجودة
+npm run format               # تنسيق الكود
+
+# قاعدة البيانات
+npm run db:generate          # توليد migrations
+npm run db:push              # تطبيق التغييرات
+npm run db:studio            # فتح Drizzle Studio
+
+# التنظيف
+rm -rf dist node_modules     # تنظيف كامل
+npm install                  # إعادة التثبيت
+
+🎯 الخلاصة
+نظام Stations هو نظام معقد ومتقدم لتحليل النصوص الدرامية. كوكيل ترميز:
+
+افهم التسلسل: المحطات تعمل بالتسلسل، لا يمكن تخطي أي منها
+احترم البنية: ConflictNetwork هو القلب، أي تعديل عليه يؤثر على كل شيء
+استخدم TypeScript بحكمة: أنواع صارمة، معالجة أخطاء شاملة
+حسّن الأداء: استخدام التخزين المؤقت، المعالجة المتوازية
+دعم العربية: RTL، ترجمات، خطوط عربية
+اختبر دائماً: لا تعتمد على الافتراضات
 
