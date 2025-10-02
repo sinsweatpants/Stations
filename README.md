@@ -1,625 +1,1334 @@
-# 🎭 نظام تحليل النصوص الدرامية المتقدم
+📋 توجيهات الترميز لوكيل jules.google - نظام Stations
+🎯 نظرة عامة على المشروع
+أنت تعمل على نظام Stations - منصة تحليل نصوص درامية متقدمة تستخدم الذكاء الاصطناعي. النظام عبارة عن خط أنابيب (pipeline) من 7 محطات متسلسلة، كل محطة تُنفذ مرحلة تحليلية محددة على النصوص السردية والدرامية.
+المكونات الأساسية:
 
-## نظرة عامة
+الخادم الخلفي: Express + TypeScript + Gemini AI
+واجهة المستخدم: React 18 + Vite + Tailwind CSS + shadcn/ui
+قاعدة البيانات: Drizzle ORM
+اللغة الأساسية: TypeScript (strict mode)
 
-نظام شامل ومتكامل لتحليل النصوص السردية والدرامية باستخدام Python وتقنيات الذكاء الاصطناعي. يتكون النظام من **7 محطات متسلسلة**، كل منها متخصصة في جانب محدد من التحليل الدرامي.
 
-### ✨ المميزات الرئيسية
-
-- 🔬 **تحليل متعدد المستويات**: من تحليل النص الأساسي إلى التصور النهائي
-- 🤖 **ذكاء اصطناعي متقدم**: استخدام نماذج متعددة (GPT-4, Gemini, Claude, وأخرى)
-- 📊 **تصورات تفاعلية**: رسوم بيانية وتقارير HTML تفاعلية
-- 🔗 **تحليل شبكي**: فحص العلاقات والصراعات كشبكة معقدة
-- 🏥 **تشخيص وعلاج**: اكتشاف المشاكل واقتراح حلول عملية
-- 📈 **مقاييس كمية**: تقييم الجودة الدرامية بمعايير علمية
-
----
-
-## 🏗️ البنية المعمارية
-
-```
-script-analyzer/
+🏗️ البنية المعمارية - خريطة ذهنية
+stations/
 │
-├── backend/
-│   ├── stations/                    # المحطات السبع
-│   │   ├── station1.py             # تحليل النص الأساسي
-│   │   ├── station2.py             # التحليل المفاهيمي
-│   │   ├── station3_network_builder.py  # بناء شبكة الصراع
-│   │   ├── station4.py             # قياس الكفاءة والفعالية
-│   │   ├── station5.py             # التحليل الديناميكي والرمزي
-│   │   ├── station6.py             # التشخيص والعلاج
-│   │   └── station7.py             # التصور والعرض النهائي
+├── 🔧 server/                    [الخادم الخلفي - المنطق الأساسي]
+│   ├── stations/                 [7 محطات تحليلية متسلسلة]
+│   │   ├── station1/            → تحليل النص الأساسي (الشخصيات والعلاقات)
+│   │   ├── station2/            → التحليل المفاهيمي (الثيمات والنوع)
+│   │   ├── station3/            → بناء شبكة الصراع (الأهم!)
+│   │   ├── station4/            → قياس الكفاءة والفعالية
+│   │   ├── station5/            → التحليل الديناميكي والرمزي
+│   │   ├── station6/            → التشخيص والعلاج
+│   │   └── station7/            → التصور والعرض النهائي
 │   │
-│   ├── core/
-│   │   └── base_entities.py        # الكيانات الأساسية (Character, Relationship, Conflict, Network)
+│   ├── core/                     [النواة - الكيانات والقواعد]
+│   │   ├── models/              → Character, Relationship, Conflict, ConflictNetwork
+│   │   └── pipeline/            → BaseStation (الفئة الأب لجميع المحطات)
 │   │
-│   ├── analysis_modules/           # وحدات التحليل المتخصصة
-│   │   ├── network_diagnostics.py  # التشخيص الشبكي
-│   │   ├── treatment_strategies.py # استراتيجيات العلاج
-│   │   ├── efficiency_metrics.py   # مقاييس الكفاءة
-│   │   ├── dynamic_analysis.py     # التحليل الديناميكي
-│   │   ├── episodic_integration.py # التكامل الحلقي
-│   │   └── ...
+│   ├── services/                 [الخدمات الحيوية]
+│   │   └── ai/                  
+│   │       ├── gemini-service.ts  → الواجهة الرئيسية لـ Gemini API
+│   │       └── result-selector.ts → اختيار أفضل النتائج
 │   │
-│   ├── utils/                      # أدوات مساعدة
-│   │   ├── api_utils.py           # تكامل API للذكاء الاصطناعي
-│   │   ├── file_utils.py          # معالجة الملفات
-│   │   ├── cache_utils.py         # نظام التخزين المؤقت
-│   │   └── perf_utils.py          # قياس الأداء
+│   ├── analysis_modules/         [وحدات التحليل المتخصصة]
+│   │   ├── network-diagnostics.ts → تشخيص الشبكات
+│   │   └── efficiency-metrics.ts  → حساب المقاييس
 │   │
-│   ├── config.yaml                 # ملف التكوين الرئيسي
-│   └── run_all_stations.py        # سكريبت التشغيل الشامل
+│   ├── index.ts                  → نقطة دخول الخادم
+│   ├── routes.ts                 → API endpoints
+│   ├── run-all-stations.ts       → أوركسترا المحطات
+│   └── storage.ts                → إدارة التخزين
 │
-├── analysis_modules/               # نسخة محدثة من الوحدات
-│   ├── network_diagnostics.py     # ✅ محدّث - تشخيص شامل
-│   └── treatment_strategies.py    # ✅ محدّث - استراتيجيات عملية
+├── 🎨 src/                       [واجهة المستخدم - React]
+│   ├── components/               [مكونات UI]
+│   │   ├── ui/                  → مكونات shadcn/ui الأساسية
+│   │   ├── AnalysisCard.tsx     → عرض نتائج التحليل
+│   │   ├── ConflictNetwork.tsx  → تصور الشبكة
+│   │   ├── DiagnosticPanel.tsx  → لوحة التشخيص
+│   │   └── StationProgress.tsx  → تتبع تقدم المحطات
+│   │
+│   ├── contexts/                 [إدارة الحالة العامة]
+│   │   ├── LanguageContext.tsx  → التبديل بين العربية/الإنجليزية
+│   │   └── ThemeContext.tsx     → الوضع الفاتح/الداكن
+│   │
+│   ├── pages/
+│   │   └── HomePage.tsx         → الصفحة الرئيسية
+│   │
+│   └── lib/
+│       ├── utils.ts             → أدوات مساعدة
+│       └── queryClient.ts       → إعدادات React Query
 │
-├── requirements.txt                # التبعيات المطلوبة
-└── README.md                       # هذا الملف
-```
+└── 📄 shared/
+    └── schema.ts                 [المخططات المشتركة بين الخادم والعميل]
 
----
+🔑 المفاهيم الجوهرية
+1. ConflictNetwork - القلب النابض للنظام
+هذا هو الكيان المركزي الذي تدور حوله جميع العمليات:
+typescriptinterface ConflictNetwork {
+  id: string;
+  name: string;
+  characters: Map<string, Character>;      // الشخصيات
+  relationships: Map<string, Relationship>; // العلاقات بين الشخصيات
+  conflicts: Map<string, Conflict>;        // الصراعات الدرامية
+  snapshots: NetworkSnapshot[];            // لقطات زمنية للتطور
+  metadata: Record<string, any>;
+}
+قاعدة حرجة:
 
-## 📋 متطلبات التشغيل
+المحطة 3 تُنشئ هذه الشبكة من الصفر
+المحطات 4-7 تعتمد عليها بالكامل
+أي تعديل على بنية ConflictNetwork يؤثر على السلسلة بأكملها
 
-### البيئة
 
-- **Python**: 3.8 أو أحدث
-- **نظام التشغيل**: Windows, Linux, macOS
-- **الذاكرة**: 4GB RAM (موصى به: 8GB+)
-- **المساحة**: 500MB لتثبيت المكتبات
+2. التدفق التسلسلي - القاعدة الذهبية
+النص الخام → المحطة 1 → المحطة 2 → المحطة 3 → ... → المحطة 7
+           ↓         ↓         ↓                    ↓
+        معلومات   ثيمات    شبكة              تصورات
+        أساسية    ومفاهيم   الصراع             نهائية
+قواعد التدفق:
 
-### التبعيات الأساسية
+لا يمكن تخطي محطات: كل محطة تعتمد على مخرجات السابقة
+التحليل الأساسي (المحطة 1 فقط): سريع (~1 دقيقة)
+التحليل الشامل (1-7): بطيء (5-10 دقائق)
+معالجة الأخطاء: إذا فشلت محطة، تتوقف السلسلة بأكملها
 
-```bash
-# تثبيت التبعيات
-pip install -r requirements.txt
 
-# التبعيات الرئيسية:
-- openai >= 1.0.0
-- google-generativeai >= 0.3.0
-- anthropic >= 0.7.0
-- networkx >= 3.0
-- matplotlib >= 3.5.0
-- pyyaml >= 6.0
-- joblib >= 1.2.0
-- tqdm >= 4.65.0
-```
+3. Gemini AI Integration - العقل المدبر
+typescript// server/services/ai/gemini-service.ts
+export enum GeminiModel {
+  PRO = 'gemini-1.5-pro-latest',      // للتحليلات المعقدة
+  FLASH = 'gemini-1.5-flash-latest'   // للعمليات السريعة
+}
+قواعد الاستخدام:
 
-### مفاتيح API المطلوبة
+استخدم PRO للمحطات 2, 3, 5, 6 (تحليلات عميقة)
+استخدم FLASH للمحطات 1, 4, 7 (عمليات أسرع)
+معالجة الأخطاء: إعادة المحاولة 3 مرات مع تأخير تصاعدي
+لا تستدعِ Gemini مباشرة - استخدم GeminiService دائماً
 
-```bash
-# إعداد متغيرات البيئة
-export OPENAI_API_KEY="your-openai-key"
-export GOOGLE_API_KEY="your-google-key"
-export ANTHROPIC_API_KEY="your-anthropic-key"  # اختياري
-export TOGETHER_API_KEY="your-together-key"    # اختياري
-export OPENROUTER_API_KEY="your-openrouter-key"  # اختياري
-```
 
----
+📐 قواعد الترميز الصارمة
+✅ قواعد TypeScript
+typescript// ✅ صحيح: استخدام الأنواع الصارمة
+interface Station1Input {
+  fullText: string;
+  projectName: string;
+  additionalContext?: Record<string, any>;
+}
 
-## 🚀 دليل الاستخدام السريع
+interface Station1Output {
+  majorCharacters: string[];
+  characterAnalysis: Map<string, CharacterProfile>;
+  relationships: Relationship[];
+  narrativeStyle: NarrativeStyleAnalysis;
+  metadata: StationMetadata;
+}
 
-### 1. إعداد المشروع
+// ❌ خطأ: استخدام any
+function processText(data: any): any { ... }
 
-```bash
-# استنساخ المشروع
-git clone https://github.com/your-repo/script-analyzer.git
-cd script-analyzer
-
-# تثبيت التبعيات
-pip install -r requirements.txt
-
-# إعداد متغيرات البيئة
-export PROSE_FILE_PATH="/path/to/your/script.txt"
-export PROJECT_PATH="/path/to/output"
-export PROJECT_NAME="MyProject"
-export APP_CONFIG_PATH="backend/config.yaml"
-```
-
-### 2. تشغيل التحليل الكامل
-
-```bash
-# تشغيل جميع المحطات السبع
-cd backend
-python run_all_stations.py
-```
-
-### 3. تشغيل محطة واحدة
-
-```bash
-# مثال: تشغيل المحطة الأولى فقط
-cd backend/stations
-python station1.py
-```
-
----
-
-## 🔬 وصف المحطات السبع
-
-### المحطة 1️⃣: تحليل النص الأساسي
-
-**الهدف**: استخراج الشخصيات الرئيسية وتحليل العلاقات والأسلوب السردي
-
-**المدخلات**:
-- النص الكامل للقصة/السيناريو
-
-**المخرجات**:
-- قائمة الشخصيات الرئيسية (3-7 شخصيات)
-- تحليل معمق لكل شخصية (السمات، الدوافع، الأهداف)
-- تحليل العلاقات الرئيسية
-- تحليل الأسلوب السردي (النغمة، الإيقاع، اللغة)
-
-**مثال على المخرجات**:
-```json
-{
-  "major_characters": ["علي", "فاطمة", "أحمد"],
-  "character_analysis": {
-    "علي": {
-      "personality_traits": "شجاع، متهور، مخلص",
-      "motivations_goals": "البحث عن العدالة والانتقام لوالده"
+// ✅ صحيح: معالجة الأخطاء
+async function analyzeText(input: Station1Input): Promise<Station1Output> {
+  try {
+    const result = await geminiService.analyze(input);
+    if (!result.majorCharacters || result.majorCharacters.length === 0) {
+      throw new ValidationError('No characters found in text');
     }
-  },
-  "narrative_style": {
-    "overall_tone": "مظلم ومشوّق",
-    "pacing": "سريع مع لحظات تأمل"
+    return result;
+  } catch (error) {
+    logger.error('Station 1 analysis failed', { error, input });
+    throw new StationProcessingError('Failed to analyze text', { cause: error });
   }
 }
-```
+القواعد الإلزامية:
 
----
+لا any أبداً - استخدم unknown أو أنواع محددة
+معالجة جميع الأخطاء - try/catch في كل عملية async
+التحقق من المدخلات - استخدم Zod لتحقق من البيانات
+توثيق JSDoc - لجميع الدوال والواجهات العامة
 
-### المحطة 2️⃣: التحليل المفاهيمي
 
-**الهدف**: استخلاص المفاهيم العميقة والثيمات والبنية الدرامية
-
-**المدخلات**:
-- مخرجات المحطة الأولى
-- النص الكامل
-
-**المخرجات**:
-- بيان القصة (Story Statement)
-- خريطة ثلاثية الأبعاد (الأحداث، المعنى، الزمن)
-- عرض مختصر (Elevator Pitch)
-- النوع الهجين والمصفوفة النوعية
-- النغمة الديناميكية
-- المراجع الفنية
-
-**مثال**:
-```json
-{
-  "story_statement": "قصة عن الولاء والخيانة في زمن الحرب",
-  "hybrid_genre": "دراما نفسية + إثارة",
-  "elevator_pitch": "عندما يكتشف جندي شاب خيانة صديقه..."
+✅ قواعد React
+tsx// ✅ صحيح: مكون نظيف مع TypeScript
+interface StationProgressProps {
+  completedStations: number[];
+  currentStation: number | null;
+  totalStations: number;
+  onStationClick?: (stationId: number) => void;
 }
-```
 
----
+export function StationProgress({ 
+  completedStations, 
+  currentStation, 
+  totalStations,
+  onStationClick 
+}: StationProgressProps) {
+  return (
+    <div className="flex gap-4 items-center" dir="rtl">
+      {Array.from({ length: totalStations }, (_, i) => i + 1).map((stationNum) => (
+        <StationBadge
+          key={stationNum}
+          number={stationNum}
+          isCompleted={completedStations.includes(stationNum)}
+          isCurrent={currentStation === stationNum}
+          onClick={() => onStationClick?.(stationNum)}
+        />
+      ))}
+    </div>
+  );
+}
 
-### المحطة 3️⃣: بناء شبكة الصراع
+// ❌ خطأ: عدم استخدام الأنواع
+export function StationProgress(props) { ... }
 
-**الهدف**: بناء شبكة معقدة من الشخصيات والعلاقات والصراعات
+// ❌ خطأ: استخدام inline styles بدلاً من Tailwind
+<div style={{ display: 'flex', gap: '16px' }}>...</div>
+قواعد React الإلزامية:
 
-**المدخلات**:
-- مخرجات المحطات 1 و 2
-- النص الكامل
+TypeScript Props دائماً - مع interface منفصل
+Tailwind CSS فقط - لا inline styles
+React Query للبيانات - لا useState للبيانات من الخادم
+معالجة Loading/Error states - في كل استدعاء API
+RTL Support - استخدم dir="rtl" للمحتوى العربي
 
-**المخرجات**:
-- شبكة صراع كاملة (`ConflictNetwork`)
-  - الشخصيات مع خصائصها
-  - العلاقات (النوع، الطبيعة، القوة)
-  - الصراعات (الموضوع، النطاق، المرحلة)
-- لقطات زمنية (Snapshots) لتطور الشبكة
 
-**البنية الأساسية**:
-```python
-class ConflictNetwork:
-    - characters: Dict[id, Character]
-    - relationships: Dict[id, Relationship]
-    - conflicts: Dict[id, Conflict]
-    - snapshots: List[NetworkSnapshot]
-```
+✅ قواعد API Design
+typescript// ✅ صحيح: API endpoint موثق ومُنظم
+/**
+ * POST /api/analyze-full-pipeline
+ * يُشغل جميع المحطات السبع بالتسلسل
+ * 
+ * @body {string} fullText - النص الكامل للتحليل (100 حرف على الأقل)
+ * @body {string} projectName - اسم المشروع
+ * @returns {Promise<PipelineResult>} نتائج جميع المحطات
+ * @throws {400} إذا كان النص قصيراً جداً
+ * @throws {500} إذا فشلت أي محطة
+ */
+router.post('/analyze-full-pipeline', async (req, res) => {
+  try {
+    const { fullText, projectName } = req.body;
+    
+    // التحقق من المدخلات
+    if (!fullText || fullText.length < 100) {
+      return res.status(400).json({ 
+        error: 'Text too short. Minimum 100 characters required.' 
+      });
+    }
 
----
+    // تشغيل المحطات
+    const results = await runAllStations(fullText, projectName);
+    
+    res.json({ success: true, data: results });
+  } catch (error) {
+    logger.error('Pipeline failed', { error });
+    res.status(500).json({ 
+      error: 'Analysis pipeline failed', 
+      details: error.message 
+    });
+  }
+});
+قواعد API:
 
-### المحطة 4️⃣: قياس الكفاءة والفعالية
+توثيق JSDoc - لكل endpoint
+التحقق من المدخلات - قبل المعالجة
+معالجة الأخطاء - مع رموز HTTP صحيحة
+تسجيل الأخطاء - باستخدام logger
+استجابات متسقة - { success, data?, error? }
 
-**الهدف**: تقييم كمي لجودة الشبكة الدرامية
 
-**المدخلات**:
-- شبكة الصراع من المحطة 3
+🔧 سيناريوهات التطوير الشائعة
+سيناريو 1: إضافة محطة جديدة
+typescript// 1. أنشئ ملف المحطة الجديد
+// server/stations/station8/station8-my-analysis.ts
 
-**المخرجات**:
-- **درجة الكفاءة الإجمالية** (0-100)
-- **التصنيف**: Excellent / Good / Fair / Poor / Critical
-- **تماسك الصراع** (Conflict Cohesion): 0-1
-- **التوازن الدرامي** (Dramatic Balance)
-  - توزيع الشخصيات (Gini coefficient)
-  - توزيع الصراعات
-- **كفاءة السرد** (Narrative Efficiency)
-  - كفاءة الشخصيات
-  - كفاءة العلاقات
-  - كفاءة الصراعات
-- **كثافة السرد** (Narrative Density)
-- **التكرارات** (Redundancy Metrics)
+import { BaseStation } from '@/server/core/pipeline/base-station';
+import { ConflictNetwork } from '@/server/core/models/base-entities';
 
-**مثال**:
-```json
-{
-  "overall_efficiency_score": 0.78,
-  "overall_rating": "Good",
-  "conflict_cohesion": 0.85,
-  "dramatic_balance": {
-    "balance_score": 0.72,
-    "character_involvement_gini": 0.35
+interface Station8Input {
+  network: ConflictNetwork;
+  previousResults: Station7Output;
+}
+
+interface Station8Output {
+  myNewAnalysis: SomeAnalysisResult;
+  metadata: StationMetadata;
+}
+
+export class Station8MyAnalysis extends BaseStation<Station8Input, Station8Output> {
+  constructor(config: StationConfig, geminiService: GeminiService) {
+    super('Station8MyAnalysis', config, geminiService);
+  }
+
+  async process(input: Station8Input): Promise<Station8Output> {
+    this.logger.info('Starting Station 8 analysis');
+    
+    try {
+      // منطق التحليل هنا
+      const analysis = await this.performAnalysis(input.network);
+      
+      return {
+        myNewAnalysis: analysis,
+        metadata: this.createMetadata('Success')
+      };
+    } catch (error) {
+      this.logger.error('Station 8 failed', { error });
+      throw new StationProcessingError('Station 8 analysis failed', { cause: error });
+    }
+  }
+
+  private async performAnalysis(network: ConflictNetwork): Promise<SomeAnalysisResult> {
+    // استخدم geminiService للتحليل
+    const prompt = this.buildPrompt(network);
+    const result = await this.geminiService.generateContent(prompt, {
+      model: GeminiModel.PRO,
+      temperature: 0.7
+    });
+    
+    return this.parseResult(result);
   }
 }
-```
 
----
+// 2. أضف المحطة إلى run-all-stations.ts
+// server/run-all-stations.ts
 
-### المحطة 5️⃣: التحليل الديناميكي والرمزي
+export async function runAllStations(...) {
+  // ... المحطات السابقة
+  
+  // المحطة 8: التحليل الجديد
+  const station8 = new Station8MyAnalysis(config, geminiService);
+  const station8Result = await station8.process({
+    network: station3Result.conflictNetwork,
+    previousResults: station7Result
+  });
+  
+  return {
+    ...previousResults,
+    station8: station8Result
+  };
+}
+نقاط تفتيش:
 
-**الهدف**: تحليل تطور الشبكة عبر الزمن والأبعاد الرمزية
+ يرث من BaseStation
+ يستخدم GeminiService وليس API مباشرة
+ معالجة أخطاء شاملة
+ logging في جميع المراحل
+ توثيق JSDoc
+ اختبارات وحدة (unit tests)
 
-**المدخلات**:
-- شبكة الصراع
-- مخرجات المحطة 4
-- النص الكامل
 
-**المخرجات**:
-- **تحليل ديناميكي**:
-  - جدول زمني للأحداث (Timeline)
-  - تطور الشبكة (Network Evolution)
-  - تتبع تطور الشخصيات (Character Development Tracking)
-  - تقدم الصراعات (Conflict Progression)
-- **تكامل حلقي** (Episodic Integration):
-  - بنية المسلسل (Series Structure)
-  - تفصيل المواسم (Season Breakdown)
-  - توزيع الحلقات (Episode Distribution)
-- **تحليل رمزي**:
-  - الرموز الرئيسية
-  - الأنماط المتكررة (Motifs)
-  - الثيمات المركزية
-- **تحليل أسلوبي**:
-  - تقييم النغمة الإجمالية
-  - تعقيد اللغة
-  - انطباع الإيقاع
-  - أسلوب الحوار
+سيناريو 2: تعديل ConflictNetwork
+typescript// ⚠️ تحذير: تعديل ConflictNetwork يؤثر على المحطات 4-7
 
----
+// ✅ صحيح: إضافة خاصية اختيارية
+interface ConflictNetwork {
+  // ... الخصائص الموجودة
+  myNewProperty?: SomeNewType;  // اختيارية لعدم كسر الكود الموجود
+}
 
-### المحطة 6️⃣: التشخيص والعلاج
+// ✅ صحيح: تحديث المحطات المتأثرة
+// server/stations/station4/station4-efficiency-metrics.ts
+async process(input: Station4Input): Promise<Station4Output> {
+  const network = input.conflictNetwork;
+  
+  // التحقق من وجود الخاصية الجديدة
+  if (network.myNewProperty) {
+    // منطق إضافي
+  }
+  
+  // ... بقية المنطق
+}
 
-**الهدف**: تشخيص المشاكل واقتراح حلول عملية
+// ❌ خطأ: إضافة خاصية إلزامية بدون migration
+interface ConflictNetwork {
+  myNewProperty: SomeNewType;  // سيكسر الكود الموجود!
+}
+خطوات آمنة لتعديل ConflictNetwork:
 
-**المدخلات**:
-- شبكة الصراع
-- مخرجات المحطة 5
+أضف الخاصية كـ optional أولاً
+حدّث المحطة 3 لتعبئة الخاصية
+حدّث المحطات 4-7 لاستخدام الخاصية
+اختبر السلسلة كاملة
+(اختياري) اجعلها required في إصدار لاحق
 
-**المخرجات**:
-- **تقرير تشخيصي**:
-  - مشاكل هيكلية (Structural Issues)
-  - شخصيات معزولة (Isolated Characters)
-  - صراعات مهملة (Abandoned Conflicts)
-  - شخصيات محملة (Overloaded Characters)
-  - اتصالات ضعيفة (Weak Connections)
-  - تكرارات (Redundancies)
-  - **درجة الصحة الإجمالية** (0-100)
-  - **مستوى الخطورة**: healthy / minor / moderate / major / critical
 
-- **توصيات العلاج**:
-  - إجراءات ذات أولوية (Prioritized Actions)
-  - إصلاحات سريعة (Quick Fixes)
-  - مراجعات هيكلية (Structural Revisions)
-  - اقتراحات تطوير الشخصيات
-  - استراتيجيات تعزيز الصراعات
+سيناريو 3: إضافة مكون UI جديد
+tsx// src/components/MyNewVisualization.tsx
 
-- **مقاييس كفاءة متقدمة**:
-  - الكفاءة الأساسية
-  - إمكانية التحسين
-  - قابلية التنفيذ
-  - النتائج المتوقعة (متفائلة / واقعية / متشائمة)
-  - تقييم المخاطر
+import { useMemo } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import type { ConflictNetwork } from '@/server/core/models/base-entities';
 
-**مثال على التشخيص**:
-```json
+interface MyNewVisualizationProps {
+  network: ConflictNetwork;
+  className?: string;
+}
+
+export function MyNewVisualization({ network, className }: MyNewVisualizationProps) {
+  const { t, isRTL } = useLanguage();
+  
+  // حساب البيانات مرة واحدة
+  const visualizationData = useMemo(() => {
+    return computeVisualization(network);
+  }, [network]);
+
+  return (
+    <Card className={className} dir={isRTL ? 'rtl' : 'ltr'}>
+      <CardHeader>
+        <CardTitle>{t('myVisualization.title')}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {visualizationData.map((item, index) => (
+            <div 
+              key={index}
+              className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800"
+            >
+              <h3 className="text-lg font-semibold mb-2">
+                {isRTL ? item.titleAr : item.titleEn}
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                {item.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// دالة مساعدة منفصلة
+function computeVisualization(network: ConflictNetwork) {
+  // منطق الحساب
+  return [];
+}
+نقاط تفتيش UI:
+
+ TypeScript Props مع interface
+ useMemo للحسابات الثقيلة
+ دعم RTL/LTR
+ دعم الترجمة (useLanguage)
+ دعم الوضع الداكن (dark mode)
+ Tailwind CSS فقط
+ استخدام مكونات shadcn/ui
+ responsive design
+
+
+🧪 قواعد الاختبار
+typescript// tests/stations/station3.test.ts
+
+import { describe, test, expect, beforeEach } from 'vitest';
+import { Station3NetworkBuilder } from '@/server/stations/station3/station3-network-builder';
+import { MockGeminiService } from '../mocks/gemini-service.mock';
+import { createTestInput } from '../fixtures/test-data';
+
+describe('Station3NetworkBuilder', () => {
+  let station3: Station3NetworkBuilder;
+  let mockGeminiService: MockGeminiService;
+
+  beforeEach(() => {
+    mockGeminiService = new MockGeminiService();
+    station3 = new Station3NetworkBuilder({}, mockGeminiService);
+  });
+
+  test('should build valid ConflictNetwork from input', async () => {
+    // Arrange
+    const input = createTestInput('complex-story');
+    
+    // Act
+    const result = await station3.process(input);
+    
+    // Assert
+    expect(result.conflictNetwork).toBeDefined();
+    expect(result.conflictNetwork.characters.size).toBeGreaterThan(0);
+    expect(result.conflictNetwork.relationships.size).toBeGreaterThan(0);
+    expect(result.conflictNetwork.conflicts.size).toBeGreaterThan(0);
+    expect(result.metadata.status).toBe('Success');
+  });
+
+  test('should handle missing characters gracefully', async () => {
+    // Arrange
+    const input = createTestInput('no-characters');
+    
+    // Act & Assert
+    await expect(station3.process(input)).rejects.toThrow(
+      'No characters found in previous analysis'
+    );
+  });
+
+  test('should create valid relationships between characters', async () => {
+    // Arrange
+    const input = createTestInput('relationship-heavy');
+    
+    // Act
+    const result = await station3.process(input);
+    
+    // Assert
+    const relationships = Array.from(result.conflictNetwork.relationships.values());
+    relationships.forEach(rel => {
+      expect(rel.source).toBeDefined();
+      expect(rel.target).toBeDefined();
+      expect(rel.nature).toBeOneOf(['positive', 'negative', 'neutral', 'complex']);
+      expect(rel.strength).toBeGreaterThanOrEqual(0);
+      expect(rel.strength).toBeLessThanOrEqual(1);
+    });
+  });
+});
+قواعد الاختبار:
+
+اختبر كل محطة بشكل منفصل - unit tests
+اختبر السلسلة كاملة - integration tests
+استخدم mocks لـ Gemini - لا استدعاءات API حقيقية
+اختبر حالات الفشل - error handling
+بيانات اختبار واقعية - في tests/fixtures/
+
+
+🚨 الأخطاء الشائعة وكيفية تجنبها
+خطأ 1: تجاهل التسلسل
+typescript// ❌ خطأ: محاولة تشغيل محطة 4 بدون محطة 3
+const station4 = new Station4EfficiencyMetrics(config, geminiService);
+const result = await station4.process({ 
+  conflictNetwork: undefined  // لا توجد شبكة!
+});
+
+// ✅ صحيح: التأكد من تسلسل المحطات
+const station3Result = await station3.process(station2Input);
+const station4Result = await station4.process({
+  conflictNetwork: station3Result.conflictNetwork
+});
+
+خطأ 2: عدم معالجة الأخطاء في API
+typescript// ❌ خطأ: ترك الأخطاء تنتشر بدون معالجة
+router.post('/analyze', async (req, res) => {
+  const result = await geminiService.analyze(req.body.text);
+  res.json(result);  // ماذا لو فشل analyze؟
+});
+
+// ✅ صحيح: معالجة شاملة
+router.post('/analyze', async (req, res) => {
+  try {
+    const { text } = req.body;
+    
+    if (!text || text.length < 100) {
+      return res.status(400).json({ 
+        error: 'Text too short',
+        minLength: 100 
+      });
+    }
+
+    const result = await geminiService.analyze(text);
+    res.json({ success: true, data: result });
+  } catch (error) {
+    logger.error('Analysis failed', { error, body: req.body });
+    res.status(500).json({ 
+      error: 'Analysis failed',
+      message: error.message 
+    });
+  }
+});
+
+خطأ 3: استخدام localStorage في React
+tsx// ❌ خطأ: localStorage غير متاح في بيئة Claude.ai
+const [data, setData] = useState(() => {
+  return JSON.parse(localStorage.getItem('analysisData') || '{}');
+});
+
+// ✅ صحيح: استخدام React Query للتخزين المؤقت
+const { data } = useQuery({
+  queryKey: ['analysis', projectId],
+  queryFn: () => fetchAnalysis(projectId),
+  staleTime: 5 * 60 * 1000  // 5 دقائق
+});
+
+خطأ 4: نسيان RTL Support
+tsx// ❌ خطأ: تجاهل الاتجاه العربي
+<div className="flex gap-4">
+  <span>اسم الشخصية:</span>
+  <strong>{character.name}</strong>
+</div>
+
+// ✅ صحيح: دعم RTL
+const { isRTL } = useLanguage();
+
+<div className="flex gap-4" dir={isRTL ? 'rtl' : 'ltr'}>
+  <span>{t('character.name')}:</span>
+  <strong>{character.name}</strong>
+</div>
+
+📊 دليل الأداء
+تحسين استدعاءات Gemini
+typescript// ❌ بطيء: استدعاءات متتالية
+for (const character of characters) {
+  const analysis = await geminiService.analyze(character);
+  results.push(analysis);
+}
+
+// ✅ سريع: استدعاءات متوازية
+const promises = characters.map(char => 
+  geminiService.analyze(char)
+);
+const results = await Promise.all(promises);
+
+// ✅ أسرع: استدعاء واحد بدفعة
+const prompt = `Analyze these characters in batch:\n${JSON.stringify(characters)}`;
+const batchResult = await geminiService.analyze(prompt);
+
+تحسين React
+tsx// ❌ بطيء: إعادة حساب في كل render
+function NetworkVisualization({ network }) {
+  const data = processNetworkData(network);  // تُنفذ في كل مرة!
+  return <Chart data={data} />;
+}
+
+// ✅ سريع: useMemo
+function NetworkVisualization({ network }) {
+  const data = useMemo(() => 
+    processNetworkData(network), 
+    [network]
+  );
+  return <Chart data={data} />;
+}
+
+// ✅ أسرع: React Query مع staleTime
+const { data } = useQuery({
+  queryKey: ['network', network.id],
+  queryFn: () => processNetworkData(network),
+  staleTime: 10 * 60 * 1000  // لا تعيد الحساب لمدة 10 دقائق
+});
+
+🎨 دليل التصميم (UI/UX)
+الألوان
+typescript// استخدم متغيرات Tailwind المُعرّفة
+const colors = {
+  primary: 'blue-600',
+  secondary: 'slate-600',
+  success: 'green-600',
+  warning: 'amber-600',
+  error: 'red-600',
+  
+  // Dark mode
+  primaryDark: 'blue-400',
+  secondaryDark: 'slate-400'
+};
+
+التخطيط (Layout)
+tsx// ✅ استخدم Grid للتخطيطات المعقدة
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {items.map(item => <Card key={item.id}>{item.content}</Card>)}
+</div>
+
+// ✅ استخدم Flex للتخطيطات البسيطة
+<div className="flex items-center justify-between gap-4">
+  <span>العنوان</span>
+  <Button>إجراء</Button>
+</div>
+
+الحركات (Animations)
+tsximport { motion } from 'framer-motion';
+
+// ✅ حركات خفيفة وسلسة
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.3 }}
+>
+  {content}
+</motion.div>
+
+// ❌ تجنب الحركات المزعجة
+<motion.div
+  animate={{ 
+    scale: [1, 1.5, 1], 
+    rotate: [0, 360, 0] 
+  }}
+  transition={{ duration: 0.5, repeat: Infinity }}
+>
+
+🔐 الأمان والخصوصية
+
+// ✅ لا تسجل البيانات الحساسة
+logger.info('Analysis started', { 
+  projectId: input.projectId,
+  textLength: input.fullText.length,
+  // ❌ لا تسجل النص الكامل!
+  // fullText: input.fullText
+});
+
+// ✅ صحيح: إخفاء المعلومات الحساسة
+logger.info('API key validated', {
+  keyPrefix: apiKey.substring(0, 8) + '...',
+  keyLength: apiKey.length
+});
+
+// ❌ خطأ: تسجيل مفتاح API كاملاً
+logger.info('Using API key', { apiKey });
+حماية API Endpoints
+typescript
+// ✅ صحيح: rate limiting
+import rateLimit from 'express-rate-limit';
+
+const analysisLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 دقيقة
+  max: 5, // 5 طلبات كحد أقصى
+  message: 'Too many analysis requests, please try again later'
+});
+
+router.post('/analyze-full-pipeline', analysisLimiter, async (req, res) => {
+  // ...
+});
+
+// ✅ صحيح: التحقق من حجم الإدخال
+const MAX_TEXT_LENGTH = 500_000; // 500k حرف
+
+router.post('/analyze', async (req, res) => {
+  const { fullText } = req.body;
+  
+  if (fullText.length > MAX_TEXT_LENGTH) {
+    return res.status(413).json({ 
+      error: 'Text too long',
+      maxLength: MAX_TEXT_LENGTH,
+      actualLength: fullText.length
+    });
+  }
+  
+  // ...
+});
+التحقق من المدخلات
+typescript
+import { z } from 'zod';
+
+// ✅ صحيح: استخدام Zod للتحقق
+const AnalysisInputSchema = z.object({
+  fullText: z.string()
+    .min(100, 'Text must be at least 100 characters')
+    .max(500_000, 'Text must not exceed 500,000 characters'),
+  projectName: z.string()
+    .min(1, 'Project name is required')
+    .max(100, 'Project name too long'),
+  language: z.enum(['ar', 'en']).optional(),
+  options: z.object({
+    stationsToRun: z.array(z.number().min(1).max(7)).optional(),
+    skipCache: z.boolean().optional()
+  }).optional()
+});
+
+router.post('/analyze', async (req, res) => {
+  try {
+    // التحقق من المدخلات
+    const validated = AnalysisInputSchema.parse(req.body);
+    
+    // المتابعة بأمان
+    const result = await runAnalysis(validated);
+    res.json({ success: true, data: result });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ 
+        error: 'Invalid input',
+        details: error.errors 
+      });
+    }
+    throw error;
+  }
+});
+📚 موارد مهمة للوكيل
+الملفات الحرجة التي يجب قراءتها
+📁 يجب قراءتها دائماً:
+├── server/core/models/base-entities.ts          ← تعريفات الكيانات الأساسية
+├── server/services/ai/gemini-service.ts         ← واجهة Gemini AI
+├── server/core/pipeline/base-station.ts         ← الفئة الأب للمحطات
+├── shared/schema.ts                             ← المخططات المشتركة
+└── server/routes.ts                             ← API endpoints
+
+📁 يجب الرجوع إليها عند الحاجة:
+├── server/stations/station3/station3-network-builder.ts  ← أهم محطة
+├── server/analysis_modules/network-diagnostics.ts        ← منطق التشخيص
+├── server/analysis_modules/efficiency-metrics.ts         ← حساب المقاييس
+└── src/components/ConflictNetwork.tsx                    ← تصور الشبكة
+أنماط الاستدعاء (Prompts) لـ Gemini
+typescript
+// ✅ نمط قوي: تعليمات واضحة + أمثلة + تنسيق محدد
+const buildCharacterAnalysisPrompt = (text: string) => `
+أنت محلل نصوص دراماتيكية متخصص. مهمتك: استخراج الشخصيات الرئيسية من النص التالي.
+
+التعليمات:
+1. استخرج 3-7 شخصيات رئيسية فقط (ليس الثانوية)
+2. لكل شخصية، حدد:
+   - الاسم الكامل
+   - السمات الشخصية (3-5 سمات)
+   - الدوافع والأهداف
+   - العلاقات الأساسية مع شخصيات أخرى
+
+تنسيق الإخراج: JSON بالشكل التالي:
 {
-  "overall_health_score": 67.5,
-  "criticality_level": "moderate_issues",
-  "isolated_characters": {
-    "total_isolated": 2,
-    "characters": [
-      {
-        "character_name": "سارة",
-        "isolation_type": "completely_isolated",
-        "suggested_connections": ["ربط مع الشخصية المركزية: أحمد"]
+  "characters": [
+    {
+      "name": "اسم الشخصية",
+      "traits": ["سمة1", "سمة2", "سمة3"],
+      "motivations": "الدوافع والأهداف",
+      "relationships": [
+        {"with": "شخصية أخرى", "type": "نوع العلاقة"}
+      ]
+    }
+  ]
+}
+
+مثال على شخصية صحيحة:
+{
+  "name": "أحمد المحامي",
+  "traits": ["عادل", "مثابر", "متفائل"],
+  "motivations": "البحث عن الحقيقة وتحقيق العدالة",
+  "relationships": [
+    {"with": "فاطمة", "type": "زوجة"}
+  ]
+}
+
+النص للتحليل:
+${text}
+
+الإخراج (JSON فقط):
+`;
+
+// ❌ نمط ضعيف: غامض وبدون تنسيق
+const weakPrompt = (text: string) => `
+حلل هذا النص واستخرج الشخصيات:
+${text}
+`;
+معادلات المقاييس المهمة
+typescript
+/**
+ * معامل جيني (Gini Coefficient)
+ * يقيس عدم المساواة في توزيع المشاركة
+ * القيمة: 0 (توازن تام) إلى 1 (عدم توازن كامل)
+ */
+function calculateGiniCoefficient(values: number[]): number {
+  const n = values.length;
+  const sortedValues = [...values].sort((a, b) => a - b);
+  
+  let sumOfDifferences = 0;
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      sumOfDifferences += Math.abs(sortedValues[i] - sortedValues[j]);
+    }
+  }
+  
+  const meanValue = values.reduce((sum, val) => sum + val, 0) / n;
+  const gini = sumOfDifferences / (2 * n * n * meanValue);
+  
+  return gini;
+}
+
+/**
+ * تماسك الصراع (Conflict Cohesion)
+ * يقيس مدى ترابط الصراعات في الشبكة
+ * القيمة: 0 (صراعات منعزلة) إلى 1 (شبكة متماسكة)
+ */
+function calculateConflictCohesion(network: ConflictNetwork): number {
+  const conflicts = Array.from(network.conflicts.values());
+  
+  // عدد الشخصيات المشاركة في أكثر من صراع
+  const characterConflictCount = new Map<string, number>();
+  conflicts.forEach(conflict => {
+    conflict.involvedCharacters.forEach(charId => {
+      characterConflictCount.set(
+        charId, 
+        (characterConflictCount.get(charId) || 0) + 1
+      );
+    });
+  });
+  
+  const multiConflictChars = Array.from(characterConflictCount.values())
+    .filter(count => count > 1).length;
+  
+  const totalChars = network.characters.size;
+  
+  return totalChars > 0 ? multiConflictChars / totalChars : 0;
+}
+
+/**
+ * كفاءة السرد (Narrative Efficiency)
+ * يقيس مدى استغلال العناصر السردية
+ */
+function calculateNarrativeEfficiency(network: ConflictNetwork): {
+  characterEfficiency: number;
+  relationshipEfficiency: number;
+  conflictEfficiency: number;
+  overall: number;
+} {
+  const totalCharacters = network.characters.size;
+  const activeCharacters = Array.from(network.characters.values())
+    .filter(char => char.conflictInvolvements.length > 0).length;
+  
+  const totalRelationships = network.relationships.size;
+  const meaningfulRelationships = Array.from(network.relationships.values())
+    .filter(rel => rel.strength >= 0.5).length;
+  
+  const totalConflicts = network.conflicts.size;
+  const progressingConflicts = Array.from(network.conflicts.values())
+    .filter(conf => conf.currentStage !== 'exposition').length;
+  
+  const charEff = totalCharacters > 0 ? activeCharacters / totalCharacters : 0;
+  const relEff = totalRelationships > 0 ? meaningfulRelationships / totalRelationships : 0;
+  const confEff = totalConflicts > 0 ? progressingConflicts / totalConflicts : 0;
+  
+  return {
+    characterEfficiency: charEff,
+    relationshipEfficiency: relEff,
+    conflictEfficiency: confEff,
+    overall: (charEff + relEff + confEff) / 3
+  };
+}
+🎯 سيناريوهات متقدمة
+سيناريو 4: التعامل مع نصوص طويلة جداً
+typescript
+// مشكلة: نصوص طويلة تتجاوز حد Gemini (1M tokens)
+// الحل: تقسيم النص إلى أجزاء
+
+interface TextChunk {
+  index: number;
+  content: string;
+  tokenCount: number;
+}
+
+async function analyzeWithChunking(
+  fullText: string,
+  geminiService: GeminiService
+): Promise<AnalysisResult> {
+  const MAX_TOKENS_PER_CHUNK = 100_000; // ~75k كلمة
+  
+  // 1. تقسيم النص
+  const chunks = splitTextIntoChunks(fullText, MAX_TOKENS_PER_CHUNK);
+  
+  // 2. تحليل كل جزء
+  const chunkResults = await Promise.all(
+    chunks.map(chunk => analyzeChunk(chunk, geminiService))
+  );
+  
+  // 3. دمج النتائج
+  const mergedResult = mergeChunkResults(chunkResults);
+  
+  return mergedResult;
+}
+
+function splitTextIntoChunks(
+  text: string, 
+  maxTokens: number
+): TextChunk[] {
+  // تقسيم ذكي عند نهايات المشاهد/الفصول
+  const scenes = text.split(/\n\n={3,}\n\n/); // مفصولة بـ ===
+  
+  const chunks: TextChunk[] = [];
+  let currentChunk = '';
+  let chunkIndex = 0;
+  
+  for (const scene of scenes) {
+    const estimatedTokens = estimateTokenCount(currentChunk + scene);
+    
+    if (estimatedTokens > maxTokens && currentChunk.length > 0) {
+      // حفظ الجزء الحالي
+      chunks.push({
+        index: chunkIndex++,
+        content: currentChunk.trim(),
+        tokenCount: estimateTokenCount(currentChunk)
+      });
+      currentChunk = scene;
+    } else {
+      currentChunk += '\n\n' + scene;
+    }
+  }
+  
+  // الجزء الأخير
+  if (currentChunk.length > 0) {
+    chunks.push({
+      index: chunkIndex,
+      content: currentChunk.trim(),
+      tokenCount: estimateTokenCount(currentChunk)
+    });
+  }
+  
+  return chunks;
+}
+
+function estimateTokenCount(text: string): number {
+  // تقدير تقريبي: 1 token ≈ 0.75 كلمة للعربية
+  const wordCount = text.split(/\s+/).length;
+  return Math.ceil(wordCount / 0.75);
+}
+
+async function mergeChunkResults(
+  results: ChunkAnalysisResult[]
+): Promise<AnalysisResult> {
+  // دمج الشخصيات (إزالة التكرارات)
+  const allCharacters = new Map<string, Character>();
+  results.forEach(result => {
+    result.characters.forEach((char, name) => {
+      if (allCharacters.has(name)) {
+        // دمج معلومات الشخصية
+        const existing = allCharacters.get(name)!;
+        allCharacters.set(name, mergeCharacterInfo(existing, char));
+      } else {
+        allCharacters.set(name, char);
       }
-    ]
-  },
-  "abandoned_conflicts": {
-    "total_abandoned": 1,
-    "conflicts": [
-      {
-        "conflict_name": "الصراع على الميراث",
-        "issue_type": "stuck_in_phase",
-        "days_inactive": 45
+    });
+  });
+  
+  // دمج العلاقات والصراعات بنفس الطريقة
+  // ...
+  
+  return {
+    characters: allCharacters,
+    // ...
+  };
+}
+سيناريو 5: التخزين المؤقت الذكي (Caching)
+typescript
+// استخدم Redis أو memory cache للنتائج الوسيطة
+
+import { createClient } from 'redis';
+
+class AnalysisCache {
+  private client: ReturnType<typeof createClient>;
+  private readonly TTL = 24 * 60 * 60; // 24 ساعة
+  
+  constructor() {
+    this.client = createClient({
+      url: process.env.REDIS_URL || 'redis://localhost:6379'
+    });
+    this.client.connect();
+  }
+  
+  // مفتاح فريد للتحليل
+  private generateKey(
+    text: string, 
+    stationNumber: number
+  ): string {
+    // استخدم hash للنص لتقليل حجم المفتاح
+    const textHash = this.hashText(text);
+    return `analysis:${textHash}:station${stationNumber}`;
+  }
+  
+  private hashText(text: string): string {
+    const crypto = require('crypto');
+    return crypto
+      .createHash('sha256')
+      .update(text)
+      .digest('hex')
+      .substring(0, 16);
+  }
+  
+  async get<T>(
+    text: string, 
+    stationNumber: number
+  ): Promise<T | null> {
+    try {
+      const key = this.generateKey(text, stationNumber);
+      const cached = await this.client.get(key);
+      
+      if (cached) {
+        console.log(`Cache hit for station ${stationNumber}`);
+        return JSON.parse(cached) as T;
       }
-    ]
+      
+      return null;
+    } catch (error) {
+      console.error('Cache get error:', error);
+      return null;
+    }
+  }
+  
+  async set<T>(
+    text: string, 
+    stationNumber: number, 
+    data: T
+  ): Promise<void> {
+    try {
+      const key = this.generateKey(text, stationNumber);
+      await this.client.setEx(
+        key, 
+        this.TTL, 
+        JSON.stringify(data)
+      );
+      console.log(`Cached result for station ${stationNumber}`);
+    } catch (error) {
+      console.error('Cache set error:', error);
+    }
+  }
+  
+  async invalidate(text: string): Promise<void> {
+    // حذف جميع نتائج المحطات للنص
+    const textHash = this.hashText(text);
+    const pattern = `analysis:${textHash}:*`;
+    
+    const keys = await this.client.keys(pattern);
+    if (keys.length > 0) {
+      await this.client.del(keys);
+      console.log(`Invalidated ${keys.length} cached results`);
+    }
   }
 }
-```
 
----
-
-### المحطة 7️⃣: التصور والعرض النهائي
-
-**الهدف**: إنشاء تصورات بصرية وتقارير نهائية شاملة
-
-**المدخلات**:
-- شبكة الصراع
-- مخرجات جميع المحطات السابقة
-
-**المخرجات**:
-- **تصورات شبكية**:
-  - رسم بياني للشبكة الكاملة (Network Graph)
-  - خريطة العلاقات (Relationship Map)
-  - خريطة الصراعات (Conflict Map)
-- **تصورات زمنية**:
-  - جدول زمني لتطور الصراعات
-  - جدول زمني لتطور الشخصيات
-  - جدول الأحداث الرئيسية
-- **رسوم بيانية إحصائية**:
-  - توزيع أنواع الصراعات
-  - توزيع طبائع العلاقات
-  - مشاركة الشخصيات في الصراعات
-  - توزيع مراحل الصراعات
-- **عناصر تفاعلية**:
-  - مستكشف الشبكة التفاعلي
-  - متصفح الجدول الزمني
-  - محلل الصراعات
-- **اقتراحات التكيف للمنصات**:
-  - بنية حلقية (Episodic) للمسلسلات
-  - بنية سينمائية للأفلام
-  - بنية روائية مسلسلة للكتب
-- **التقرير النهائي**:
-  - ملخص تنفيذي
-  - تحليل SWOT (نقاط القوة، الضعف، الفرص، التهديدات)
-  - التقييم الشامل
-  - النتائج التفصيلية
-- **حزمة التصدير**:
-  - JSON (للبرمجة)
-  - Markdown (للقراءة)
-  - HTML (تفاعلي)
-  - PDF (للطباعة)
-
----
-
-## 📊 أمثلة على المخرجات
-
-### مثال 1: رسم بياني للشبكة
-
-```
-     [علي] ────عداء────> [أحمد]
-       │                    │
-       │                    │
-    صداقة              تحالف
-       │                    │
-       ↓                    ↓
-    [فاطمة] ──حب متبادل── [سارة]
-```
-
-### مثال 2: تقرير الصحة
-
-```
-==============================================
-تقييم صحة الشبكة الدرامية
-==============================================
-
-الدرجة الإجمالية: 72.5/100
-مستوى الخطورة: moderate_issues
-
-المشاكل المكتشفة:
-  • مشاكل هيكلية: 2
-  • شخصيات معزولة: 1
-  • صراعات مهملة: 3
-  • شخصيات محملة: 1
-  • اتصالات ضعيفة: 5
-  • تكرارات: 2
-
-التوصية الرئيسية:
-✓ الشبكة في حالة جيدة مع بعض المجالات للتحسين
-```
-
----
-
-## 🔧 التكوين المتقدم
-
-### ملف `config.yaml`
-
-```yaml
-api_providers:
-  openai:
-    enabled: true
-    default_model: "gpt-4o-mini"
-    temperature: 0.7
-    max_tokens: 2000
+// الاستخدام في المحطات
+export class Station3NetworkBuilder extends BaseStation {
+  constructor(
+    config: StationConfig,
+    geminiService: GeminiService,
+    private cache: AnalysisCache
+  ) {
+    super('Station3NetworkBuilder', config, geminiService);
+  }
   
-  google:
-    enabled: true
-    models:
-      pro: "gemini-1.5-pro-latest"
-      flash: "gemini-1.5-flash-latest"
-
-station_settings:
-  station1_text_processing:
-    max_characters_analyzed: 7
-    analysis_depth: "detailed"
-  
-  station3_network_builder:
-    enable_ai_inference: true
-    relationship_threshold: 0.5
-  
-  station4_efficiency_metrics:
-    enable_advanced_metrics: true
-  
-  station6_diagnostics:
-    health_score_weights:
-      structural: 0.3
-      balance: 0.25
-      efficiency: 0.25
-      redundancy: 0.2
-
-visualization:
-  output_format: ["html", "png", "svg"]
-  interactive_enabled: true
-  chart_style: "seaborn"
-```
-
----
-
-## 🧪 الاختبار
-
-### تشغيل الاختبارات
-
-```bash
-# تشغيل جميع الاختبارات
-pytest tests/
-
-# اختبار محطة محددة
-pytest tests/test_station1.py
-
-# اختبار مع تغطية
-pytest --cov=backend tests/
-```
-
-### أمثلة الاختبار
-
-```python
-# tests/test_network_diagnostics.py
-import pytest
-from core.base_entities import ConflictNetwork, Character
-from analysis_modules.network_diagnostics import NetworkDiagnostics
-
-def test_isolated_character_detection():
-    """اختبار كشف الشخصيات المعزولة"""
-    network = ConflictNetwork("Test Network")
+  async process(input: Station3Input): Promise<Station3Output> {
+    // 1. التحقق من الكاش
+    const cached = await this.cache.get<Station3Output>(
+      input.fullText, 
+      3
+    );
     
-    # إضافة شخصية معزولة
-    char1 = Character(id="char1", name="علي")
-    network.add_character(char1)
+    if (cached && !input.options?.skipCache) {
+      this.logger.info('Returning cached result for Station 3');
+      return cached;
+    }
     
-    # تشغيل التشخيص
-    diagnostics = NetworkDiagnostics(network)
-    report = diagnostics.run_all_diagnostics()
+    // 2. التحليل الفعلي
+    this.logger.info('Performing fresh analysis for Station 3');
+    const result = await this.performAnalysis(input);
     
-    # التحقق
-    assert report['isolated_characters']['total_isolated'] == 1
-    assert report['criticality_level'] in ['moderate_issues', 'major_issues']
-```
+    // 3. حفظ في الكاش
+    await this.cache.set(input.fullText, 3, result);
+    
+    return result;
+  }
+}
+سيناريو 6: معالجة الأخطاء المتقدمة
+typescript
+// تعريف أنواع أخطاء مخصصة
 
----
+export class StationError extends Error {
+  constructor(
+    message: string,
+    public readonly stationName: string,
+    public readonly stationNumber: number,
+    public readonly cause?: Error
+  ) {
+    super(message);
+    this.name = 'StationError';
+  }
+}
 
-## 📈 قياس الأداء
+export class GeminiAPIError extends Error {
+  constructor(
+    message: string,
+    public readonly statusCode?: number,
+    public readonly retryable: boolean = true
+  ) {
+    super(message);
+    this.name = 'GeminiAPIError';
+  }
+}
 
-### معايير الأداء
+export class ValidationError extends Error {
+  constructor(
+    message: string,
+    public readonly field: string,
+    public readonly value: any
+  ) {
+    super(message);
+    this.name = 'ValidationError';
+  }
+}
 
-| المحطة | الوقت المتوسط | الذاكرة |
-|--------|---------------|---------|
-| المحطة 1 | 30-60 ثانية | ~500MB |
-| المحطة 2 | 45-90 ثانية | ~600MB |
-| المحطة 3 | 2-4 دقائق | ~800MB |
-| المحطة 4 | 10-20 ثانية | ~400MB |
-| المحطة 5 | 1-2 دقيقة | ~700MB |
-| المحطة 6 | 15-30 ثانية | ~500MB |
-| المحطة 7 | 30-60 ثانية | ~600MB |
-| **المجموع** | **5-10 دقائق** | **~1GB** |
+// استخدام في المحطات
+export class Station1TextAnalysis extends BaseStation {
+  async process(input: Station1Input): Promise<Station1Output> {
+    try {
+      // التحقق من المدخلات
+      this.validateInput(input);
+      
+      // التحليل
+      const result = await this.performAnalysis(input);
+      
+      // التحقق من المخرجات
+      this.validateOutput(result);
+      
+      return result;
+    } catch (error) {
+      // معالجة مخصصة حسب نوع الخطأ
+      if (error instanceof ValidationError) {
+        throw new StationError(
+          `Invalid input for Station 1: ${error.message}`,
+          'Station1TextAnalysis',
+          1,
+          error
+        );
+      }
+      
+      if (error instanceof GeminiAPIError) {
+        if (error.retryable) {
+          // إعادة المحاولة مع exponential backoff
+          return await this.retryWithBackoff(() => 
+            this.performAnalysis(input)
+          );
+        }
+        throw new StationError(
+          `Gemini API error in Station 1: ${error.message}`,
+          'Station1TextAnalysis',
+          1,
+          error
+        );
+      }
+      
+      // خطأ غير متوقع
+      throw new StationError(
+        `Unexpected error in Station 1: ${error.message}`,
+        'Station1TextAnalysis',
+        1,
+        error instanceof Error ? error : undefined
+      );
+    }
+  }
+  
+  private async retryWithBackoff<T>(
+    fn: () => Promise<T>,
+    maxRetries: number = 3
+  ): Promise<T> {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        return await fn();
+      } catch (error) {
+        if (attempt === maxRetries) throw error;
+        
+        const delay = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s
+        this.logger.warn(`Retry attempt ${attempt}/${maxRetries}, waiting ${delay}ms`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+    
+    throw new Error('Max retries exceeded');
+  }
+}
+📋 Checklist للوكيل قبل كل Task
+✅ قبل إضافة ميزة جديدة
+ هل قرأت الملفات ذات الصلة في server/core/models/؟
+ هل فهمت التدفق في server/run-all-stations.ts؟
+ هل الميزة تتطلب تعديل ConflictNetwork؟
+ إذا نعم، هل التعديل متوافق مع المحطات الموجودة؟
+ هل ستحتاج لاستدعاء Gemini API؟
+ هل لديك خطة للتخزين المؤقت (caching)؟
+ هل الميزة تحتاج مكون UI جديد؟
+ هل المكون يدعم RTL و dark mode؟
+✅ قبل تعديل كود موجود
+ هل قرأت الكود الحالي بالكامل؟
+ هل فهمت السبب وراء التصميم الحالي؟
+ هل التعديل سيكسر أي وظيفة موجودة؟
+ هل اختبرت السيناريوهات الحرجة؟
+ هل حدّثت التوثيق (JSDoc)؟
+ هل حدّثت الاختبارات؟
+✅ قبل الـ Commit
+ هل الكود يمر من TypeScript strict checks؟
+ هل الكود يمر من ESLint؟
+ هل الكود منسق بـ Prettier؟
+ هل جميع الاختبارات تنجح؟
+ هل التوثيق محدث؟
+ هل رسالة الـ commit واضحة ووصفية؟
+🎓 مصطلحات مهمة
+المصطلح	الإنجليزية	الوصف
+شبكة الصراع	ConflictNetwork	البنية المركزية التي تربط الشخصيات والعلاقات والصراعات
+محطة	Station	وحدة تحليل مستقلة في خط الأنابيب
+التماسك	Cohesion	مدى ترابط عناصر الشبكة
+الكفاءة السردية	Narrative Efficiency	مدى استغلال العناصر السردية
+معامل جيني	Gini Coefficient	مقياس عدم المساواة في التوزيع
+الشخصية المعزولة	Isolated Character	شخصية بدون علاقات أو صراعات
+الصراع المهمل	Abandoned Conflict	صراع لم يتطور أو يُحل
+اللقطة الزمنية	Snapshot	حالة الشبكة في نقطة زمنية محددة
+🔗 روابط مرجعية سريعة
+typescript
+// الكيانات الأساسية
+import type { 
+  Character,
+  Relationship,
+  Conflict,
+  ConflictNetwork,
+  NetworkSnapshot 
+} from '@/server/core/models/base-entities';
 
-*ملاحظة: الأوقات تقريبية وتعتمد على طول النص ومواصفات النظام*
+// خدمات AI
+import { GeminiService, GeminiModel } from '@/server/services/ai/gemini-service';
 
-### التحسينات
+// المحطات
+import { Station1TextAnalysis } from '@/server/stations/station1/station1-text-analysis';
+import { Station3NetworkBuilder } from '@/server/stations/station3/station3-network-builder';
 
-- ✅ **التخزين المؤقت**: استخدام `joblib` لتخزين النتائج
-- ✅ **المعالجة المتوازية**: استخدام `asyncio` للعمليات المتزامنة
-- ✅ **الاستدعاءات المُحسَّنة**: تقليل استدعاءات API من خلال الدُفعات
+// التحليل
+import { NetworkDiagnostics } from '@/server/analysis_modules/network-diagnostics';
+import { EfficiencyMetrics } from '@/server/analysis_modules/efficiency-metrics';
 
----
+// UI Components
+import { ConflictNetwork } from '@/components/ConflictNetwork';
+import { DiagnosticPanel } from '@/components/DiagnosticPanel';
+import { StationProgress } from '@/components/StationProgress';
 
-## 🤝 المساهمة
+// Contexts
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useTheme } from '@/contexts/ThemeContext';
+💡 نصائح ذهبية للوكيل
+1. اقرأ قبل الكتابة
+لا تبدأ الترميز قبل فهم السياق الكامل. اقرأ الملفات ذات الصلة أولاً.
 
-نرحب بالمساهمات! الرجاء اتباع الخطوات التالية:
+2. اختبر محلياً
+لا تفترض أن الكود يعمل. اختبر بنفسك قبل الالتزام.
 
-1. Fork المشروع
-2. إنشاء فرع للميزة (`git checkout -b feature/AmazingFeature`)
-3. Commit التغييرات (`git commit -m 'Add amazing feature'`)
-4. Push للفرع (`git push origin feature/AmazingFeature`)
-5. فتح Pull Request
+3. الأداء مهم
+تذكر أن المحطات تعمل بالتسلسل. أي تحسين في الأداء يتراكم.
 
-### معايير الكود
+4. العربية أولاً
+النظام مُحسَّن للعربية. تأكد من دعم RTL والترجمات.
 
-- اتباع PEP 8 لـ Python
-- توثيق جميع الدوال (docstrings)
-- كتابة اختبارات للميزات الجديدة
-- معالجة الأخطاء بشكل شامل
+5. الأخطاء صديقتك
+معالجة الأخطاء الجيدة = تجربة مستخدم أفضل.
 
----
+6. التوثيق ليس اختيارياً
+كود بدون توثيق = كود صعب الصيانة.
 
-## 📝 الترخيص
+7. Gemini باهظ
+قلل استدعاءات API قدر الإمكان. استخدم التخزين المؤقت.
 
-هذا المشروع مرخص تحت رخصة MIT - انظر ملف [LICENSE](LICENSE) للتفاصيل.
+8. التسلسل مقدس
+لا تكسر تسلسل المحطات. إذا احتجت، أضف محطة جديدة.
 
----
+🚀 أوامر سريعة للوكيل
+bash
+# التطوير
+npm run dev                    # تشغيل كامل (خادم + واجهة)
+npm run dev:server            # خادم فقط
+npm run dev:client            # واجهة فقط
 
-## 🆘 الدعم والمساعدة
+# الاختبار
+npm test                      # جميع الاختبارات
+npm run test:watch           # مع المراقبة
+npm run test:coverage        # مع التغطية
+npm test -- station3         # اختبار محطة محددة
 
-### الأسئلة الشائعة
+# البناء
+npm run build                # بناء للإنتاج
+npm run type-check           # فحص الأنواع
+npm run lint                 # فحص الجودة
+npm run format               # تنسيق الكود
 
-**س: كم يستغرق تحليل نص طويل؟**  
-ج: للنص بطول 50,000 كلمة، يستغرق التحليل الكامل حوالي 5-10 دقائق.
+# قاعدة البيانات
+npm run db:generate          # توليد migrations
+npm run db:push              # تطبيق التغييرات
+npm run db:studio            # فتح Drizzle Studio
 
-**س: هل يمكن استخدام نماذج AI أخرى؟**  
-ج: نعم! النظام مصمم ليكون مرناً. يمكنك إضافة نماذج جديدة في `utils/api_utils.py`.
+# التنظيف
+rm -rf dist node_modules     # تنظيف كامل
+npm install                  # إعادة التثبيت
+🎯 الخلاصة
+نظام Stations هو نظام معقد ومتقدم لتحليل النصوص الدرامية. كوكيل ترميز:
 
-**س: كيف أحسّن النتائج؟**  
-ج: جرّب:
-- تعديل قيم `temperature` في `config.yaml`
-- استخدام نماذج أقوى (مثل GPT-4 بدلاً من GPT-4-mini)
-- توفير سياق إضافي في المحطة الأولى
-
-### التواصل
-
-- 📧 **البريد الإلكتروني**: support@script-analyzer.com
-- 💬 **Discord**: [انضم لمجتمعنا](https://discord.gg/script-analyzer)
-- 📚 **الوثائق الكاملة**: [docs.script-analyzer.com](https://docs.script-analyzer.com)
-- 🐛 **الإبلاغ عن الأخطاء**: [GitHub Issues](https://github.com/your-repo/script-analyzer/issues)
-
----
-
-## 🙏 شكر وتقدير
-
-- **Anthropic** - نماذج Claude AI
-- **OpenAI** - نماذج GPT
-- **Google** - نماذج Gemini
-- **NetworkX** - مكتبة تحليل الشبكات
-- **مجتمع Python** - الأدوات والمكتبات الرائعة
-
----
-
-## 📚 مراجع علمية
-
-1. McKee, Robert. *Story: Substance, Structure, Style and the Principles of Screenwriting*. 1997.
-2. Snyder, Blake. *Save the Cat!: The Last Book on Screenwriting You'll Ever Need*. 2005.
-3. Campbell, Joseph. *The Hero with a Thousand Faces*. 1949.
-4. Newman, M.E.J. *Networks: An Introduction*. Oxford University Press, 2010.
-5. Moretti, Franco. *Distant Reading*. Verso Books, 2013.
-
----
-
-<p align="center">
-  <b>صُنع بـ ❤️ لمحبي السرد والدراما</b>
-</p>
-
-<p align="center">
-  ⭐ إذا أعجبك المشروع، لا تنسَ إضافة نجمة على GitHub!
-</p>
+افهم التسلسل: المحطات تعمل بالتسلسل، لا يمكن تخطي أي منها
+احترم البنية: ConflictNetwork هو القلب، أي تعديل عليه يؤثر على كل شيء
+استخدم TypeScript بحكمة: أنواع صارمة، معالجة أخطاء شاملة
+حسّن الأداء: استخدام التخزين المؤقت، المعالجة المتوازية
+دعم العربية: RTL، ترجمات، خطوط عربية
+اختبر دائماً: لا تعتمد على الافتراضات
