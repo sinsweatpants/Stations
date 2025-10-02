@@ -5,3 +5,11 @@ server/public
 vite.config.ts.*
 *.tar.gz
 .env
+# Production readiness additions
+logs/
+*.log
+.health-check-test
+backup_*/
+package.json.scripts.txt
+coverage/
+.eslintcache
