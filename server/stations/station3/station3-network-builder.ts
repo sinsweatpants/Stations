@@ -1,10 +1,10 @@
 import { BaseStation, StationConfig } from '../../core/pipeline/base-station';
 import { GeminiService, GeminiModel } from '../../services/ai/gemini-service';
-import { 
-  Character, 
-  Relationship, 
-  Conflict, 
-  ConflictNetwork, 
+import {
+  Character,
+  Relationship,
+  Conflict,
+  ConflictNetwork,
   ConflictNetworkImpl,
   RelationshipType,
   RelationshipNature,
@@ -15,6 +15,7 @@ import {
 } from '../../core/models/base-entities';
 import { Station1Output } from '../station1/station1-text-analysis';
 import { Station2Output } from '../station2/station2-conceptual-analysis';
+import logger from '../../utils/logger';
 
 export interface Station3Input {
   station1Output: Station1Output;
@@ -128,7 +129,8 @@ class RelationshipInferenceEngine {
 
         relationships.push(relationship);
       } catch (error) {
-        console.error('Error parsing relationship:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error parsing relationship', { error: errorMessage });
       }
     }
 
@@ -260,7 +262,8 @@ class ConflictInferenceEngine {
 
         conflicts.push(conflict);
       } catch (error) {
-        console.error('Error parsing conflict:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        logger.error('Error parsing conflict', { error: errorMessage });
       }
     }
 
@@ -369,11 +372,11 @@ export class Station3NetworkBuilder extends BaseStation<Station3Input, Station3O
     });
   }
 
-  protected extractRequiredData(input: Station3Input): any {
+  protected extractRequiredData(input: Station3Input): Record<string, unknown> {
     return {
-      station1: input.station1Output,
-      station2: input.station2Output,
-      fullText: input.fullText
+      station1Characters: input.station1Output.majorCharacters.length,
+      station2StoryStatementLength: input.station2Output.storyStatement.length,
+      textLength: input.fullText.length
     };
   }
 

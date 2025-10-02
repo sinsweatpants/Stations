@@ -7,17 +7,15 @@ import { Station3NetworkBuilder } from './stations/station3/station3-network-bui
 import { Station4EfficiencyMetrics } from './stations/station4/station4-efficiency-metrics';
 import { Station5DynamicSymbolicStylistic } from './stations/station5/station5-dynamic-symbolic-stylistic';
 import { Station6DiagnosticsAndTreatment } from './stations/station6/station6-diagnostics-treatment';
-import { Station7Finalization } from './stations/station7/station7-finalization';
+import {
+  Station7Finalization,
+  Station7Input,
+  Station7Output
+} from './stations/station7/station7-finalization';
 import { GeminiService, GeminiModel } from './services/ai/gemini-service';
 import * as fs from 'fs';
 import * as path from 'path';
-
-// Basic logger
-const logger = {
-  info: (message: string) => console.log(`[INFO] ${message}`),
-  error: (message: string) => console.error(`[ERROR] ${message}`),
-  warn: (message: string) => console.warn(`[WARN] ${message}`),
-};
+import logger from './utils/logger';
 
 async function runAllStations() {
   logger.info('================================================');
@@ -65,11 +63,14 @@ async function runAllStations() {
   const station6Config = { stationNumber: 6, stationName: 'Diagnostics & Treatment', inputValidation: () => true, outputValidation: () => true, cacheEnabled: false, performanceTracking: true };
   const station6 = new Station6DiagnosticsAndTreatment(station6Config, geminiService);
   
-  const station7Config: import('./core/pipeline/base-station').StationConfig = {
+  const station7Config: import('./core/pipeline/base-station').StationConfig<
+    Station7Input,
+    Station7Output
+  > = {
     stationNumber: 7,
     stationName: 'Finalization & Visualization',
-    inputValidation: (input: any) => Boolean(input.conflictNetwork && input.station6Output),
-    outputValidation: (output: any) => Boolean(output.finalReport && output.visualizationResults),
+    inputValidation: (input) => Boolean(input.conflictNetwork && input.station6Output),
+    outputValidation: (output) => Boolean(output.finalReport && output.visualizationResults),
     cacheEnabled: false,
     performanceTracking: true,
   };

@@ -308,10 +308,10 @@ export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Stati
     };
   }
 
-  protected extractRequiredData(input: Station2Input): any {
+  protected extractRequiredData(input: Station2Input): Record<string, unknown> {
     return {
-      station1: input.station1Output,
-      fullText: input.fullText
+      charactersCount: input.station1Output.majorCharacters.length,
+      textLength: input.fullText.length
     };
   }
 

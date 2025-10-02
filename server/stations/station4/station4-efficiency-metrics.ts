@@ -128,9 +128,11 @@ export class Station4EfficiencyMetrics extends BaseStation<Station4Input, Statio
     };
   }
 
-  protected extractRequiredData(input: Station4Input): any {
+  protected extractRequiredData(input: Station4Input): Record<string, unknown> {
     return {
-      networkSummary: input.station3Output.networkSummary
+      characters: input.station3Output.networkSummary.charactersCount,
+      relationships: input.station3Output.networkSummary.relationshipsCount,
+      conflicts: input.station3Output.networkSummary.conflictsCount
     };
   }
 

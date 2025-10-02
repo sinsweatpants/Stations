@@ -1,14 +1,9 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
-
-// Basic logger
-const logger = {
-  info: (message: string) => console.log(`[INFO] ${message}`),
-  error: (message: string) => console.error(`[ERROR] ${message}`),
-  warn: (message: string) => console.warn(`[WARN] ${message}`),
-};
+import logger from '../../utils/logger';
 
 export enum GeminiModel {
   PRO = 'gemini-2.5-pro',
+  FLASH = 'gemini-1.5-flash'
 }
 
 export interface GeminiConfig {
@@ -16,6 +11,7 @@ export interface GeminiConfig {
   defaultModel: GeminiModel;
   maxRetries: number;
   timeout: number;
+  fallbackModel?: GeminiModel;
 }
 
 export interface GeminiRequest {
@@ -27,7 +23,22 @@ export interface GeminiRequest {
   maxTokens?: number;
 }
 
-export interface GeminiResponse<T = any> {
+export function isValidJSONResponse<T>(obj: unknown): obj is T {
+  return typeof obj === 'object' && obj !== null;
+}
+
+export function hasRequiredFields<T extends Record<string, unknown>>(
+  obj: unknown,
+  fields: (keyof T)[]
+): obj is T {
+  if (!isValidJSONResponse<T>(obj)) {
+    return false;
+  }
+
+  return fields.every(field => Object.prototype.hasOwnProperty.call(obj, field));
+}
+
+export interface GeminiResponse<T = unknown> {
   model: GeminiModel;
   content: T;
   usage: {
@@ -84,14 +95,15 @@ export class GeminiService {
       return {
         model: request.model,
         content: this.parseResponse<T>(text),
-        usage: usage,
+        usage,
         metadata: {
           timestamp: new Date(),
           latency: Date.now() - startTime
         }
       };
     } catch (error) {
-      logger.error(`Error calling Gemini API for model ${request.model}: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      logger.error(`Error calling Gemini API for model ${request.model}`, { error: errorMessage });
       return this.handleError(error, request);
     }
   }
@@ -100,25 +112,35 @@ export class GeminiService {
     try {
       // Clean the response to extract only the JSON part
       const jsonMatch = responseText.match(/```json\n([\s\S]*?)\n```/);
-      if (jsonMatch && jsonMatch) {
-        return JSON.parse(jsonMatch);
+      let parsed: unknown;
+
+      if (jsonMatch && jsonMatch[1]) {
+        parsed = JSON.parse(jsonMatch[1]);
+      } else {
+        // Fallback for responses that might just be JSON without markdown
+        parsed = JSON.parse(responseText);
       }
-      // Fallback for responses that might just be JSON without markdown
-      return JSON.parse(responseText);
+      if (!isValidJSONResponse(parsed)) {
+        logger.warn('Parsed response is not a valid object');
+        return { raw: responseText, error: 'Invalid response format' } as unknown as T;
+      }
+
+      return parsed as T;
     } catch (error) {
       logger.warn('Failed to parse JSON from response. Returning raw text.');
-      // If parsing fails, we return the raw text wrapped in a simple object
-      // This might not match type T, but it prevents a crash.
-      return { raw: responseText } as unknown as T;
+      return { raw: responseText, error: 'JSON parse failed' } as unknown as T;
     }
   }
 
   private async handleError(
-    error: any,
+    error: unknown,
     request: GeminiRequest
-  ): Promise<GeminiResponse<any>> {
+  ): Promise<GeminiResponse<unknown>> {
     // In a real app, you'd have more sophisticated retry/fallback logic
-    logger.error(`Failed to generate content with model ${request.model}. Error: ${error.message}`);
-    throw error; // Re-throw the error to be handled by the calling station
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    logger.error(`Failed to generate content with model ${request.model}`, {
+      error: errorMessage
+    });
+    throw error;
   }
 }

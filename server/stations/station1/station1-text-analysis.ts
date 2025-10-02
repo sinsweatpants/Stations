@@ -1,5 +1,6 @@
 import { BaseStation, StationConfig } from '../../core/pipeline/base-station';
 import { GeminiService, GeminiModel } from '../../services/ai/gemini-service';
+import logger from '../../utils/logger';
 
 export interface Station1Input {
   fullText: string;
@@ -40,16 +41,44 @@ export interface Station1Output {
   };
 }
 
+interface CharacterAnalysisContent {
+  personality_traits?: string;
+  motivations_goals?: string;
+  key_relationships_brief?: string;
+  narrative_function?: string;
+  potential_arc_observation?: string;
+}
+
+interface RelationshipContentItem {
+  characters: [string, string];
+  dynamic?: string;
+  narrative_importance?: string;
+}
+
+interface RelationshipAnalysisContent {
+  key_relationships: RelationshipContentItem[];
+}
+
+interface NarrativeStyleContent {
+  overall_tone?: string;
+  pacing_analysis?: string;
+  language_style?: string;
+}
+
 export class Station1TextAnalysis extends BaseStation<Station1Input, Station1Output> {
-  
   constructor(
-    config: StationConfig,
+    config: StationConfig<Station1Input, Station1Output>,
     geminiService: GeminiService
   ) {
     super(config, geminiService);
   }
 
   protected async process(input: Station1Input): Promise<Station1Output> {
+    logger.info('Station 1: Starting text analysis', {
+      project: input.projectName,
+      textLength: input.fullText.length
+    });
+
     const [
       majorCharacters,
       relationshipAnalysis,
@@ -145,13 +174,13 @@ export class Station1TextAnalysis extends BaseStation<Station1Input, Station1Out
 }
     `;
 
-    const result = await this.geminiService.generate({
+    const result = await this.geminiService.generate<CharacterAnalysisContent>({
       prompt,
       context: fullText.substring(0, 30000),
       model: GeminiModel.PRO
     });
 
-    const content: any = result.content || {};
+    const content = result.content ?? {};
 
     return {
       personalityTraits: content.personality_traits || 'N/A',
@@ -181,19 +210,19 @@ export class Station1TextAnalysis extends BaseStation<Station1Input, Station1Out
 }
     `;
 
-    const result = await this.geminiService.generate({
+    const result = await this.geminiService.generate<RelationshipAnalysisContent>({
       prompt,
       context: fullText.substring(0, 30000),
       model: GeminiModel.PRO
     });
 
-    const content: any = result.content || { key_relationships: [] };
+    const content = result.content ?? { key_relationships: [] };
 
     return {
-      keyRelationships: content.key_relationships.map((rel: any) => ({
-        characters: rel.characters as [string, string],
-        dynamic: rel.dynamic || 'N/A',
-        narrativeImportance: rel.narrative_importance || 'N/A'
+      keyRelationships: content.key_relationships.map(rel => ({
+        characters: rel.characters,
+        dynamic: rel.dynamic ?? 'N/A',
+        narrativeImportance: rel.narrative_importance ?? 'N/A'
       }))
     };
   }
@@ -217,13 +246,13 @@ export class Station1TextAnalysis extends BaseStation<Station1Input, Station1Out
 }
     `;
 
-    const result = await this.geminiService.generate({
+    const result = await this.geminiService.generate<NarrativeStyleContent>({
       prompt,
       context: fullText.substring(0, 30000),
       model: GeminiModel.PRO
     });
 
-    const content: any = result.content || {};
+    const content = result.content ?? {};
 
     return {
       overallTone: content.overall_tone || 'N/A',
@@ -232,8 +261,11 @@ export class Station1TextAnalysis extends BaseStation<Station1Input, Station1Out
     };
   }
 
-  protected extractRequiredData(input: Station1Input): any {
-    return { fullText: input.fullText };
+  protected extractRequiredData(input: Station1Input): Record<string, unknown> {
+    return {
+      textLength: input.fullText.length,
+      hasProjectName: Boolean(input.projectName)
+    };
   }
 
   protected getErrorFallback(): Station1Output {

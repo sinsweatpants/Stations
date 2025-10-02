@@ -1,10 +1,11 @@
 import { GeminiService, GeminiModel } from '../../services/ai/gemini-service';
+import logger from '../../utils/logger';
 
-export interface StationConfig {
+export interface StationConfig<TInput = unknown, TOutput = unknown> {
   stationNumber: number;
   stationName: string;
-  inputValidation: (input: any) => boolean;
-  outputValidation: (output: any) => boolean;
+  inputValidation: (input: TInput) => boolean;
+  outputValidation: (output: TOutput) => boolean;
   cacheEnabled: boolean;
   performanceTracking: boolean;
 }
@@ -19,12 +20,12 @@ export interface StationMetadata {
 }
 
 export abstract class BaseStation<TInput, TOutput> {
-  protected config: StationConfig;
+  protected config: StationConfig<TInput, TOutput>;
   protected geminiService: GeminiService;
   protected cache: Map<string, TOutput>;
 
   constructor(
-    config: StationConfig,
+    config: StationConfig<TInput, TOutput>,
     geminiService: GeminiService
   ) {
     this.config = config;
@@ -67,7 +68,7 @@ export abstract class BaseStation<TInput, TOutput> {
 
   protected abstract process(input: TInput): Promise<TOutput>;
   
-  protected abstract extractRequiredData(input: TInput): any;
+  protected abstract extractRequiredData(input: TInput): Record<string, unknown>;
   
   protected validateInput(input: TInput): void {
     if (!this.config.inputValidation(input)) {
@@ -116,21 +117,28 @@ export abstract class BaseStation<TInput, TOutput> {
     };
   }
   
-  protected handleError(error: any, startTime: number): any {
-    console.error(
-      `Error in ${this.config.stationName}:`,
-      error
-    );
-    
+  protected handleError(error: unknown, startTime: number): {
+    output: TOutput;
+    metadata: StationMetadata;
+  } {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorStack = error instanceof Error ? error.stack : undefined;
+
+    logger.error(`Error in ${this.config.stationName}`, {
+      error: errorMessage,
+      stack: errorStack,
+      station: this.config.stationNumber
+    });
+
     return {
       output: this.getErrorFallback(),
       metadata: {
         ...this.createMetadata(startTime, false),
         errorOccurred: true,
-        errorDetails: error.message
+        errorDetails: errorMessage
       }
     };
   }
-  
+
   protected abstract getErrorFallback(): TOutput;
 }
