@@ -1,0 +1,125 @@
+# ======================================
+# نظام تحليل النصوص الدرامية المتقدم
+# ملف التبعيات الرئيسية
+# ======================================
+
+# --- Core AI/ML Libraries ---
+openai>=1.12.0                  # OpenAI GPT models integration
+google-generativeai>=0.3.2      # Google Gemini models
+anthropic>=0.18.0               # Anthropic Claude models (optional)
+
+# --- Network Analysis ---
+networkx>=3.2.1                 # Graph/network analysis and visualization
+python-louvain>=0.16            # Community detection in networks
+
+# --- Data Processing & Analysis ---
+numpy>=1.24.0                   # Numerical computing
+pandas>=2.0.0                   # Data manipulation and analysis
+scipy>=1.10.0                   # Scientific computing
+
+# --- Visualization ---
+matplotlib>=3.7.0               # Plotting and visualization
+seaborn>=0.12.0                 # Statistical data visualization
+plotly>=5.17.0                  # Interactive plots
+pyvis>=0.3.2                    # Interactive network visualizations
+
+# --- Natural Language Processing ---
+nltk>=3.8.1                     # Natural language toolkit
+spacy>=3.7.0                    # Advanced NLP (optional, requires model download)
+transformers>=4.35.0            # Hugging Face transformers (optional for advanced NLP)
+
+# --- Configuration & Serialization ---
+pyyaml>=6.0.1                   # YAML configuration files
+python-dotenv>=1.0.0            # Environment variable management
+toml>=0.10.2                    # TOML configuration support
+
+# --- Caching & Performance ---
+joblib>=1.3.2                   # Efficient serialization and caching
+redis>=5.0.0                    # Redis client for distributed caching (optional)
+diskcache>=5.6.3                # Simple disk caching
+
+# --- Async & Concurrency ---
+asyncio>=3.4.3                  # Asynchronous I/O
+aiohttp>=3.9.0                  # Async HTTP client/server
+aiofiles>=23.2.1                # Async file operations
+
+# --- Progress & Logging ---
+tqdm>=4.66.0                    # Progress bars
+colorlog>=6.8.0                 # Colored terminal logs
+loguru>=0.7.2                   # Advanced logging (alternative)
+
+# --- File Handling ---
+python-docx>=1.1.0              # Microsoft Word document handling
+openpyxl>=3.1.2                 # Excel file handling
+pypdf>=3.17.0                   # PDF reading and manipulation
+pillow>=10.1.0                  # Image processing
+
+# --- HTTP & API ---
+requests>=2.31.0                # HTTP library
+urllib3>=2.1.0                  # HTTP client
+httpx>=0.25.0                   # Modern HTTP client
+
+# --- Testing ---
+pytest>=7.4.3                   # Testing framework
+pytest-cov>=4.1.0               # Test coverage
+pytest-asyncio>=0.21.1          # Async testing support
+pytest-mock>=3.12.0             # Mocking for tests
+
+# --- Code Quality ---
+black>=23.12.0                  # Code formatter
+flake8>=6.1.0                   # Linting
+mypy>=1.7.0                     # Static type checking
+pylint>=3.0.0                   # Code analysis
+
+# --- Documentation ---
+sphinx>=7.2.6                   # Documentation generator
+sphinx-rtd-theme>=2.0.0         # Read the Docs theme
+
+# --- Utilities ---
+python-dateutil>=2.8.2          # Date/time utilities
+pytz>=2023.3                    # Timezone support
+click>=8.1.7                    # CLI creation
+rich>=13.7.0                    # Rich terminal output
+
+# --- Security ---
+cryptography>=41.0.7            # Cryptographic recipes
+pyjwt>=2.8.0                    # JSON Web Tokens
+
+# --- Optional: Advanced Features ---
+# langchain>=0.1.0              # LLM orchestration framework
+# chromadb>=0.4.0               # Vector database for embeddings
+# sentence-transformers>=2.2.0  # Sentence embeddings
+# fastapi>=0.104.0              # Web framework for API
+# uvicorn>=0.24.0               # ASGI server
+
+# --- Development Tools ---
+ipython>=8.18.0                 # Enhanced Python shell
+jupyter>=1.0.0                  # Jupyter notebooks
+notebook>=7.0.6                 # Jupyter notebook interface
+
+# --- Platform-specific (Windows) ---
+# pywin32>=306                  # Windows API access (Windows only)
+
+# ======================================
+# Installation Instructions:
+# 
+# 1. Basic installation:
+#    pip install -r requirements.txt
+#
+# 2. With development tools:
+#    pip install -r requirements.txt -r requirements-dev.txt
+#
+# 3. Specific versions:
+#    pip install -r requirements.txt --upgrade
+#
+# 4. Virtual environment (recommended):
+#    python -m venv venv
+#    source venv/bin/activate  # Linux/Mac
+#    venv\Scripts\activate     # Windows
+#    pip install -r requirements.txt
+# ======================================
+
+# Version Information:
+# Python Version: >= 3.8
+# Last Updated: 2025-01-02
+# Compatibility: Linux, macOS, Windows
