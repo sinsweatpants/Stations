@@ -12,6 +12,14 @@ const logger = {
   error: (message: string) => console.error(message),
 };
 
+const safeGet = <T>(array: T[], index: number): T | undefined => {
+  if (index < 0 || index >= array.length) {
+    return undefined;
+  }
+
+  return array[index];
+};
+
 
 // Station 5 Interfaces
 interface Station5Input {
@@ -238,9 +246,24 @@ class DynamicAnalysisEngine {
     }
     
     for (const conflict of network.conflicts.values()) {
-      if (conflict.timestamps) {
+      const legacyTimestamp = (conflict as Conflict & {
+        timestamp?: Date | Date[];
+      }).timestamp;
+
+      const rawTimestamps = legacyTimestamp ?? conflict.timestamps;
+      const timestamps = Array.isArray(rawTimestamps)
+        ? rawTimestamps
+        : rawTimestamps
+        ? [rawTimestamps]
+        : [];
+
+      for (const timestamp of timestamps) {
+        if (!timestamp) {
+          continue;
+        }
+
         events.push({
-          timestamp: conflict.timestamps,
+          timestamp,
           eventType: 'conflict_emerged',
           description: `Conflict emerged: ${conflict.name}`,
           involvedEntities: {
@@ -249,7 +272,7 @@ class DynamicAnalysisEngine {
           },
           significance: conflict.strength,
           narrativePhase: this.inferNarrativePhase(
-            conflict.timestamps,
+            timestamp,
             network.snapshots
           )
         });
@@ -269,8 +292,8 @@ class DynamicAnalysisEngine {
         return 'setup';
     }
 
-    const firstSnapshot = snapshots;
-    const lastSnapshot = snapshots[snapshots.length - 1];
+    const firstSnapshot = safeGet(snapshots, 0);
+    const lastSnapshot = safeGet(snapshots, snapshots.length - 1);
 
     if (!firstSnapshot?.timestamp || !lastSnapshot?.timestamp) {
         return 'setup';
@@ -378,8 +401,10 @@ class DynamicAnalysisEngine {
   }
   
   private calculateVariance(values: number[]): number {
-    if (values.length === 0) return 0;
-    
+    if (values.length <= 1) {
+      return 0;
+    }
+
     const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
     const squaredDiffs = values.map(val => Math.pow(val - mean, 2));
     return squaredDiffs.reduce((sum, val) => sum + val, 0) / values.length;
@@ -462,13 +487,17 @@ class DynamicAnalysisEngine {
     stages: CharacterEvolution['developmentStages']
   ): 'positive' | 'negative' | 'flat' | 'complex' {
     if (stages.length < 2) return 'flat';
-    
-    const firstStage = stages;
-    const lastStage = stages[stages.length - 1];
-    
-    const conflictChange = 
+
+    const firstStage = safeGet(stages, 0);
+    const lastStage = safeGet(stages, stages.length - 1);
+
+    if (!firstStage || !lastStage) {
+      return 'flat';
+    }
+
+    const conflictChange =
       lastStage.conflicts.length - firstStage.conflicts.length;
-    const relationshipChange = 
+    const relationshipChange =
       lastStage.relationships.length - firstStage.relationships.length;
     
     const totalChange = conflictChange + relationshipChange;
@@ -690,8 +719,10 @@ class EpisodicIntegrationEngine {
   }
   
   private calculateVariance(values: number[]): number {
-    if (values.length === 0) return 0;
-    
+    if (values.length <= 1) {
+      return 0;
+    }
+
     const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
     const squaredDiffs = values.map(val => Math.pow(val - mean, 2));
     return squaredDiffs.reduce((sum, val) => sum + val, 0) / values.length;

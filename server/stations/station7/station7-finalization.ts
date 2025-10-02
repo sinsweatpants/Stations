@@ -2,7 +2,7 @@ import { BaseStation, StationConfig } from '../../core/pipeline/base-station';
 import { ConflictNetwork, Character, Relationship, Conflict } from '../../core/models/base-entities';
 import { GeminiService } from '../../services/ai/gemini-service';
 import { Station6Output } from '../station6/station6-diagnostics-treatment';
-import * as fs from 'fs';
+import { promises as fsPromises } from 'fs';
 import * as path from 'path';
 
 // Define a logger placeholder
@@ -28,6 +28,7 @@ interface Station7Output {
     analysisTimestamp: Date;
     status: 'Success' | 'Partial' | 'Failed';
     processingTime: number;
+    filesGenerated: number;
   };
 }
 
@@ -142,13 +143,32 @@ interface ExportFormat {
 
 // Dummy classes for engines until they are implemented
 class VisualizationEngine {
-    constructor(private network: ConflictNetwork, private outputDir: string) {
-        fs.mkdirSync(path.join(outputDir, 'graphs'), { recursive: true });
-        fs.mkdirSync(path.join(outputDir, 'charts'), { recursive: true });
-        fs.mkdirSync(path.join(outputDir, 'interactive'), { recursive: true });
+    constructor(private network: ConflictNetwork, private outputDir: string) {}
+
+    private async ensureDirectories(): Promise<void> {
+        const directories = ['graphs', 'charts', 'interactive'].map(subDir =>
+            path.join(this.outputDir, subDir)
+        );
+
+        await Promise.all(
+            directories.map(async dir => {
+                try {
+                    await fsPromises.mkdir(dir, { recursive: true });
+                } catch (error) {
+                    logger.error(
+                        `Failed to create visualization directory ${dir}: ${
+                            error instanceof Error ? error.message : 'Unknown error'
+                        }`
+                    );
+                    throw error;
+                }
+            })
+        );
     }
 
     async generateAllVisualizations(): Promise<VisualizationResults> {
+        await this.ensureDirectories();
+
         // Dummy implementation
         return {
             networkGraphs: new Map(),
@@ -225,14 +245,22 @@ export class Station7Finalization extends BaseStation<Station7Input, Station7Out
     ) {
         super(config, geminiService);
         this.outputDir = outputDir;
-        if (!fs.existsSync(this.outputDir)) {
-            fs.mkdirSync(this.outputDir, { recursive: true });
-        }
     }
 
     protected async process(input: Station7Input): Promise<Station7Output> {
         const startTime = Date.now();
         logger.info("S7: Starting finalization and visualization...");
+
+        try {
+            await fsPromises.mkdir(this.outputDir, { recursive: true });
+        } catch (error) {
+            logger.error(
+                `S7: Failed to ensure output directory: ${
+                    error instanceof Error ? error.message : 'Unknown error'
+                }`
+            );
+            throw error;
+        }
 
         // Initialize engines with necessary data
         this.visualizationEngine = new VisualizationEngine(input.conflictNetwork, this.outputDir);
@@ -256,7 +284,10 @@ export class Station7Finalization extends BaseStation<Station7Input, Station7Out
         const exportPackage = await this.exportGenerator.generateExportPackage();
         logger.info("S7: Export package created.");
 
+        await this.saveOutputs(finalReport, visualizationResults);
+
         const processingTime = Date.now() - startTime;
+        const filesGenerated = this.countGeneratedFiles(visualizationResults);
 
         return {
             visualizationResults,
@@ -267,8 +298,60 @@ export class Station7Finalization extends BaseStation<Station7Input, Station7Out
                 analysisTimestamp: new Date(),
                 status: 'Success',
                 processingTime,
+                filesGenerated,
             },
         };
+    }
+
+    private async saveOutputs(
+        finalReport: FinalAnalysisReport,
+        visualizationResults: VisualizationResults
+    ): Promise<void> {
+        try {
+            const reportPath = path.join(this.outputDir, 'final-report.json');
+            await fsPromises.writeFile(
+                reportPath,
+                JSON.stringify(finalReport, null, 2),
+                'utf-8'
+            );
+            logger.info(`S7: Saved final report to ${reportPath}`);
+
+            const visualizationPayload = {
+                networkGraphs: Array.from(visualizationResults.networkGraphs.entries()),
+                timelineVisualizations: Array.from(
+                    visualizationResults.timelineVisualizations.entries()
+                ),
+                statisticalCharts: Array.from(
+                    visualizationResults.statisticalCharts.entries()
+                ),
+                interactiveElements: visualizationResults.interactiveElements,
+            };
+
+            const visualizationPath = path.join(this.outputDir, 'visualizations.json');
+            await fsPromises.writeFile(
+                visualizationPath,
+                JSON.stringify(visualizationPayload, null, 2),
+                'utf-8'
+            );
+            logger.info(`S7: Saved visualizations to ${visualizationPath}`);
+        } catch (error) {
+            logger.error(
+                `S7: Failed to save outputs: ${
+                    error instanceof Error ? error.message : 'Unknown error'
+                }`
+            );
+            throw new Error('Output save operation failed');
+        }
+    }
+
+    private countGeneratedFiles(visualizationResults: VisualizationResults): number {
+        const visualizationCount =
+            visualizationResults.networkGraphs.size +
+            visualizationResults.timelineVisualizations.size +
+            visualizationResults.statisticalCharts.size +
+            visualizationResults.interactiveElements.length;
+
+        return visualizationCount + 2; // final report + visualization payload files
     }
 
     protected extractRequiredData(input: Station7Input): any {
@@ -318,6 +401,7 @@ export class Station7Finalization extends BaseStation<Station7Input, Station7Out
                 analysisTimestamp: new Date(),
                 status: 'Failed',
                 processingTime: 0,
+                filesGenerated: 0,
             },
         };
     }

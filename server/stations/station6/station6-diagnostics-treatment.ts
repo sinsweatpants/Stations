@@ -1,319 +1,348 @@
 import { BaseStation, StationConfig } from '../../core/pipeline/base-station';
-import { ConflictNetwork, Conflict, Character, Relationship, ConflictPhase } from '../../core/models/base-entities';
 import { GeminiService } from '../../services/ai/gemini-service';
-import { Station5Output } from '../station5/station5-dynamic-symbolic-stylistic';
-import { Station4Output } from '../station4/station4-efficiency-metrics'; // Assuming this might be needed for some metrics
+import type { ConflictNetwork } from '../../core/models/base-entities';
 
-// Define a logger placeholder
+// Basic logger
 const logger = {
   info: (message: string) => console.log(`[INFO] ${message}`),
-  warn: (message: string) => console.warn(`[WARN] ${message}`),
   error: (message: string) => console.error(`[ERROR] ${message}`),
+  warn: (message: string) => console.warn(`[WARN] ${message}`)
 };
 
-// Station 6 Interfaces
-interface Station6Input {
+export interface Station6Input {
   conflictNetwork: ConflictNetwork;
-  station5Output: Station5Output;
+  station5Output: unknown;
 }
 
-interface Station6Output {
-  diagnosticsReport: NetworkDiagnosticsReport;
-  treatmentRecommendations: TreatmentRecommendations;
-  advancedEfficiencyMetrics: AdvancedEfficiencyMetrics;
+export interface DiagnosticIssue {
+  issueId: string;
+  severity: 'critical' | 'high' | 'medium' | 'low';
+  category: 'character' | 'conflict' | 'relationship' | 'structure' | 'pacing';
+  description: string;
+  affectedElements: string[];
+  suggestedFix: string;
+}
+
+export interface TreatmentRecommendation {
+  recommendationId: string;
+  targetIssue: string;
+  priority: number;
+  actionType: 'add' | 'modify' | 'remove' | 'strengthen' | 'weaken';
+  specificAction: string;
+  expectedImpact: string;
+  implementationNotes: string;
+}
+
+export interface Station6Output {
+  diagnosticsReport: {
+    overallHealthScore: number;
+    criticalIssues: DiagnosticIssue[];
+    warnings: DiagnosticIssue[];
+    suggestions: DiagnosticIssue[];
+  };
+  treatmentPlan: {
+    prioritizedRecommendations: TreatmentRecommendation[];
+    estimatedImprovementScore: number;
+    implementationComplexity: 'low' | 'medium' | 'high';
+  };
   metadata: {
     analysisTimestamp: Date;
+    totalIssuesFound: number;
     status: 'Success' | 'Partial' | 'Failed';
-    analysisTime: number;
   };
 }
-
-interface NetworkDiagnosticsReport {
-  structuralIssues: StructuralIssue[];
-  isolatedCharacters: IsolatedCharacterIssue[];
-  abandonedConflicts: AbandonedConflictIssue[];
-  overloadedCharacters: OverloadedCharacterIssue[];
-  weakConnections: WeakConnectionIssue[];
-  redundancyIssues: RedundancyIssue[];
-  overallHealthScore: number;
-  criticalityLevel: 'healthy' | 'minor_issues' | 'moderate_issues' | 
-                     'major_issues' | 'critical';
-}
-
-interface StructuralIssue {
-  type: 'disconnected_components' | 'bottleneck_character' | 
-        'dead_end_conflict' | 'circular_dependency' | 'other';
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  description: string;
-  affectedEntities: {
-    characters?: string[];
-    relationships?: string[];
-    conflicts?: string[];
-  };
-  potentialImpact: string;
-}
-
-interface IsolatedCharacterIssue {
-  characterId: string;
-  characterName: string;
-  isolationType: 'completely_isolated' | 'weakly_connected' | 
-                 'relationship_only' | 'conflict_only';
-  connectionCount: number;
-  suggestedConnections: string[];
-}
-
-interface AbandonedConflictIssue {
-  conflictId: string;
-  conflictName: string;
-  issueType: 'no_progression' | 'stuck_in_phase' | 'insufficient_involvement';
-  lastActivity: Date | null;
-  durationInCurrentPhase: number; // days
-  suggestedActions: string[];
-}
-
-interface OverloadedCharacterIssue {
-  characterId: string;
-  characterName: string;
-  involvementScore: number;
-  conflictCount: number;
-  relationshipCount: number;
-  suggestedRedistribution: string[];
-}
-
-interface WeakConnectionIssue {
-  connectionType: 'relationship' | 'conflict_link';
-  connectionId: string;
-  entities: string[];
-  strengthScore: number;
-  reasonForWeakness: string;
-  suggestedStrengthening: string;
-}
-
-interface RedundancyIssue {
-  type: 'duplicate_relationship' | 'overlapping_conflict';
-  entities: string[];
-  similarityScore: number;
-  suggestedMerge: string;
-}
-
-interface TreatmentRecommendations {
-  prioritizedActions: PrioritizedAction[];
-  quickFixes: QuickFix[];
-  structuralRevisions: StructuralRevision[];
-  characterDevelopmentSuggestions: CharacterDevelopmentSuggestion[];
-  conflictEnhancementStrategies: ConflictEnhancementStrategy[];
-  consolidatedSummary: string;
-}
-
-interface PrioritizedAction {
-  priority: 'critical' | 'high' | 'medium' | 'low';
-  actionType: 'add' | 'remove' | 'modify' | 'merge';
-  targetEntity: {
-    type: 'character' | 'relationship' | 'conflict';
-    id: string;
-    name: string;
-  };
-  description: string;
-  expectedImpact: string;
-  effort: 'low' | 'medium' | 'high';
-}
-
-interface QuickFix {
-  issueId: string;
-  fixDescription: string;
-  implementation: string;
-  estimatedTime: string;
-}
-
-interface StructuralRevision {
-  revisionType: 'add_bridge_character' | 'merge_conflicts' | 
-                'split_overloaded_character' | 'create_subplot' | 'other';
-  rationale: string;
-  steps: string[];
-  affectedElements: string[];
-  expectedOutcome: string;
-}
-
-interface CharacterDevelopmentSuggestion {
-  characterId: string;
-  characterName: string;
-  currentState: string;
-  suggestedArc: string;
-  keyMilestones: string[];
-  relationshipsToAdd: string[];
-  conflictsToInvolve: string[];
-}
-
-interface ConflictEnhancementStrategy {
-  conflictId: string;
-  conflictName: string;
-  currentWeakness: string;
-  enhancementApproach: string;
-  stakesEscalation: string;
-  charactersToInvolve: string[];
-  phaseProgression: string;
-}
-
-interface AdvancedEfficiencyMetrics {
-  postDiagnosticScore: number;
-  improvementPotential: number;
-  treatmentFeasibility: number;
-  expectedOutcome: {
-    optimisticScore: number;
-    realisticScore: number;
-    pessimisticScore: number;
-  };
-  riskAssessment: {
-    implementationRisks: string[];
-    narrativeCoherenceRisk: number;
-    characterConsistencyRisk: number;
-  };
-}
-
-// Dummy implementation of NetworkDiagnostics and other engines for now
-class NetworkDiagnostics {
-    runAllDiagnostics(network: ConflictNetwork): NetworkDiagnosticsReport {
-        logger.warn("NetworkDiagnostics is a dummy implementation.");
-        return {
-            structuralIssues: [],
-            isolatedCharacters: [],
-            abandonedConflicts: [],
-            overloadedCharacters: [],
-            weakConnections: [],
-            redundancyIssues: [],
-            overallHealthScore: 75,
-            criticalityLevel: 'minor_issues',
-        };
-    }
-}
-
-class TreatmentStrategies {
-    analyzeAndRecommendTreatments(): TreatmentRecommendations {
-        logger.warn("TreatmentStrategies is a dummy implementation.");
-        return {
-            prioritizedActions: [],
-            quickFixes: [],
-            structuralRevisions: [],
-            characterDevelopmentSuggestions: [],
-            conflictEnhancementStrategies: [],
-            consolidatedSummary: "Dummy summary.",
-        };
-    }
-}
-
-class AdvancedEfficiencyMetricsCalculator {
-    calculatePostDiagnosticMetrics(diagnostics: NetworkDiagnosticsReport): AdvancedEfficiencyMetrics {
-        logger.warn("AdvancedEfficiencyMetricsCalculator is a dummy implementation.");
-        return {
-            postDiagnosticScore: 0,
-            improvementPotential: 0,
-            treatmentFeasibility: 0,
-            expectedOutcome: {
-                optimisticScore: 0,
-                realisticScore: 0,
-                pessimisticScore: 0,
-            },
-            riskAssessment: {
-                implementationRisks: [],
-                narrativeCoherenceRisk: 0,
-                characterConsistencyRisk: 0,
-            },
-        };
-    }
-}
-
 
 export class Station6DiagnosticsAndTreatment extends BaseStation<Station6Input, Station6Output> {
-  constructor(
-    config: StationConfig,
-    geminiService: GeminiService
-  ) {
+  constructor(config: StationConfig, geminiService: GeminiService) {
     super(config, geminiService);
   }
 
   protected async process(input: Station6Input): Promise<Station6Output> {
-    const startTime = Date.now();
-    const network = input.conflictNetwork;
-    
-    logger.info("S6: Starting diagnostics...");
-    
-    const diagnosticsEngine = new NetworkDiagnostics();
-    const diagnosticsReport = diagnosticsEngine.runAllDiagnostics(network);
-    
-    logger.info(`S6: Diagnostics complete. Health Score: ${diagnosticsReport.overallHealthScore}`);
-    
-    const treatmentEngine = new TreatmentStrategies();
-    const treatmentRecommendations = treatmentEngine.analyzeAndRecommendTreatments();
-    
-    logger.info(`S6: Generated ${treatmentRecommendations.prioritizedActions.length} prioritized actions`);
-    
-    const advancedMetrics = new AdvancedEfficiencyMetricsCalculator();
-    const advancedEfficiencyMetrics = advancedMetrics.calculatePostDiagnosticMetrics(
-      diagnosticsReport
+    try {
+      logger.info('Starting Station 6: Diagnostics & Treatment Analysis');
+
+      const diagnosticsReport = await this.runDiagnostics(input.conflictNetwork);
+      const treatmentPlan = await this.generateTreatmentPlan(diagnosticsReport);
+
+      return {
+        diagnosticsReport,
+        treatmentPlan,
+        metadata: {
+          analysisTimestamp: new Date(),
+          totalIssuesFound:
+            diagnosticsReport.criticalIssues.length +
+            diagnosticsReport.warnings.length +
+            diagnosticsReport.suggestions.length,
+          status: 'Success'
+        }
+      };
+    } catch (error) {
+      logger.error(
+        `Error in Station 6: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
+      throw error;
+    }
+  }
+
+  private async runDiagnostics(
+    network: ConflictNetwork
+  ): Promise<Station6Output['diagnosticsReport']> {
+    const issues: DiagnosticIssue[] = [];
+
+    issues.push(...this.diagnoseCharacterIssues(network));
+    issues.push(...this.diagnoseConflictIssues(network));
+    issues.push(...this.diagnoseRelationshipIssues(network));
+
+    const criticalIssues = issues.filter(issue => issue.severity === 'critical');
+    const warnings = issues.filter(issue => issue.severity === 'high' || issue.severity === 'medium');
+    const suggestions = issues.filter(issue => issue.severity === 'low');
+
+    const overallHealthScore = this.calculateHealthScore(
+      criticalIssues.length,
+      warnings.length,
+      suggestions.length
     );
-    
-    logger.info(`S6: Advanced metrics calculated. Improvement potential: ${(advancedEfficiencyMetrics.improvementPotential * 100).toFixed(1)}%`);
-    
-    const analysisTime = Date.now() - startTime;
-    
+
     return {
-      diagnosticsReport,
-      treatmentRecommendations,
-      advancedEfficiencyMetrics,
-      metadata: {
-        analysisTimestamp: new Date(),
-        status: 'Success',
-        analysisTime
+      overallHealthScore,
+      criticalIssues,
+      warnings,
+      suggestions
+    };
+  }
+
+  private diagnoseCharacterIssues(network: ConflictNetwork): DiagnosticIssue[] {
+    const issues: DiagnosticIssue[] = [];
+
+    network.characters.forEach((character, charId) => {
+      const hasRelationships = Array.from(network.relationships.values()).some(
+        relationship => relationship.source === charId || relationship.target === charId
+      );
+
+      if (!hasRelationships) {
+        issues.push({
+          issueId: `char-isolated-${charId}`,
+          severity: 'medium',
+          category: 'character',
+          description: `Character "${character.name}" has no relationships`,
+          affectedElements: [charId],
+          suggestedFix:
+            'Consider adding at least one meaningful relationship for this character'
+        });
       }
-    };
+
+      const hasConflicts = Array.from(network.conflicts.values()).some(conflict =>
+        conflict.involvedCharacters.includes(charId)
+      );
+
+      if (!hasConflicts && network.conflicts.size > 0) {
+        issues.push({
+          issueId: `char-no-conflict-${charId}`,
+          severity: 'low',
+          category: 'character',
+          description: `Character "${character.name}" is not involved in any conflicts`,
+          affectedElements: [charId],
+          suggestedFix:
+            'Consider involving this character in at least one conflict or subplot'
+        });
+      }
+    });
+
+    return issues;
   }
-  
-  protected extractRequiredData(input: Station6Input): any {
+
+  private diagnoseConflictIssues(network: ConflictNetwork): DiagnosticIssue[] {
+    const issues: DiagnosticIssue[] = [];
+
+    if (network.conflicts.size === 0) {
+      issues.push({
+        issueId: 'no-conflicts',
+        severity: 'critical',
+        category: 'conflict',
+        description: 'No conflicts detected in the story',
+        affectedElements: [],
+        suggestedFix: 'Add at least one central conflict to drive the narrative'
+      });
+    } else if (network.conflicts.size < 2) {
+      issues.push({
+        issueId: 'few-conflicts',
+        severity: 'medium',
+        category: 'conflict',
+        description: 'Story has very few conflicts',
+        affectedElements: [],
+        suggestedFix: 'Consider adding subplots or secondary conflicts for depth'
+      });
+    }
+
+    const strengths = Array.from(network.conflicts.values()).map(conflict => conflict.strength);
+    const averageStrength =
+      strengths.length > 0
+        ? strengths.reduce((sum, value) => sum + value, 0) / strengths.length
+        : 0;
+
+    if (averageStrength < 3) {
+      issues.push({
+        issueId: 'low-conflict-strength',
+        severity: 'medium',
+        category: 'conflict',
+        description: 'Overall conflict strength is low',
+        affectedElements: Array.from(network.conflicts.keys()),
+        suggestedFix: 'Consider raising the stakes or intensifying existing conflicts'
+      });
+    }
+
+    return issues;
+  }
+
+  private diagnoseRelationshipIssues(network: ConflictNetwork): DiagnosticIssue[] {
+    const issues: DiagnosticIssue[] = [];
+
+    const relationshipTypes = new Set(
+      Array.from(network.relationships.values()).map(relationship => relationship.type)
+    );
+
+    if (relationshipTypes.size < 3 && network.relationships.size > 5) {
+      issues.push({
+        issueId: 'low-relationship-diversity',
+        severity: 'low',
+        category: 'relationship',
+        description: 'Limited variety in relationship types',
+        affectedElements: [],
+        suggestedFix:
+          'Consider adding different types of relationships (friendship, rivalry, mentorship, etc.)'
+      });
+    }
+
+    return issues;
+  }
+
+  private calculateHealthScore(critical: number, warnings: number, suggestions: number): number {
+    let score = 100;
+
+    score -= critical * 20;
+    score -= warnings * 5;
+    score -= suggestions * 2;
+
+    return Math.max(0, Math.min(100, score));
+  }
+
+  private async generateTreatmentPlan(
+    diagnostics: Station6Output['diagnosticsReport']
+  ): Promise<Station6Output['treatmentPlan']> {
+    const recommendations: TreatmentRecommendation[] = [];
+
+    diagnostics.criticalIssues.forEach((issue, index) => {
+      recommendations.push({
+        recommendationId: `rec-critical-${index}`,
+        targetIssue: issue.issueId,
+        priority: 1,
+        actionType: 'add',
+        specificAction: issue.suggestedFix,
+        expectedImpact: 'High impact on story coherence',
+        implementationNotes: 'Address this immediately'
+      });
+    });
+
+    diagnostics.warnings.forEach((issue, index) => {
+      recommendations.push({
+        recommendationId: `rec-warning-${index}`,
+        targetIssue: issue.issueId,
+        priority: 2,
+        actionType: 'modify',
+        specificAction: issue.suggestedFix,
+        expectedImpact: 'Moderate impact on story quality',
+        implementationNotes: 'Address after critical issues'
+      });
+    });
+
+    diagnostics.suggestions.forEach((issue, index) => {
+      recommendations.push({
+        recommendationId: `rec-suggestion-${index}`,
+        targetIssue: issue.issueId,
+        priority: 3,
+        actionType: 'strengthen',
+        specificAction: issue.suggestedFix,
+        expectedImpact: 'Incremental improvement to story depth',
+        implementationNotes: 'Schedule when higher priority work is complete'
+      });
+    });
+
+    recommendations.sort((a, b) => a.priority - b.priority);
+
+    const potentialImprovement = this.estimateImprovement(diagnostics);
+    const estimatedImprovementScore = Math.min(
+      100,
+      diagnostics.overallHealthScore + potentialImprovement
+    );
+
+    const implementationComplexity = this.determineComplexity(recommendations);
+
     return {
-      network: input.conflictNetwork,
-      station5Output: input.station5Output
+      prioritizedRecommendations: recommendations,
+      estimatedImprovementScore,
+      implementationComplexity
     };
   }
-  
+
+  private estimateImprovement(diagnostics: Station6Output['diagnosticsReport']): number {
+    let improvement = 0;
+    improvement += diagnostics.criticalIssues.length * 17;
+    improvement += diagnostics.warnings.length * 4;
+    improvement += diagnostics.suggestions.length * 1.5;
+    return improvement;
+  }
+
+  private determineComplexity(
+    recommendations: TreatmentRecommendation[]
+  ): 'low' | 'medium' | 'high' {
+    if (recommendations.length === 0) {
+      return 'low';
+    }
+
+    if (recommendations.length <= 3) {
+      return 'low';
+    }
+
+    if (recommendations.length <= 7) {
+      return 'medium';
+    }
+
+    return 'high';
+  }
+
+  protected extractRequiredData(input: Station6Input): Record<string, unknown> {
+    return {
+      networkSize: input.conflictNetwork.characters.size,
+      conflictsCount: input.conflictNetwork.conflicts.size
+    };
+  }
+
   protected getErrorFallback(): Station6Output {
     return {
       diagnosticsReport: {
-        structuralIssues: [],
-        isolatedCharacters: [],
-        abandonedConflicts: [],
-        overloadedCharacters: [],
-        weakConnections: [],
-        redundancyIssues: [],
         overallHealthScore: 0,
-        criticalityLevel: 'critical'
+        criticalIssues: [
+          {
+            issueId: 'error-occurred',
+            severity: 'critical',
+            category: 'structure',
+            description: 'Analysis failed due to an error',
+            affectedElements: [],
+            suggestedFix: 'Please retry the analysis'
+          }
+        ],
+        warnings: [],
+        suggestions: []
       },
-      treatmentRecommendations: {
-        prioritizedActions: [],
-        quickFixes: [],
-        structuralRevisions: [],
-        characterDevelopmentSuggestions: [],
-        conflictEnhancementStrategies: [],
-        consolidatedSummary: 'Analysis failed - unable to generate recommendations'
-      },
-      advancedEfficiencyMetrics: {
-        postDiagnosticScore: 0,
-        improvementPotential: 0,
-        treatmentFeasibility: 0,
-        expectedOutcome: {
-          optimisticScore: 0,
-          realisticScore: 0,
-          pessimisticScore: 0
-        },
-        riskAssessment: {
-          implementationRisks: ['Analysis failed'],
-          narrativeCoherenceRisk: 1,
-          characterConsistencyRisk: 1
-        }
+      treatmentPlan: {
+        prioritizedRecommendations: [],
+        estimatedImprovementScore: 0,
+        implementationComplexity: 'high'
       },
       metadata: {
         analysisTimestamp: new Date(),
-        status: 'Failed',
-        analysisTime: 0
+        totalIssuesFound: 1,
+        status: 'Failed'
       }
     };
   }
