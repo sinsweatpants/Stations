@@ -1,29 +1,74 @@
+import { useMemo } from 'react';
 import { Check } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-
-interface Station {
-  id: number;
-  nameAr: string;
-  nameEn: string;
-  status: 'completed' | 'active' | 'pending';
-}
+import type { StationDefinition } from './station-progress-utils';
+import { computeStationProgress } from './station-progress-utils';
 
 interface StationProgressProps {
-  stations: Station[];
+  stations: StationDefinition[];
 }
 
 export default function StationProgress({ stations }: StationProgressProps) {
   const { language } = useLanguage();
 
+  const { currentStation, nextStation, phase, allCompleted } = useMemo(
+    () => computeStationProgress(stations),
+    [stations]
+  );
+
+  const progressMessage = useMemo(() => {
+    if (!currentStation) {
+      return language === 'ar'
+        ? 'لا توجد محطات متاحة حالياً.'
+        : 'No stations are available yet.';
+    }
+
+    if (phase === 'active') {
+      const baseMessage =
+        language === 'ar'
+          ? `أنت الآن في المحطة ${currentStation.id}: ${currentStation.nameAr}.`
+          : `You are currently at station ${currentStation.id}: ${currentStation.nameEn}.`;
+
+      if (nextStation) {
+        const nextMessage =
+          language === 'ar'
+            ? ` المحطة التالية ستكون ${nextStation.id}: ${nextStation.nameAr}.`
+            : ` Next up: station ${nextStation.id}: ${nextStation.nameEn}.`;
+        return `${baseMessage}${nextMessage}`;
+      }
+
+      return baseMessage;
+    }
+
+    if (allCompleted) {
+      return language === 'ar'
+        ? `اكتملت جميع المحطات. انتهيت عند المحطة ${currentStation.id}: ${currentStation.nameAr}.`
+        : `All stations are complete. You finished at station ${currentStation.id}: ${currentStation.nameEn}.`;
+    }
+
+    if (phase === 'completed' && nextStation) {
+      return language === 'ar'
+        ? `آخر محطة مكتملة هي ${currentStation.id}: ${currentStation.nameAr}. المحطة التالية: ${nextStation.id}: ${nextStation.nameAr}.`
+        : `The last completed station is ${currentStation.id}: ${currentStation.nameEn}. Next station: ${nextStation.id}: ${nextStation.nameEn}.`;
+    }
+
+    return language === 'ar'
+      ? `لم تبدأ عملية التحليل بعد. ستكون البداية من المحطة ${currentStation.id}: ${currentStation.nameAr}.`
+      : `Analysis has not started yet. The journey will begin at station ${currentStation.id}: ${currentStation.nameEn}.`;
+  }, [allCompleted, currentStation, language, nextStation, phase]);
+
   return (
     <div className="w-full py-8">
+      <p className="text-sm text-muted-foreground mb-4" aria-live="polite">
+        {progressMessage}
+      </p>
       <div className="flex items-center justify-between relative">
         <div className="absolute top-5 left-0 right-0 h-0.5 bg-border" style={{ zIndex: 0 }} />
-        
+
         {stations.map((station, index) => {
           const isCompleted = station.status === 'completed';
           const isActive = station.status === 'active';
-          
+
           return (
             <div key={station.id} className="flex flex-col items-center relative" style={{ zIndex: 1 }}>
               <div
