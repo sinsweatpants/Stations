@@ -1,115 +1,140 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
 
-MODE="dry-run"
-REPORT="cleanup/trash_report.jsonl"
-BACKUP_ROOT="cleanup/_backup"
+# سكربت تنفيذ تنظيف آمن
+# يقرأ تقرير الأدلة وينفذ الحذف مع نسخة احتياطية
 
-show_help() {
-  cat <<'USAGE'
-Usage: cleanup/apply_cleanup.sh [--dry-run|--apply] [--report PATH]
+set -e
 
-Options:
-  --dry-run      Simulate the cleanup actions (default).
-  --apply        Execute the cleanup using the report entries marked for removal.
-  --report PATH  Use an alternate JSONL report (defaults to cleanup/trash_report.jsonl).
-  --help         Show this help message.
-USAGE
-}
+# الألوان
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
 
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-    --dry-run)
-      MODE="dry-run"
-      shift
-      ;;
-    --apply)
-      MODE="apply"
-      shift
-      ;;
-    --report)
-      REPORT="$2"
-      shift 2
-      ;;
-    --help|-h)
-      show_help
-      exit 0
-      ;;
-    *)
-      echo "Unknown option: $1" >&2
-      show_help >&2
-      exit 1
-      ;;
-  esac
+# متغيرات
+DRY_RUN=${1:-"--dry-run"}
+BACKUP_DIR="cleanup/_backup"
+REPORT_FILE="cleanup/trash_report.jsonl"
+
+echo -e "${GREEN}🧹 بدء عملية تنظيف هيكل المشروع${NC}"
+echo "=================================="
+
+# التحقق من وجود تقرير الأدلة
+if [ ! -f "$REPORT_FILE" ]; then
+    echo -e "${RED}❌ خطأ: لا يوجد تقرير الأدلة في $REPORT_FILE${NC}"
+    exit 1
+fi
+
+# إنشاء مجلد النسخة الاحتياطية
+mkdir -p "$BACKUP_DIR"
+
+# قراءة تقرير الأدلة
+echo -e "${YELLOW}📖 قراءة تقرير الأدلة...${NC}"
+
+# تحليل الملفات المراد حذفها
+files_to_remove=()
+files_to_review=()
+total_size=0
+
+while IFS= read -r line; do
+    if [ -n "$line" ]; then
+        path=$(echo "$line" | jq -r '.path')
+        decision=$(echo "$line" | jq -r '.decision')
+        size=$(echo "$line" | jq -r '.size_bytes')
+        
+        if [ "$decision" = "remove" ]; then
+            files_to_remove+=("$path")
+            total_size=$((total_size + size))
+        elif [ "$decision" = "review" ]; then
+            files_to_review+=("$path")
+        fi
+    fi
+done < "$REPORT_FILE"
+
+echo -e "${GREEN}✅ تم تحليل التقرير${NC}"
+echo "الملفات المراد حذفها: ${#files_to_remove[@]}"
+echo "الملفات المراجعة: ${#files_to_review[@]}"
+echo "إجمالي الحجم: $((total_size / 1024)) KB"
+
+# عرض الملفات المراد حذفها
+if [ ${#files_to_remove[@]} -gt 0 ]; then
+    echo -e "\n${YELLOW}📋 الملفات المراد حذفها:${NC}"
+    for file in "${files_to_remove[@]}"; do
+        echo "  - $file"
+    done
+fi
+
+# عرض الملفات المراجعة
+if [ ${#files_to_review[@]} -gt 0 ]; then
+    echo -e "\n${YELLOW}⚠️  الملفات المراجعة (لن يتم حذفها):${NC}"
+    for file in "${files_to_review[@]}"; do
+        echo "  - $file"
+    done
+fi
+
+# التحقق من Dry Run
+if [ "$DRY_RUN" = "--dry-run" ]; then
+    echo -e "\n${YELLOW}🔍 وضع Dry Run - لن يتم حذف أي ملفات${NC}"
+    echo "لتنفيذ الحذف الفعلي، استخدم: $0 --execute"
+    exit 0
+fi
+
+# التحقق من التنفيذ الفعلي
+if [ "$DRY_RUN" != "--execute" ]; then
+    echo -e "\n${RED}❌ خطأ: يجب استخدام --execute لتنفيذ الحذف الفعلي${NC}"
+    exit 1
+fi
+
+# تأكيد من المستخدم
+echo -e "\n${RED}⚠️  تحذير: سيتم حذف ${#files_to_remove[@]} ملف نهائياً!${NC}"
+read -p "هل أنت متأكد؟ اكتب 'yes' للمتابعة: " confirmation
+
+if [ "$confirmation" != "yes" ]; then
+    echo -e "${YELLOW}❌ تم إلغاء العملية${NC}"
+    exit 0
+fi
+
+# إنشاء نسخة احتياطية
+echo -e "\n${YELLOW}💾 إنشاء نسخة احتياطية...${NC}"
+for file in "${files_to_remove[@]}"; do
+    if [ -f "$file" ]; then
+        # إنشاء مجلد الوجهة
+        dir=$(dirname "$BACKUP_DIR/$file")
+        mkdir -p "$dir"
+        
+        # نسخ الملف
+        cp "$file" "$BACKUP_DIR/$file"
+        echo "  ✓ تم نسخ $file"
+    fi
 done
 
-if [[ ! -f "$REPORT" ]]; then
-  echo "Report not found: $REPORT" >&2
-  exit 1
-fi
-
-mapfile -t ITEMS < <(python3 - "$REPORT" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-report_path = Path(sys.argv[1])
-with report_path.open('r', encoding='utf-8') as handle:
-    for line in handle:
-        line = line.strip()
-        if not line:
-            continue
-        entry = json.loads(line)
-        if entry.get('decision') == 'remove':
-            path = entry.get('path')
-            kind = entry.get('kind', 'file')
-            risk = entry.get('risk', 'med')
-            print(f"{path}\t{kind}\t{risk}")
-PY
-)
-
-if [[ ${#ITEMS[@]} -eq 0 ]]; then
-  echo "No removable items found in $REPORT."
-  exit 0
-fi
-
-mkdir -p "$BACKUP_ROOT"
-
-declare -a ACTION_LOG
-
-for ROW in "${ITEMS[@]}"; do
-  IFS=$'\t' read -r TARGET KIND RISK <<<"$ROW"
-  if [[ -z "$TARGET" ]]; then
-    continue
-  fi
-  ACTION_LOG+=("target=$TARGET kind=$KIND risk=$RISK")
-  if [[ "$MODE" == "apply" ]]; then
-    if [[ "$RISK" != "low" ]]; then
-      echo "Refusing to delete $TARGET because risk level is $RISK (must be low)." >&2
-      exit 2
-    fi
-    if [[ ! -e "$TARGET" ]]; then
-      echo "Warning: $TARGET does not exist on disk; skipping." >&2
-      continue
-    fi
-    safe_name=${TARGET//\//__}
-    archive="$BACKUP_ROOT/${safe_name}.tar.gz"
-    echo "Backing up $TARGET -> $archive"
-    tar -czf "$archive" "$TARGET"
-    echo "Removing $TARGET"
-    rm -rf "$TARGET"
-    git add -A "$TARGET"
-  else
-    if [[ "$RISK" != "low" ]]; then
-      echo "[DRY-RUN] $TARGET would require manual review (risk=$RISK)."
+# حذف الملفات
+echo -e "\n${YELLOW}🗑️  حذف الملفات...${NC}"
+deleted_count=0
+for file in "${files_to_remove[@]}"; do
+    if [ -f "$file" ]; then
+        rm "$file"
+        echo "  ✓ تم حذف $file"
+        deleted_count=$((deleted_count + 1))
     else
-      echo "[DRY-RUN] Would backup and remove $TARGET (kind=$KIND)."
+        echo "  ⚠️  الملف غير موجود: $file"
     fi
-  fi
 done
 
-if [[ "$MODE" == "apply" ]]; then
-  echo "Cleanup applied. Review git status before committing."
-else
-  echo "Dry run complete. Generated action plan for ${#ITEMS[@]} items."
-fi
+# تحديث Git
+echo -e "\n${YELLOW}📝 تحديث Git...${NC}"
+git add -A
+git commit -m "chore(cleanup): remove $deleted_count unused files
+
+- تم حذف $deleted_count ملف غير مستخدم
+- تم إنشاء نسخة احتياطية في $BACKUP_DIR
+- إجمالي الحجم المحذوف: $((total_size / 1024)) KB
+
+ملفات تم حذفها:
+$(printf '%s\n' "${files_to_remove[@]}" | head -10)
+$([ ${#files_to_remove[@]} -gt 10 ] && echo "... و $(( ${#files_to_remove[@]} - 10 )) ملف آخر")"
+
+echo -e "\n${GREEN}✅ تم إنجاز عملية التنظيف بنجاح!${NC}"
+echo "الملفات المحذوفة: $deleted_count"
+echo "النسخة الاحتياطية: $BACKUP_DIR"
+echo "لتحديث .gitignore، أضف: cleanup/_backup/"

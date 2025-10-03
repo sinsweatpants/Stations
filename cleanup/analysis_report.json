@@ -1,0 +1,2004 @@
+{
+  "timestamp": "2025-10-03T07:50:45.697Z",
+  "summary": {
+    "totalFiles": 107,
+    "unusedFiles": 103,
+    "duplicateFiles": 0,
+    "totalSize": 397728
+  },
+  "unusedFiles": [
+    {
+      "path": "src\\components\\AnalysisCard.tsx",
+      "size": 978,
+      "lastModified": "2025-10-03T07:27:11.734Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\CharacterNode.tsx",
+      "size": 1015,
+      "lastModified": "2025-10-03T07:27:11.734Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ConflictNetwork.tsx",
+      "size": 2980,
+      "lastModified": "2025-10-03T07:27:11.734Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\DiagnosticPanel.tsx",
+      "size": 2870,
+      "lastModified": "2025-10-03T07:27:11.734Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\examples\\AnalysisCard.tsx",
+      "size": 953,
+      "lastModified": "2025-10-03T07:27:11.736Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\examples\\CharacterNode.tsx",
+      "size": 442,
+      "lastModified": "2025-10-03T07:27:11.736Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\examples\\ConflictNetwork.tsx",
+      "size": 830,
+      "lastModified": "2025-10-03T07:27:11.736Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\examples\\DiagnosticPanel.tsx",
+      "size": 1258,
+      "lastModified": "2025-10-03T07:27:11.738Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\examples\\Header.tsx",
+      "size": 337,
+      "lastModified": "2025-10-03T07:27:11.738Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\examples\\HeroSection.tsx",
+      "size": 306,
+      "lastModified": "2025-10-03T07:27:11.738Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\examples\\MetricCard.tsx",
+      "size": 988,
+      "lastModified": "2025-10-03T07:27:11.738Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\examples\\StationProgress.tsx",
+      "size": 1046,
+      "lastModified": "2025-10-03T07:27:11.738Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\examples\\TextInput.tsx",
+      "size": 504,
+      "lastModified": "2025-10-03T07:27:11.740Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\Header.tsx",
+      "size": 1824,
+      "lastModified": "2025-10-03T07:27:11.734Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\HeroSection.tsx",
+      "size": 3382,
+      "lastModified": "2025-10-03T07:27:11.734Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\MetricCard.tsx",
+      "size": 1286,
+      "lastModified": "2025-10-03T07:27:11.734Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\station-progress-utils.ts",
+      "size": 2065,
+      "lastModified": "2025-10-03T07:27:11.740Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\StationProgress.tsx",
+      "size": 4166,
+      "lastModified": "2025-10-03T07:27:11.736Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\TextInput.tsx",
+      "size": 3132,
+      "lastModified": "2025-10-03T07:27:11.736Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\accordion.tsx",
+      "size": 2033,
+      "lastModified": "2025-10-03T07:27:11.740Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\alert-dialog.tsx",
+      "size": 4559,
+      "lastModified": "2025-10-03T07:27:11.740Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\alert.tsx",
+      "size": 1643,
+      "lastModified": "2025-10-03T07:27:11.742Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\aspect-ratio.tsx",
+      "size": 145,
+      "lastModified": "2025-10-03T07:27:11.742Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\avatar.tsx",
+      "size": 1643,
+      "lastModified": "2025-10-03T07:27:11.742Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\badge.tsx",
+      "size": 1240,
+      "lastModified": "2025-10-03T07:27:11.742Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\breadcrumb.tsx",
+      "size": 2827,
+      "lastModified": "2025-10-03T07:27:11.742Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\button.tsx",
+      "size": 2421,
+      "lastModified": "2025-10-03T07:27:11.742Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\calendar.tsx",
+      "size": 2763,
+      "lastModified": "2025-10-03T07:27:11.742Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\card.tsx",
+      "size": 1989,
+      "lastModified": "2025-10-03T07:27:11.742Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\carousel.tsx",
+      "size": 6470,
+      "lastModified": "2025-10-03T07:27:11.744Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\chart.tsx",
+      "size": 10846,
+      "lastModified": "2025-10-03T07:27:11.744Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\checkbox.tsx",
+      "size": 1084,
+      "lastModified": "2025-10-03T07:27:11.744Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\collapsible.tsx",
+      "size": 340,
+      "lastModified": "2025-10-03T07:27:11.744Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\command.tsx",
+      "size": 5036,
+      "lastModified": "2025-10-03T07:27:11.744Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\context-menu.tsx",
+      "size": 7626,
+      "lastModified": "2025-10-03T07:27:11.744Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\dialog.tsx",
+      "size": 3970,
+      "lastModified": "2025-10-03T07:27:11.746Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\drawer.tsx",
+      "size": 3139,
+      "lastModified": "2025-10-03T07:27:11.746Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\dropdown-menu.tsx",
+      "size": 7807,
+      "lastModified": "2025-10-03T07:27:11.746Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\form.tsx",
+      "size": 4298,
+      "lastModified": "2025-10-03T07:27:11.746Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\hover-card.tsx",
+      "size": 1280,
+      "lastModified": "2025-10-03T07:27:11.746Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\input-otp.tsx",
+      "size": 2223,
+      "lastModified": "2025-10-03T07:27:11.746Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\input.tsx",
+      "size": 867,
+      "lastModified": "2025-10-03T07:27:11.746Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\label.tsx",
+      "size": 734,
+      "lastModified": "2025-10-03T07:27:11.746Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\menubar.tsx",
+      "size": 8861,
+      "lastModified": "2025-10-03T07:27:11.748Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\navigation-menu.tsx",
+      "size": 5256,
+      "lastModified": "2025-10-03T07:27:11.748Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\pagination.tsx",
+      "size": 2868,
+      "lastModified": "2025-10-03T07:27:11.748Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\popover.tsx",
+      "size": 1309,
+      "lastModified": "2025-10-03T07:27:11.748Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\progress.tsx",
+      "size": 819,
+      "lastModified": "2025-10-03T07:27:11.748Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\radio-group.tsx",
+      "size": 1509,
+      "lastModified": "2025-10-03T07:27:11.748Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\resizable.tsx",
+      "size": 1768,
+      "lastModified": "2025-10-03T07:27:11.748Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\scroll-area.tsx",
+      "size": 1688,
+      "lastModified": "2025-10-03T07:27:11.748Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\select.tsx",
+      "size": 5901,
+      "lastModified": "2025-10-03T07:27:11.750Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\separator.tsx",
+      "size": 785,
+      "lastModified": "2025-10-03T07:27:11.750Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\sheet.tsx",
+      "size": 4421,
+      "lastModified": "2025-10-03T07:27:11.750Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\sidebar.tsx",
+      "size": 22573,
+      "lastModified": "2025-10-03T07:27:11.750Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\skeleton.tsx",
+      "size": 276,
+      "lastModified": "2025-10-03T07:27:11.750Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\slider.tsx",
+      "size": 1103,
+      "lastModified": "2025-10-03T07:27:11.750Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\switch.tsx",
+      "size": 1166,
+      "lastModified": "2025-10-03T07:27:11.750Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\table.tsx",
+      "size": 2882,
+      "lastModified": "2025-10-03T07:27:11.752Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\tabs.tsx",
+      "size": 1936,
+      "lastModified": "2025-10-03T07:27:11.752Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\textarea.tsx",
+      "size": 711,
+      "lastModified": "2025-10-03T07:27:11.752Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\toast.tsx",
+      "size": 4972,
+      "lastModified": "2025-10-03T07:27:11.752Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\toaster.tsx",
+      "size": 805,
+      "lastModified": "2025-10-03T07:27:11.752Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\toggle-group.tsx",
+      "size": 1814,
+      "lastModified": "2025-10-03T07:27:11.752Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\toggle.tsx",
+      "size": 1570,
+      "lastModified": "2025-10-03T07:27:11.752Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\ui\\tooltip.tsx",
+      "size": 1239,
+      "lastModified": "2025-10-03T07:27:11.754Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\components\\__tests__\\station-progress-utils.test.ts",
+      "size": 2702,
+      "lastModified": "2025-10-03T07:27:11.736Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\contexts\\LanguageContext.tsx",
+      "size": 1001,
+      "lastModified": "2025-10-03T07:27:11.754Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\contexts\\ThemeContext.tsx",
+      "size": 1017,
+      "lastModified": "2025-10-03T07:27:11.754Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\hooks\\use-mobile.tsx",
+      "size": 584,
+      "lastModified": "2025-10-03T07:27:11.754Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\hooks\\use-toast.ts",
+      "size": 4086,
+      "lastModified": "2025-10-03T07:27:11.754Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\lib\\queryClient.ts",
+      "size": 1440,
+      "lastModified": "2025-10-03T07:27:11.756Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\lib\\utils.ts",
+      "size": 172,
+      "lastModified": "2025-10-03T07:27:11.756Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\pages\\HomePage.tsx",
+      "size": 24380,
+      "lastModified": "2025-10-03T07:27:11.756Z",
+      "dependents": []
+    },
+    {
+      "path": "src\\pages\\not-found.tsx",
+      "size": 732,
+      "lastModified": "2025-10-03T07:27:11.756Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\analysis_modules\\efficiency-metrics.ts",
+      "size": 10922,
+      "lastModified": "2025-10-03T07:27:11.718Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\analysis_modules\\network-diagnostics.ts",
+      "size": 17370,
+      "lastModified": "2025-10-03T07:27:11.718Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\core\\models\\base-entities.ts",
+      "size": 3665,
+      "lastModified": "2025-10-03T07:27:11.724Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\core\\pipeline\\base-station.ts",
+      "size": 4019,
+      "lastModified": "2025-10-03T07:27:11.724Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\middleware\\auth.ts",
+      "size": 1423,
+      "lastModified": "2025-10-03T07:27:11.724Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\middleware\\rate-limit.ts",
+      "size": 1096,
+      "lastModified": "2025-10-03T07:27:11.726Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\middleware\\sanitize.ts",
+      "size": 1091,
+      "lastModified": "2025-10-03T07:27:11.726Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\routes\\health.ts",
+      "size": 1216,
+      "lastModified": "2025-10-03T07:27:11.726Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\run-all-stations.ts",
+      "size": 7783,
+      "lastModified": "2025-10-03T07:27:11.726Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\services\\ai\\gemini-service.ts",
+      "size": 7941,
+      "lastModified": "2025-10-03T07:27:11.726Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\services\\ai\\result-selector.ts",
+      "size": 1839,
+      "lastModified": "2025-10-03T07:27:11.728Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\stations\\station1\\station1-text-analysis.ts",
+      "size": 8912,
+      "lastModified": "2025-10-03T07:27:11.728Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\stations\\station2\\station2-conceptual-analysis.ts",
+      "size": 11114,
+      "lastModified": "2025-10-03T07:27:11.728Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\stations\\station3\\station3-network-builder.ts",
+      "size": 16807,
+      "lastModified": "2025-10-03T07:27:11.728Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\stations\\station4\\station4-efficiency-metrics.ts",
+      "size": 5178,
+      "lastModified": "2025-10-03T07:27:11.728Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\stations\\station5\\station5-dynamic-symbolic-stylistic.ts",
+      "size": 37548,
+      "lastModified": "2025-10-03T07:27:11.730Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\stations\\station6\\station6-diagnostics-treatment.ts",
+      "size": 11019,
+      "lastModified": "2025-10-03T07:27:11.730Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\stations\\station7\\station7-finalization.ts",
+      "size": 14328,
+      "lastModified": "2025-10-03T07:27:11.730Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\storage.ts",
+      "size": 1031,
+      "lastModified": "2025-10-03T07:27:11.730Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\types\\contexts.ts",
+      "size": 598,
+      "lastModified": "2025-10-03T07:27:11.732Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\utils\\logger.ts",
+      "size": 1411,
+      "lastModified": "2025-10-03T07:27:11.732Z",
+      "dependents": []
+    },
+    {
+      "path": "server\\vite.ts",
+      "size": 2348,
+      "lastModified": "2025-10-03T07:27:11.732Z",
+      "dependents": []
+    },
+    {
+      "path": "shared\\schema.ts",
+      "size": 3018,
+      "lastModified": "2025-10-03T07:27:11.732Z",
+      "dependents": []
+    },
+    {
+      "path": "drizzle.config.ts",
+      "size": 339,
+      "lastModified": "2025-10-03T07:27:11.714Z",
+      "dependents": []
+    },
+    {
+      "path": "postcss.config.js",
+      "size": 86,
+      "lastModified": "2025-10-03T07:27:11.718Z",
+      "dependents": []
+    },
+    {
+      "path": "tailwind.config.ts",
+      "size": 4180,
+      "lastModified": "2025-10-03T07:27:11.758Z",
+      "dependents": []
+    },
+    {
+      "path": "vite.config.ts",
+      "size": 1120,
+      "lastModified": "2025-10-03T07:27:11.764Z",
+      "dependents": []
+    },
+    {
+      "path": "vitest.config.ts",
+      "size": 635,
+      "lastModified": "2025-10-03T07:27:11.764Z",
+      "dependents": []
+    }
+  ],
+  "duplicates": [],
+  "dependencies": {
+    "src\\App.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\queryClient.ts",
+      "D:\\stations.thecopy\\src\\components\\ui\\toaster.tsx",
+      "D:\\stations.thecopy\\src\\components\\ui\\tooltip.tsx",
+      "D:\\stations.thecopy\\src\\contexts\\ThemeContext.tsx",
+      "D:\\stations.thecopy\\src\\contexts\\LanguageContext.tsx",
+      "D:\\stations.thecopy\\src\\pages\\HomePage.tsx",
+      "D:\\stations.thecopy\\src\\pages\\not-found.tsx"
+    ],
+    "src\\components\\AnalysisCard.tsx": [
+      "D:\\stations.thecopy\\src\\components\\ui\\card.tsx",
+      "D:\\stations.thecopy\\src\\components\\ui\\badge.tsx"
+    ],
+    "src\\components\\CharacterNode.tsx": [
+      "D:\\stations.thecopy\\src\\components\\ui\\avatar.tsx"
+    ],
+    "src\\components\\ConflictNetwork.tsx": [
+      "D:\\stations.thecopy\\src\\components\\ui\\card.tsx",
+      "D:\\stations.thecopy\\src\\components\\CharacterNode.tsx",
+      "D:\\stations.thecopy\\src\\contexts\\LanguageContext.tsx"
+    ],
+    "src\\components\\DiagnosticPanel.tsx": [
+      "D:\\stations.thecopy\\src\\components\\ui\\card.tsx",
+      "D:\\stations.thecopy\\src\\components\\ui\\badge.tsx",
+      "D:\\stations.thecopy\\src\\contexts\\LanguageContext.tsx"
+    ],
+    "src\\components\\examples\\AnalysisCard.tsx": [
+      "D:\\stations.thecopy\\src\\components\\AnalysisCard.tsx"
+    ],
+    "src\\components\\examples\\CharacterNode.tsx": [
+      "D:\\stations.thecopy\\src\\components\\CharacterNode.tsx"
+    ],
+    "src\\components\\examples\\ConflictNetwork.tsx": [
+      "D:\\stations.thecopy\\src\\components\\ConflictNetwork.tsx",
+      "D:\\stations.thecopy\\src\\contexts\\LanguageContext.tsx"
+    ],
+    "src\\components\\examples\\DiagnosticPanel.tsx": [
+      "D:\\stations.thecopy\\src\\components\\DiagnosticPanel.tsx",
+      "D:\\stations.thecopy\\src\\contexts\\LanguageContext.tsx"
+    ],
+    "src\\components\\examples\\Header.tsx": [
+      "D:\\stations.thecopy\\src\\components\\Header.tsx",
+      "D:\\stations.thecopy\\src\\contexts\\ThemeContext.tsx",
+      "D:\\stations.thecopy\\src\\contexts\\LanguageContext.tsx"
+    ],
+    "src\\components\\examples\\HeroSection.tsx": [
+      "D:\\stations.thecopy\\src\\components\\HeroSection.tsx",
+      "D:\\stations.thecopy\\src\\contexts\\LanguageContext.tsx"
+    ],
+    "src\\components\\examples\\MetricCard.tsx": [
+      "D:\\stations.thecopy\\src\\components\\MetricCard.tsx"
+    ],
+    "src\\components\\examples\\StationProgress.tsx": [
+      "D:\\stations.thecopy\\src\\components\\StationProgress.tsx",
+      "D:\\stations.thecopy\\src\\contexts\\LanguageContext.tsx"
+    ],
+    "src\\components\\examples\\TextInput.tsx": [
+      "D:\\stations.thecopy\\src\\components\\TextInput.tsx",
+      "D:\\stations.thecopy\\src\\contexts\\LanguageContext.tsx"
+    ],
+    "src\\components\\Header.tsx": [
+      "D:\\stations.thecopy\\src\\components\\ui\\button.tsx",
+      "D:\\stations.thecopy\\src\\contexts\\ThemeContext.tsx",
+      "D:\\stations.thecopy\\src\\contexts\\LanguageContext.tsx"
+    ],
+    "src\\components\\HeroSection.tsx": [
+      "D:\\stations.thecopy\\src\\components\\ui\\button.tsx",
+      "D:\\stations.thecopy\\src\\contexts\\LanguageContext.tsx"
+    ],
+    "src\\components\\MetricCard.tsx": [
+      "D:\\stations.thecopy\\src\\components\\ui\\card.tsx",
+      "D:\\stations.thecopy\\src\\components\\ui\\progress.tsx"
+    ],
+    "src\\components\\station-progress-utils.ts": [],
+    "src\\components\\StationProgress.tsx": [
+      "D:\\stations.thecopy\\src\\contexts\\LanguageContext.tsx",
+      "D:\\stations.thecopy\\src\\components\\station-progress-utils.ts"
+    ],
+    "src\\components\\TextInput.tsx": [
+      "D:\\stations.thecopy\\src\\components\\ui\\textarea.tsx",
+      "D:\\stations.thecopy\\src\\components\\ui\\button.tsx",
+      "D:\\stations.thecopy\\src\\contexts\\LanguageContext.tsx",
+      "D:\\stations.thecopy\\src\\components\\ui\\card.tsx"
+    ],
+    "src\\components\\ui\\accordion.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\alert-dialog.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts",
+      "D:\\stations.thecopy\\src\\components\\ui\\button.tsx"
+    ],
+    "src\\components\\ui\\alert.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\aspect-ratio.tsx": [],
+    "src\\components\\ui\\avatar.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\badge.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\breadcrumb.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\button.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\calendar.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts",
+      "D:\\stations.thecopy\\src\\components\\ui\\button.tsx"
+    ],
+    "src\\components\\ui\\card.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\carousel.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts",
+      "D:\\stations.thecopy\\src\\components\\ui\\button.tsx"
+    ],
+    "src\\components\\ui\\chart.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\checkbox.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\collapsible.tsx": [],
+    "src\\components\\ui\\command.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts",
+      "D:\\stations.thecopy\\src\\components\\ui\\dialog.tsx"
+    ],
+    "src\\components\\ui\\context-menu.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\dialog.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\drawer.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\dropdown-menu.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\form.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts",
+      "D:\\stations.thecopy\\src\\components\\ui\\label.tsx"
+    ],
+    "src\\components\\ui\\hover-card.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\input-otp.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\input.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\label.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\menubar.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\navigation-menu.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\pagination.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts",
+      "D:\\stations.thecopy\\src\\components\\ui\\button.tsx"
+    ],
+    "src\\components\\ui\\popover.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\progress.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\radio-group.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\resizable.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\scroll-area.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\select.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\separator.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\sheet.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\sidebar.tsx": [
+      "D:\\stations.thecopy\\src\\hooks\\use-mobile.tsx",
+      "D:\\stations.thecopy\\src\\lib\\utils.ts",
+      "D:\\stations.thecopy\\src\\components\\ui\\button.tsx",
+      "D:\\stations.thecopy\\src\\components\\ui\\input.tsx",
+      "D:\\stations.thecopy\\src\\components\\ui\\separator.tsx",
+      "D:\\stations.thecopy\\src\\components\\ui\\sheet.tsx",
+      "D:\\stations.thecopy\\src\\components\\ui\\skeleton.tsx",
+      "D:\\stations.thecopy\\src\\components\\ui\\tooltip.tsx"
+    ],
+    "src\\components\\ui\\skeleton.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\slider.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\switch.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\table.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\tabs.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\textarea.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\toast.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\toaster.tsx": [
+      "D:\\stations.thecopy\\src\\hooks\\use-toast.ts",
+      "D:\\stations.thecopy\\src\\components\\ui\\toast.tsx"
+    ],
+    "src\\components\\ui\\toggle-group.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts",
+      "D:\\stations.thecopy\\src\\components\\ui\\toggle.tsx"
+    ],
+    "src\\components\\ui\\toggle.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\ui\\tooltip.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\utils.ts"
+    ],
+    "src\\components\\__tests__\\station-progress-utils.test.ts": [
+      "D:\\stations.thecopy\\src\\components\\station-progress-utils.ts"
+    ],
+    "src\\contexts\\LanguageContext.tsx": [],
+    "src\\contexts\\ThemeContext.tsx": [],
+    "src\\hooks\\use-mobile.tsx": [],
+    "src\\hooks\\use-toast.ts": [],
+    "src\\lib\\queryClient.ts": [],
+    "src\\lib\\utils.ts": [],
+    "src\\main.tsx": [
+      "D:\\stations.thecopy\\src\\App.tsx"
+    ],
+    "src\\pages\\HomePage.tsx": [
+      "D:\\stations.thecopy\\src\\lib\\queryClient.ts",
+      "D:\\stations.thecopy\\src\\components\\Header.tsx",
+      "D:\\stations.thecopy\\src\\components\\HeroSection.tsx",
+      "D:\\stations.thecopy\\src\\components\\StationProgress.tsx",
+      "D:\\stations.thecopy\\src\\components\\TextInput.tsx",
+      "D:\\stations.thecopy\\src\\components\\AnalysisCard.tsx",
+      "D:\\stations.thecopy\\src\\components\\ConflictNetwork.tsx",
+      "D:\\stations.thecopy\\src\\components\\MetricCard.tsx",
+      "D:\\stations.thecopy\\src\\components\\DiagnosticPanel.tsx",
+      "D:\\stations.thecopy\\src\\contexts\\LanguageContext.tsx",
+      "D:\\stations.thecopy\\src\\hooks\\use-toast.ts",
+      "D:\\stations.thecopy\\src\\components\\ui\\tabs.tsx"
+    ],
+    "src\\pages\\not-found.tsx": [
+      "D:\\stations.thecopy\\src\\components\\ui\\card.tsx"
+    ],
+    "server\\analysis_modules\\efficiency-metrics.ts": [
+      "D:\\stations.thecopy\\server\\core\\models\\base-entities.ts"
+    ],
+    "server\\analysis_modules\\network-diagnostics.ts": [
+      "D:\\stations.thecopy\\server\\core\\models\\base-entities.ts"
+    ],
+    "server\\core\\models\\base-entities.ts": [],
+    "server\\core\\pipeline\\base-station.ts": [
+      "D:\\stations.thecopy\\server\\services\\ai\\gemini-service.ts",
+      "D:\\stations.thecopy\\server\\utils\\logger.ts"
+    ],
+    "server\\index.ts": [
+      "D:\\stations.thecopy\\server\\routes.ts",
+      "D:\\stations.thecopy\\server\\vite.ts",
+      "D:\\stations.thecopy\\server\\utils\\logger.ts"
+    ],
+    "server\\middleware\\auth.ts": [
+      "D:\\stations.thecopy\\server\\utils\\logger.ts"
+    ],
+    "server\\middleware\\rate-limit.ts": [],
+    "server\\middleware\\sanitize.ts": [],
+    "server\\routes\\health.ts": [],
+    "server\\routes.ts": [
+      "D:\\stations.thecopy\\shared\\schema.ts",
+      "D:\\stations.thecopy\\server\\run-all-stations.ts",
+      "D:\\stations.thecopy\\server\\services\\ai\\gemini-service.ts",
+      "D:\\stations.thecopy\\server\\stations\\station1\\station1-text-analysis.ts",
+      "D:\\stations.thecopy\\server\\stations\\station2\\station2-conceptual-analysis.ts",
+      "D:\\stations.thecopy\\server\\stations\\station3\\station3-network-builder.ts",
+      "D:\\stations.thecopy\\server\\middleware\\auth.ts",
+      "D:\\stations.thecopy\\server\\middleware\\rate-limit.ts",
+      "D:\\stations.thecopy\\server\\middleware\\sanitize.ts",
+      "D:\\stations.thecopy\\server\\routes\\health.ts",
+      "D:\\stations.thecopy\\server\\utils\\logger.ts"
+    ],
+    "server\\run-all-stations.ts": [
+      "D:\\stations.thecopy\\server\\stations\\station1\\station1-text-analysis.ts",
+      "D:\\stations.thecopy\\server\\stations\\station2\\station2-conceptual-analysis.ts",
+      "D:\\stations.thecopy\\server\\stations\\station3\\station3-network-builder.ts",
+      "D:\\stations.thecopy\\server\\stations\\station4\\station4-efficiency-metrics.ts",
+      "D:\\stations.thecopy\\server\\stations\\station5\\station5-dynamic-symbolic-stylistic.ts",
+      "D:\\stations.thecopy\\server\\stations\\station6\\station6-diagnostics-treatment.ts",
+      "D:\\stations.thecopy\\server\\stations\\station7\\station7-finalization.ts",
+      "D:\\stations.thecopy\\server\\services\\ai\\gemini-service.ts",
+      "D:\\stations.thecopy\\server\\core\\pipeline\\base-station.ts",
+      "D:\\stations.thecopy\\server\\utils\\logger.ts"
+    ],
+    "server\\services\\ai\\gemini-service.ts": [
+      "D:\\stations.thecopy\\server\\utils\\logger.ts"
+    ],
+    "server\\services\\ai\\result-selector.ts": [
+      "D:\\stations.thecopy\\server\\services\\ai\\gemini-service.ts"
+    ],
+    "server\\stations\\station1\\station1-text-analysis.ts": [
+      "D:\\stations.thecopy\\server\\core\\pipeline\\base-station.ts",
+      "D:\\stations.thecopy\\server\\services\\ai\\gemini-service.ts"
+    ],
+    "server\\stations\\station2\\station2-conceptual-analysis.ts": [
+      "D:\\stations.thecopy\\server\\core\\pipeline\\base-station.ts",
+      "D:\\stations.thecopy\\server\\services\\ai\\gemini-service.ts",
+      "D:\\stations.thecopy\\server\\stations\\station1\\station1-text-analysis.ts",
+      "D:\\stations.thecopy\\server\\types\\contexts.ts"
+    ],
+    "server\\stations\\station3\\station3-network-builder.ts": [
+      "D:\\stations.thecopy\\server\\core\\pipeline\\base-station.ts",
+      "D:\\stations.thecopy\\server\\services\\ai\\gemini-service.ts",
+      "D:\\stations.thecopy\\server\\core\\models\\base-entities.ts",
+      "D:\\stations.thecopy\\server\\stations\\station1\\station1-text-analysis.ts",
+      "D:\\stations.thecopy\\server\\stations\\station2\\station2-conceptual-analysis.ts",
+      "D:\\stations.thecopy\\server\\utils\\logger.ts",
+      "D:\\stations.thecopy\\server\\types\\contexts.ts"
+    ],
+    "server\\stations\\station4\\station4-efficiency-metrics.ts": [
+      "D:\\stations.thecopy\\server\\core\\pipeline\\base-station.ts",
+      "D:\\stations.thecopy\\server\\services\\ai\\gemini-service.ts",
+      "D:\\stations.thecopy\\server\\analysis_modules\\efficiency-metrics.ts",
+      "D:\\stations.thecopy\\server\\stations\\station3\\station3-network-builder.ts"
+    ],
+    "server\\stations\\station5\\station5-dynamic-symbolic-stylistic.ts": [
+      "D:\\stations.thecopy\\server\\core\\pipeline\\base-station.ts",
+      "D:\\stations.thecopy\\server\\core\\models\\base-entities.ts",
+      "D:\\stations.thecopy\\server\\services\\ai\\gemini-service.ts",
+      "D:\\stations.thecopy\\server\\stations\\station4\\station4-efficiency-metrics.ts"
+    ],
+    "server\\stations\\station6\\station6-diagnostics-treatment.ts": [
+      "D:\\stations.thecopy\\server\\core\\pipeline\\base-station.ts",
+      "D:\\stations.thecopy\\server\\services\\ai\\gemini-service.ts",
+      "D:\\stations.thecopy\\server\\utils\\logger.ts"
+    ],
+    "server\\stations\\station7\\station7-finalization.ts": [
+      "D:\\stations.thecopy\\server\\core\\pipeline\\base-station.ts",
+      "D:\\stations.thecopy\\server\\core\\models\\base-entities.ts",
+      "D:\\stations.thecopy\\server\\services\\ai\\gemini-service.ts",
+      "D:\\stations.thecopy\\server\\stations\\station6\\station6-diagnostics-treatment.ts",
+      "D:\\stations.thecopy\\server\\utils\\logger.ts"
+    ],
+    "server\\storage.ts": [
+      "D:\\stations.thecopy\\shared\\schema.ts"
+    ],
+    "server\\types\\contexts.ts": [],
+    "server\\utils\\logger.ts": [],
+    "server\\vite.ts": [
+      "D:\\stations.thecopy\\vite.config"
+    ],
+    "shared\\schema.ts": [],
+    "drizzle.config.ts": [],
+    "postcss.config.js": [],
+    "tailwind.config.ts": [],
+    "vite.config.ts": [],
+    "vitest.config.ts": []
+  },
+  "dependents": {
+    "D:\\stations.thecopy\\src\\lib\\queryClient.ts": [
+      "src\\App.tsx",
+      "src\\pages\\HomePage.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\ui\\toaster.tsx": [
+      "src\\App.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\ui\\tooltip.tsx": [
+      "src\\App.tsx",
+      "src\\components\\ui\\sidebar.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\contexts\\ThemeContext.tsx": [
+      "src\\App.tsx",
+      "src\\components\\examples\\Header.tsx",
+      "src\\components\\Header.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\contexts\\LanguageContext.tsx": [
+      "src\\App.tsx",
+      "src\\components\\ConflictNetwork.tsx",
+      "src\\components\\DiagnosticPanel.tsx",
+      "src\\components\\examples\\ConflictNetwork.tsx",
+      "src\\components\\examples\\DiagnosticPanel.tsx",
+      "src\\components\\examples\\Header.tsx",
+      "src\\components\\examples\\HeroSection.tsx",
+      "src\\components\\examples\\StationProgress.tsx",
+      "src\\components\\examples\\TextInput.tsx",
+      "src\\components\\Header.tsx",
+      "src\\components\\HeroSection.tsx",
+      "src\\components\\StationProgress.tsx",
+      "src\\components\\TextInput.tsx",
+      "src\\pages\\HomePage.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\pages\\HomePage.tsx": [
+      "src\\App.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\pages\\not-found.tsx": [
+      "src\\App.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\ui\\card.tsx": [
+      "src\\components\\AnalysisCard.tsx",
+      "src\\components\\ConflictNetwork.tsx",
+      "src\\components\\DiagnosticPanel.tsx",
+      "src\\components\\MetricCard.tsx",
+      "src\\components\\TextInput.tsx",
+      "src\\pages\\not-found.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\ui\\badge.tsx": [
+      "src\\components\\AnalysisCard.tsx",
+      "src\\components\\DiagnosticPanel.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\ui\\avatar.tsx": [
+      "src\\components\\CharacterNode.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\CharacterNode.tsx": [
+      "src\\components\\ConflictNetwork.tsx",
+      "src\\components\\examples\\CharacterNode.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\AnalysisCard.tsx": [
+      "src\\components\\examples\\AnalysisCard.tsx",
+      "src\\pages\\HomePage.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\ConflictNetwork.tsx": [
+      "src\\components\\examples\\ConflictNetwork.tsx",
+      "src\\pages\\HomePage.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\DiagnosticPanel.tsx": [
+      "src\\components\\examples\\DiagnosticPanel.tsx",
+      "src\\pages\\HomePage.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\Header.tsx": [
+      "src\\components\\examples\\Header.tsx",
+      "src\\pages\\HomePage.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\HeroSection.tsx": [
+      "src\\components\\examples\\HeroSection.tsx",
+      "src\\pages\\HomePage.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\MetricCard.tsx": [
+      "src\\components\\examples\\MetricCard.tsx",
+      "src\\pages\\HomePage.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\StationProgress.tsx": [
+      "src\\components\\examples\\StationProgress.tsx",
+      "src\\pages\\HomePage.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\TextInput.tsx": [
+      "src\\components\\examples\\TextInput.tsx",
+      "src\\pages\\HomePage.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\ui\\button.tsx": [
+      "src\\components\\Header.tsx",
+      "src\\components\\HeroSection.tsx",
+      "src\\components\\TextInput.tsx",
+      "src\\components\\ui\\alert-dialog.tsx",
+      "src\\components\\ui\\calendar.tsx",
+      "src\\components\\ui\\carousel.tsx",
+      "src\\components\\ui\\pagination.tsx",
+      "src\\components\\ui\\sidebar.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\ui\\progress.tsx": [
+      "src\\components\\MetricCard.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\station-progress-utils.ts": [
+      "src\\components\\StationProgress.tsx",
+      "src\\components\\__tests__\\station-progress-utils.test.ts"
+    ],
+    "D:\\stations.thecopy\\src\\components\\ui\\textarea.tsx": [
+      "src\\components\\TextInput.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\lib\\utils.ts": [
+      "src\\components\\ui\\accordion.tsx",
+      "src\\components\\ui\\alert-dialog.tsx",
+      "src\\components\\ui\\alert.tsx",
+      "src\\components\\ui\\avatar.tsx",
+      "src\\components\\ui\\badge.tsx",
+      "src\\components\\ui\\breadcrumb.tsx",
+      "src\\components\\ui\\button.tsx",
+      "src\\components\\ui\\calendar.tsx",
+      "src\\components\\ui\\card.tsx",
+      "src\\components\\ui\\carousel.tsx",
+      "src\\components\\ui\\chart.tsx",
+      "src\\components\\ui\\checkbox.tsx",
+      "src\\components\\ui\\command.tsx",
+      "src\\components\\ui\\context-menu.tsx",
+      "src\\components\\ui\\dialog.tsx",
+      "src\\components\\ui\\drawer.tsx",
+      "src\\components\\ui\\dropdown-menu.tsx",
+      "src\\components\\ui\\form.tsx",
+      "src\\components\\ui\\hover-card.tsx",
+      "src\\components\\ui\\input-otp.tsx",
+      "src\\components\\ui\\input.tsx",
+      "src\\components\\ui\\label.tsx",
+      "src\\components\\ui\\menubar.tsx",
+      "src\\components\\ui\\navigation-menu.tsx",
+      "src\\components\\ui\\pagination.tsx",
+      "src\\components\\ui\\popover.tsx",
+      "src\\components\\ui\\progress.tsx",
+      "src\\components\\ui\\radio-group.tsx",
+      "src\\components\\ui\\resizable.tsx",
+      "src\\components\\ui\\scroll-area.tsx",
+      "src\\components\\ui\\select.tsx",
+      "src\\components\\ui\\separator.tsx",
+      "src\\components\\ui\\sheet.tsx",
+      "src\\components\\ui\\sidebar.tsx",
+      "src\\components\\ui\\skeleton.tsx",
+      "src\\components\\ui\\slider.tsx",
+      "src\\components\\ui\\switch.tsx",
+      "src\\components\\ui\\table.tsx",
+      "src\\components\\ui\\tabs.tsx",
+      "src\\components\\ui\\textarea.tsx",
+      "src\\components\\ui\\toast.tsx",
+      "src\\components\\ui\\toggle-group.tsx",
+      "src\\components\\ui\\toggle.tsx",
+      "src\\components\\ui\\tooltip.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\ui\\dialog.tsx": [
+      "src\\components\\ui\\command.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\ui\\label.tsx": [
+      "src\\components\\ui\\form.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\hooks\\use-mobile.tsx": [
+      "src\\components\\ui\\sidebar.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\ui\\input.tsx": [
+      "src\\components\\ui\\sidebar.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\ui\\separator.tsx": [
+      "src\\components\\ui\\sidebar.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\ui\\sheet.tsx": [
+      "src\\components\\ui\\sidebar.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\ui\\skeleton.tsx": [
+      "src\\components\\ui\\sidebar.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\hooks\\use-toast.ts": [
+      "src\\components\\ui\\toaster.tsx",
+      "src\\pages\\HomePage.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\ui\\toast.tsx": [
+      "src\\components\\ui\\toaster.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\ui\\toggle.tsx": [
+      "src\\components\\ui\\toggle-group.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\App.tsx": [
+      "src\\main.tsx"
+    ],
+    "D:\\stations.thecopy\\src\\components\\ui\\tabs.tsx": [
+      "src\\pages\\HomePage.tsx"
+    ],
+    "D:\\stations.thecopy\\server\\core\\models\\base-entities.ts": [
+      "server\\analysis_modules\\efficiency-metrics.ts",
+      "server\\analysis_modules\\network-diagnostics.ts",
+      "server\\stations\\station3\\station3-network-builder.ts",
+      "server\\stations\\station5\\station5-dynamic-symbolic-stylistic.ts",
+      "server\\stations\\station7\\station7-finalization.ts"
+    ],
+    "D:\\stations.thecopy\\server\\services\\ai\\gemini-service.ts": [
+      "server\\core\\pipeline\\base-station.ts",
+      "server\\routes.ts",
+      "server\\run-all-stations.ts",
+      "server\\services\\ai\\result-selector.ts",
+      "server\\stations\\station1\\station1-text-analysis.ts",
+      "server\\stations\\station2\\station2-conceptual-analysis.ts",
+      "server\\stations\\station3\\station3-network-builder.ts",
+      "server\\stations\\station4\\station4-efficiency-metrics.ts",
+      "server\\stations\\station5\\station5-dynamic-symbolic-stylistic.ts",
+      "server\\stations\\station6\\station6-diagnostics-treatment.ts",
+      "server\\stations\\station7\\station7-finalization.ts"
+    ],
+    "D:\\stations.thecopy\\server\\utils\\logger.ts": [
+      "server\\core\\pipeline\\base-station.ts",
+      "server\\index.ts",
+      "server\\middleware\\auth.ts",
+      "server\\routes.ts",
+      "server\\run-all-stations.ts",
+      "server\\services\\ai\\gemini-service.ts",
+      "server\\stations\\station3\\station3-network-builder.ts",
+      "server\\stations\\station6\\station6-diagnostics-treatment.ts",
+      "server\\stations\\station7\\station7-finalization.ts"
+    ],
+    "D:\\stations.thecopy\\server\\routes.ts": [
+      "server\\index.ts"
+    ],
+    "D:\\stations.thecopy\\server\\vite.ts": [
+      "server\\index.ts"
+    ],
+    "D:\\stations.thecopy\\shared\\schema.ts": [
+      "server\\routes.ts",
+      "server\\storage.ts"
+    ],
+    "D:\\stations.thecopy\\server\\run-all-stations.ts": [
+      "server\\routes.ts"
+    ],
+    "D:\\stations.thecopy\\server\\stations\\station1\\station1-text-analysis.ts": [
+      "server\\routes.ts",
+      "server\\run-all-stations.ts",
+      "server\\stations\\station2\\station2-conceptual-analysis.ts",
+      "server\\stations\\station3\\station3-network-builder.ts"
+    ],
+    "D:\\stations.thecopy\\server\\stations\\station2\\station2-conceptual-analysis.ts": [
+      "server\\routes.ts",
+      "server\\run-all-stations.ts",
+      "server\\stations\\station3\\station3-network-builder.ts"
+    ],
+    "D:\\stations.thecopy\\server\\stations\\station3\\station3-network-builder.ts": [
+      "server\\routes.ts",
+      "server\\run-all-stations.ts",
+      "server\\stations\\station4\\station4-efficiency-metrics.ts"
+    ],
+    "D:\\stations.thecopy\\server\\middleware\\auth.ts": [
+      "server\\routes.ts"
+    ],
+    "D:\\stations.thecopy\\server\\middleware\\rate-limit.ts": [
+      "server\\routes.ts"
+    ],
+    "D:\\stations.thecopy\\server\\middleware\\sanitize.ts": [
+      "server\\routes.ts"
+    ],
+    "D:\\stations.thecopy\\server\\routes\\health.ts": [
+      "server\\routes.ts"
+    ],
+    "D:\\stations.thecopy\\server\\stations\\station4\\station4-efficiency-metrics.ts": [
+      "server\\run-all-stations.ts",
+      "server\\stations\\station5\\station5-dynamic-symbolic-stylistic.ts"
+    ],
+    "D:\\stations.thecopy\\server\\stations\\station5\\station5-dynamic-symbolic-stylistic.ts": [
+      "server\\run-all-stations.ts"
+    ],
+    "D:\\stations.thecopy\\server\\stations\\station6\\station6-diagnostics-treatment.ts": [
+      "server\\run-all-stations.ts",
+      "server\\stations\\station7\\station7-finalization.ts"
+    ],
+    "D:\\stations.thecopy\\server\\stations\\station7\\station7-finalization.ts": [
+      "server\\run-all-stations.ts"
+    ],
+    "D:\\stations.thecopy\\server\\core\\pipeline\\base-station.ts": [
+      "server\\run-all-stations.ts",
+      "server\\stations\\station1\\station1-text-analysis.ts",
+      "server\\stations\\station2\\station2-conceptual-analysis.ts",
+      "server\\stations\\station3\\station3-network-builder.ts",
+      "server\\stations\\station4\\station4-efficiency-metrics.ts",
+      "server\\stations\\station5\\station5-dynamic-symbolic-stylistic.ts",
+      "server\\stations\\station6\\station6-diagnostics-treatment.ts",
+      "server\\stations\\station7\\station7-finalization.ts"
+    ],
+    "D:\\stations.thecopy\\server\\types\\contexts.ts": [
+      "server\\stations\\station2\\station2-conceptual-analysis.ts",
+      "server\\stations\\station3\\station3-network-builder.ts"
+    ],
+    "D:\\stations.thecopy\\server\\analysis_modules\\efficiency-metrics.ts": [
+      "server\\stations\\station4\\station4-efficiency-metrics.ts"
+    ],
+    "D:\\stations.thecopy\\vite.config": [
+      "server\\vite.ts"
+    ]
+  },
+  "gitInfo": {
+    ".claude/settings.local.json": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    ".dockerignore": {
+      "lastCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842",
+      "lastCommitTime": 1759402817,
+      "firstCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842"
+    },
+    ".env.example": {
+      "lastCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842",
+      "lastCommitTime": 1759402817,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    ".eslintrc.json": {
+      "lastCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842",
+      "lastCommitTime": 1759402817,
+      "firstCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842"
+    },
+    ".github/workflows/ci.yml": {
+      "lastCommit": "70f36a5c355831c55bf53e3a5e9317b56defb165",
+      "lastCommitTime": 1759471383,
+      "firstCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842"
+    },
+    ".gitignore": {
+      "lastCommit": "5b0c202549f6484f69e4f1cd58e35e7b09cf755d",
+      "lastCommitTime": 1759465835,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    ".prettierignore": {
+      "lastCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842",
+      "lastCommitTime": 1759402817,
+      "firstCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842"
+    },
+    ".prettierrc": {
+      "lastCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842",
+      "lastCommitTime": 1759402817,
+      "firstCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842"
+    },
+    "AGENTS.md": {
+      "lastCommit": "c5acd1bc97e24d17ed7c3160bb24e03bad8f45b7",
+      "lastCommitTime": 1759394678,
+      "firstCommit": "16c2df06d3f440731e11070bfd004213b5949550"
+    },
+    "API_DOCUMENTATION.md": {
+      "lastCommit": "77d7d471e169f82345179805bafa3294d4723385",
+      "lastCommitTime": 1759467942,
+      "firstCommit": "77d7d471e169f82345179805bafa3294d4723385"
+    },
+    "Dockerfile": {
+      "lastCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842",
+      "lastCommitTime": 1759402817,
+      "firstCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842"
+    },
+    "IMPLEMENTATION_CHECKLIST.md": {
+      "lastCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842",
+      "lastCommitTime": 1759402817,
+      "firstCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842"
+    },
+    "QUICKSTART.md.pdf": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "README.md": {
+      "lastCommit": "77d7d471e169f82345179805bafa3294d4723385",
+      "lastCommitTime": 1759467942,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "TESTING_DIRECTIVE_STATIONS.md": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "USAGE_GUIDE.md": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "cleanup/PR_BODY.md": {
+      "lastCommit": "3281ec053fd5ecfd0af964f9bc110872549b6807",
+      "lastCommitTime": 1759476217,
+      "firstCommit": "3281ec053fd5ecfd0af964f9bc110872549b6807"
+    },
+    "cleanup/apply_cleanup.sh": {
+      "lastCommit": "3281ec053fd5ecfd0af964f9bc110872549b6807",
+      "lastCommitTime": 1759476217,
+      "firstCommit": "3281ec053fd5ecfd0af964f9bc110872549b6807"
+    },
+    "cleanup/cleanup.diff": {
+      "lastCommit": "3281ec053fd5ecfd0af964f9bc110872549b6807",
+      "lastCommitTime": 1759476217,
+      "firstCommit": "3281ec053fd5ecfd0af964f9bc110872549b6807"
+    },
+    "cleanup/trash_report.jsonl": {
+      "lastCommit": "3281ec053fd5ecfd0af964f9bc110872549b6807",
+      "lastCommitTime": 1759476217,
+      "firstCommit": "3281ec053fd5ecfd0af964f9bc110872549b6807"
+    },
+    "cleanup/verification.md": {
+      "lastCommit": "3281ec053fd5ecfd0af964f9bc110872549b6807",
+      "lastCommitTime": 1759476217,
+      "firstCommit": "3281ec053fd5ecfd0af964f9bc110872549b6807"
+    },
+    "components.json": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "design_guidelines.md": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "docker-compose.yml": {
+      "lastCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842",
+      "lastCommitTime": 1759402817,
+      "firstCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842"
+    },
+    "drizzle.config.ts": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "fix-typescript-issues.sh": {
+      "lastCommit": "16c2df06d3f440731e11070bfd004213b5949550",
+      "lastCommitTime": 1759390990,
+      "firstCommit": "16c2df06d3f440731e11070bfd004213b5949550"
+    },
+    "gitignore": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "index.html": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "package-lock.json": {
+      "lastCommit": "a2befe43b6ae2cbfb24a242ea76eebcbebbf40ce",
+      "lastCommitTime": 1759465370,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "package.json": {
+      "lastCommit": "a2befe43b6ae2cbfb24a242ea76eebcbebbf40ce",
+      "lastCommitTime": 1759465370,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "postcss.config.js": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "server/analysis_modules/efficiency-metrics.ts": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "server/analysis_modules/network-diagnostics.ts": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "server/core/models/base-entities.ts": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "server/core/pipeline/base-station.ts": {
+      "lastCommit": "77d7d471e169f82345179805bafa3294d4723385",
+      "lastCommitTime": 1759467942,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "server/index.ts": {
+      "lastCommit": "77d7d471e169f82345179805bafa3294d4723385",
+      "lastCommitTime": 1759467942,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "server/middleware/auth.ts": {
+      "lastCommit": "b7f164d05bc1203a84423093359c21523aacb19e",
+      "lastCommitTime": 1759470845,
+      "firstCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842"
+    },
+    "server/middleware/rate-limit.ts": {
+      "lastCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842",
+      "lastCommitTime": 1759402817,
+      "firstCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842"
+    },
+    "server/middleware/sanitize.ts": {
+      "lastCommit": "3281ec053fd5ecfd0af964f9bc110872549b6807",
+      "lastCommitTime": 1759476217,
+      "firstCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842"
+    },
+    "server/routes.ts": {
+      "lastCommit": "8711d5457633e9fe3031e546621ea89d3584fe73",
+      "lastCommitTime": 1759470345,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "server/routes/health.ts": {
+      "lastCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842",
+      "lastCommitTime": 1759402817,
+      "firstCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842"
+    },
+    "server/run-all-stations.ts": {
+      "lastCommit": "77d7d471e169f82345179805bafa3294d4723385",
+      "lastCommitTime": 1759467942,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "server/services/ai/gemini-service.ts": {
+      "lastCommit": "a86f803297448e1c2e1e2646fb22c4e7f2d0070f",
+      "lastCommitTime": 1759471874,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "server/services/ai/result-selector.ts": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "server/stations/station1/station1-text-analysis.ts": {
+      "lastCommit": "77d7d471e169f82345179805bafa3294d4723385",
+      "lastCommitTime": 1759467942,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "server/stations/station2/station2-conceptual-analysis.ts": {
+      "lastCommit": "b7f164d05bc1203a84423093359c21523aacb19e",
+      "lastCommitTime": 1759470845,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "server/stations/station3/station3-network-builder.ts": {
+      "lastCommit": "b7f164d05bc1203a84423093359c21523aacb19e",
+      "lastCommitTime": 1759470845,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "server/stations/station4/station4-efficiency-metrics.ts": {
+      "lastCommit": "77d7d471e169f82345179805bafa3294d4723385",
+      "lastCommitTime": 1759467942,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "server/stations/station5/station5-dynamic-symbolic-stylistic.ts": {
+      "lastCommit": "77d7d471e169f82345179805bafa3294d4723385",
+      "lastCommitTime": 1759467942,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "server/stations/station6/station6-diagnostics-treatment.ts": {
+      "lastCommit": "77d7d471e169f82345179805bafa3294d4723385",
+      "lastCommitTime": 1759467942,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "server/stations/station7/station7-finalization.ts": {
+      "lastCommit": "77d7d471e169f82345179805bafa3294d4723385",
+      "lastCommitTime": 1759467942,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "server/storage.ts": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "server/types/contexts.ts": {
+      "lastCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842",
+      "lastCommitTime": 1759402817,
+      "firstCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842"
+    },
+    "server/utils/logger.ts": {
+      "lastCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842",
+      "lastCommitTime": 1759402817,
+      "firstCommit": "7811fa1c68c879fdde153eddc4e26fd72d0fa842"
+    },
+    "server/vite.ts": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "shared/schema.ts": {
+      "lastCommit": "77d7d471e169f82345179805bafa3294d4723385",
+      "lastCommitTime": 1759467942,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/App.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/AnalysisCard.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/CharacterNode.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ConflictNetwork.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/DiagnosticPanel.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/Header.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/HeroSection.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/MetricCard.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/StationProgress.tsx": {
+      "lastCommit": "a2befe43b6ae2cbfb24a242ea76eebcbebbf40ce",
+      "lastCommitTime": 1759465370,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/TextInput.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/__tests__/station-progress-utils.test.ts": {
+      "lastCommit": "a2befe43b6ae2cbfb24a242ea76eebcbebbf40ce",
+      "lastCommitTime": 1759465370,
+      "firstCommit": "a2befe43b6ae2cbfb24a242ea76eebcbebbf40ce"
+    },
+    "src/components/examples/AnalysisCard.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/examples/CharacterNode.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/examples/ConflictNetwork.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/examples/DiagnosticPanel.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/examples/Header.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/examples/HeroSection.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/examples/MetricCard.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/examples/StationProgress.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/examples/TextInput.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/station-progress-utils.ts": {
+      "lastCommit": "a2befe43b6ae2cbfb24a242ea76eebcbebbf40ce",
+      "lastCommitTime": 1759465370,
+      "firstCommit": "a2befe43b6ae2cbfb24a242ea76eebcbebbf40ce"
+    },
+    "src/components/ui/accordion.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/alert-dialog.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/alert.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/aspect-ratio.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/avatar.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/badge.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/breadcrumb.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/button.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/calendar.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/card.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/carousel.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/chart.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/checkbox.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/collapsible.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/command.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/context-menu.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/dialog.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/drawer.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/dropdown-menu.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/form.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/hover-card.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/input-otp.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/input.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/label.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/menubar.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/navigation-menu.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/pagination.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/popover.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/progress.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/radio-group.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/resizable.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/scroll-area.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/select.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/separator.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/sheet.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/sidebar.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/skeleton.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/slider.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/switch.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/table.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/tabs.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/textarea.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/toast.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/toaster.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/toggle-group.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/toggle.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/components/ui/tooltip.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/contexts/LanguageContext.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/contexts/ThemeContext.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/hooks/use-mobile.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/hooks/use-toast.ts": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/index.css": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/lib/queryClient.ts": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/lib/utils.ts": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/main.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/pages/HomePage.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "src/pages/not-found.tsx": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "stations.code-workspace": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "tailwind.config.ts": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "tsconfig.json": {
+      "lastCommit": "a86f803297448e1c2e1e2646fb22c4e7f2d0070f",
+      "lastCommitTime": 1759471874,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "vite.config.ts": {
+      "lastCommit": "74cbac526da78f811e322f6810d3d5ec2141a935",
+      "lastCommitTime": 1759385824,
+      "firstCommit": "74cbac526da78f811e322f6810d3d5ec2141a935"
+    },
+    "vitest.config.ts": {
+      "lastCommit": "a2befe43b6ae2cbfb24a242ea76eebcbebbf40ce",
+      "lastCommitTime": 1759465370,
+      "firstCommit": "a2befe43b6ae2cbfb24a242ea76eebcbebbf40ce"
+    }
+  }
+}
