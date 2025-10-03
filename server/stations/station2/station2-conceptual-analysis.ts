@@ -1,6 +1,7 @@
 import { BaseStation, type StationConfig } from '../../core/pipeline/base-station';
 import { GeminiService, GeminiModel } from '../../services/ai/gemini-service';
 import { Station1Output } from '../station1/station1-text-analysis';
+import { Station2Context } from '../../types/contexts';
 
 export interface Station2Input {
   station1Output: Station1Output;
@@ -75,16 +76,16 @@ export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Stati
   }
 
   protected async process(input: Station2Input): Promise<Station2Output> {
-    const context = this.buildContextFromStation1(input.station1Output);
-    
+    const context = this.buildContextFromStation1(input.station1Output, input.fullText);
+
     const [
       storyStatements,
       threeDMap,
       hybridGenreOptions
     ] = await Promise.all([
-      this.generateStoryStatements(context, input.fullText),
-      this.generate3DMap(context, input.fullText),
-      this.generateHybridGenre(context, input.fullText)
+      this.generateStoryStatements(context),
+      this.generate3DMap(context),
+      this.generateHybridGenre(context)
     ]);
 
     const storyStatement = storyStatements[0];
@@ -97,9 +98,9 @@ export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Stati
       artisticReferences
     ] = await Promise.all([
       this.generateElevatorPitch(storyStatement),
-      this.generateGenreMatrix(hybridGenre, context, input.fullText),
-      this.generateDynamicTone(hybridGenre, context, input.fullText),
-      this.generateArtisticReferences(hybridGenre, context, input.fullText)
+      this.generateGenreMatrix(hybridGenre, context),
+      this.generateDynamicTone(hybridGenre, context),
+      this.generateArtisticReferences(hybridGenre, context)
     ]);
 
     return {
@@ -117,22 +118,25 @@ export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Stati
     };
   }
 
-  private buildContextFromStation1(s1Output: Station1Output): Record<string, unknown> {
+  private buildContextFromStation1(s1Output: Station1Output, fullText: string): Station2Context {
+    const relationshipSummary = s1Output.relationshipAnalysis.keyRelationships
+      .map(relationship => {
+        const [source, target] = relationship.characters;
+        return `${source} ↔ ${target}: ${relationship.dynamic} (${relationship.narrativeImportance})`;
+      })
+      .join('\n');
+
     return {
       majorCharacters: s1Output.majorCharacters,
-      characterProfiles: Array.from(s1Output.characterAnalysis.entries()).map(([name, analysis]) => ({
-        name,
-        traits: analysis.personalityTraits,
-        motivations: analysis.motivationsGoals
-      })),
-      keyRelationships: s1Output.relationshipAnalysis.keyRelationships,
-      narrativeStyle: s1Output.narrativeStyleAnalysis
+      relationshipSummary: relationshipSummary || 'لم يتم تحديد علاقات رئيسية بعد.',
+      narrativeTone: s1Output.narrativeStyleAnalysis.overallTone,
+      fullText
     };
   }
 
-  private async generateStoryStatements(context: Record<string, unknown>, fullText: string): Promise<string[]> {
+  private async generateStoryStatements(context: Station2Context): Promise<string[]> {
     const prompt = `
-بصفتك مساعد كتابة سيناريو خبير، ومستندًا إلى ملخص السيناريو الأولي والنص الكامل المرفقين، 
+بصفتك مساعد كتابة سيناريو خبير، ومستندًا إلى ملخص السيناريو الأولي والنص الكامل المرفقين،
 اقترح **ثلاثة (3)** بدائل متميزة لـ "بيان القصة" (Story Statement).
 
 كل بيان يجب أن يتكون من **أربع جمل**، تغطي:
@@ -157,7 +161,7 @@ export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Stati
       story_statement_alternatives: string[];
     }>({
       prompt,
-      context: fullText.substring(0, 25000),
+      context: context.fullText.substring(0, 25000),
       model: GeminiModel.PRO,
       temperature: 0.8
     });
@@ -165,7 +169,7 @@ export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Stati
     return result.content.story_statement_alternatives || ['فشل توليد بيان القصة'];
   }
 
-  private async generate3DMap(context: Record<string, unknown>, fullText: string): Promise<ThreeDMapResult> {
+  private async generate3DMap(context: Station2Context): Promise<ThreeDMapResult> {
     const prompt = `
 بناءً على السياق: ${JSON.stringify(context, null, 2)}
 
@@ -192,7 +196,7 @@ export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Stati
 
     const result = await this.geminiService.generate<ThreeDMapResult>({
       prompt,
-      context: fullText.substring(0, 25000),
+      context: context.fullText.substring(0, 25000),
       model: GeminiModel.PRO,
       temperature: 0.7
     });
@@ -223,7 +227,7 @@ export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Stati
     return result.content.elevator_pitch || 'فشل توليد العرض المختصر';
   }
 
-  private async generateHybridGenre(context: any, fullText: string): Promise<string[]> {
+  private async generateHybridGenre(context: Station2Context): Promise<string[]> {
     const prompt = `
 بناءً على السياق والنص الكامل، اقترح **ما بين 3 إلى 5 بدائل** 
 لتركيبة **"نوع هجين" (Hybrid Genre)** دقيقة ومناسبة.
@@ -244,7 +248,7 @@ export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Stati
       hybrid_genre_alternatives: string[];
     }>({
       prompt,
-      context: fullText.substring(0, 20000),
+      context: context.fullText.substring(0, 20000),
       model: GeminiModel.PRO,
       temperature: 0.8
     });
@@ -252,7 +256,7 @@ export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Stati
     return result.content.hybrid_genre_alternatives || ['Drama-Thriller'];
   }
 
-  private async generateGenreMatrix(hybridGenre: string, context: any, fullText: string): Promise<GenreMatrixResult> {
+  private async generateGenreMatrix(hybridGenre: string, context: Station2Context): Promise<GenreMatrixResult> {
     const prompt = `
 بناءً على النوع الهجين المعتمد: "${hybridGenre}"
 
@@ -276,7 +280,7 @@ export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Stati
       genre_contribution_matrix: GenreMatrixResult;
     }>({
       prompt,
-      context: fullText.substring(0, 15000),
+      context: context.fullText.substring(0, 15000),
       model: GeminiModel.PRO,
       temperature: 0.7
     });
@@ -284,14 +288,26 @@ export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Stati
     return result.content.genre_contribution_matrix || {};
   }
 
-  private async generateDynamicTone(hybridGenre: string, context: Record<string, unknown>, fullText: string): Promise<DynamicToneResult> {
-    return {};
+  private async generateDynamicTone(hybridGenre: string, context: Station2Context): Promise<DynamicToneResult> {
+    return {
+      baseline: {
+        visualAtmosphereDescribed: `يعكس هذا المشهد نغمة "${context.narrativeTone}" المهيمنة.`,
+        writtenPacing: 'يتم الاحتفاظ بإيقاع سردي متوسط لدعم تنامي التوتر.',
+        dialogueStructure: 'الحوارات مختصرة وتدفع الصراع للأمام بشكل مباشر.',
+        soundIndicationsDescribed: 'توجيهات صوتية محدودة، تركز على الخلفية البيئية لتعزيز الجو العام.'
+      }
+    };
   }
 
-  private async generateArtisticReferences(hybridGenre: string, context: Record<string, unknown>, fullText: string): Promise<ArtisticReferencesResult> {
+  private async generateArtisticReferences(hybridGenre: string, context: Station2Context): Promise<ArtisticReferencesResult> {
     return {
-      visualReferences: [],
-      musicalMood: ''
+      visualReferences: [
+        {
+          work: 'لوحة افتراضية تعكس الصراع المركزي',
+          reason: `تدعم المزاج ${context.narrativeTone} الذي حددته التحليلات السابقة.`
+        }
+      ],
+      musicalMood: `مزيج من العناصر السمعية ينسجم مع طابع ${hybridGenre}.`
     };
   }
 
