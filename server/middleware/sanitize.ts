@@ -13,11 +13,7 @@ function sanitizeObject(obj: any): void {
       const value = obj[key];
 
       if (typeof value === 'string') {
-        obj[key] = value
-          .replace(/<[^>]*>/g, '')
-          .replace(/[\u0000-\u001F\u007F]+/g, '')
-          .replace(/\0/g, '')
-          .trim();
+        obj[key] = value.replace(/\0/g, '');
 
         if (obj[key].length > 500000) {
           obj[key] = obj[key].substring(0, 500000);
