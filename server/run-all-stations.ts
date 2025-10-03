@@ -1,143 +1,198 @@
-import * as dotenv from 'dotenv';
-dotenv.config(); // Load environment variables from .env file
-
-import { Station1TextAnalysis } from './stations/station1/station1-text-analysis';
-import { Station2ConceptualAnalysis } from './stations/station2/station2-conceptual-analysis';
-import { Station3NetworkBuilder } from './stations/station3/station3-network-builder';
-import { Station4EfficiencyMetrics } from './stations/station4/station4-efficiency-metrics';
-import { Station5DynamicSymbolicStylistic } from './stations/station5/station5-dynamic-symbolic-stylistic';
-import { Station6DiagnosticsAndTreatment } from './stations/station6/station6-diagnostics-treatment';
-import { Station7Finalization } from './stations/station7/station7-finalization';
-import { GeminiService, GeminiModel } from './services/ai/gemini-service';
 import * as fs from 'fs';
 import * as path from 'path';
+import { Station1TextAnalysis, type Station1Input, type Station1Output } from './stations/station1/station1-text-analysis';
+import { Station2ConceptualAnalysis, type Station2Input, type Station2Output } from './stations/station2/station2-conceptual-analysis';
+import { Station3NetworkBuilder, type Station3Input, type Station3Output } from './stations/station3/station3-network-builder';
+import { Station4EfficiencyMetrics, type Station4Input, type Station4Output } from './stations/station4/station4-efficiency-metrics';
+import { Station5DynamicSymbolicStylistic, type Station5Input, type Station5Output } from './stations/station5/station5-dynamic-symbolic-stylistic';
+import { Station6DiagnosticsAndTreatment, type Station6Input, type Station6Output } from './stations/station6/station6-diagnostics-treatment';
+import { Station7Finalization, type Station7Input, type Station7Output } from './stations/station7/station7-finalization';
+import { GeminiService, GeminiModel } from './services/ai/gemini-service';
+import { type StationConfig } from './core/pipeline/base-station';
+import logger from './utils/logger';
 
-// Basic logger
-const logger = {
-  info: (message: string) => console.log(`[INFO] ${message}`),
-  error: (message: string) => console.error(`[ERROR] ${message}`),
-  warn: (message: string) => console.warn(`[WARN] ${message}`),
-};
-
-async function runAllStations() {
-  logger.info('================================================');
-  logger.info('Starting Full Dramatic Text Analysis Pipeline');
-  logger.info('================================================');
-
-  if (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === 'your_api_key_here') {
-    logger.error('GEMINI_API_KEY is not set or is invalid. Please create a .env file and add your API key.');
-    return;
-  }
-
-  // --- Configuration ---
-  const outputDir = path.join(process.cwd(), 'analysis_output');
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
-  }
-
-  // Dummy text for analysis
-  const fullText = "The king, a man of great pride, faced a dilemma. His daughter, the princess, loved a humble knight. The queen, ever the pragmatist, saw an opportunity. A rival kingdom threatened their borders, and the knight was their best warrior. The king's advisor, a treacherous man, plotted to use this situation to his advantage. A great conflict was brewing, not just on the battlefield, but within the castle walls.";
-  
-  // --- Service Initialization ---
-  const geminiService = new GeminiService({
-    apiKey: process.env.GEMINI_API_KEY,
-    defaultModel: GeminiModel.PRO,
-    maxRetries: 3,
-    timeout: 60000,
-  });
-
-  // --- Station Initialization ---
-  const station1Config = { stationNumber: 1, stationName: 'Text Analysis', inputValidation: () => true, outputValidation: () => true, cacheEnabled: false, performanceTracking: true };
-  const station1 = new Station1TextAnalysis(station1Config, geminiService);
-
-  const station2Config = { stationNumber: 2, stationName: 'Conceptual Analysis', inputValidation: () => true, outputValidation: () => true, cacheEnabled: false, performanceTracking: true };
-  const station2 = new Station2ConceptualAnalysis(station2Config, geminiService);
-
-  const station3Config = { stationNumber: 3, stationName: 'Network Builder', inputValidation: () => true, outputValidation: () => true, cacheEnabled: false, performanceTracking: true };
-  const station3 = new Station3NetworkBuilder(station3Config, geminiService);
-
-  const station4Config = { stationNumber: 4, stationName: 'Efficiency Metrics', inputValidation: () => true, outputValidation: () => true, cacheEnabled: false, performanceTracking: true };
-  const station4 = new Station4EfficiencyMetrics(station4Config, geminiService);
-
-  const station5Config = { stationNumber: 5, stationName: 'Dynamic, Symbolic & Stylistic Analysis', inputValidation: () => true, outputValidation: () => true, cacheEnabled: false, performanceTracking: true };
-  const station5 = new Station5DynamicSymbolicStylistic(station5Config, geminiService);
-
-  const station6Config = { stationNumber: 6, stationName: 'Diagnostics & Treatment', inputValidation: () => true, outputValidation: () => true, cacheEnabled: false, performanceTracking: true };
-  const station6 = new Station6DiagnosticsAndTreatment(station6Config, geminiService);
-  
-  const station7Config: import('./core/pipeline/base-station').StationConfig = {
-    stationNumber: 7,
-    stationName: 'Finalization & Visualization',
-    inputValidation: (input: any) => Boolean(input.conflictNetwork && input.station6Output),
-    outputValidation: (output: any) => Boolean(output.finalReport && output.visualizationResults),
-    cacheEnabled: false,
-    performanceTracking: true,
-  };
-  const station7 = new Station7Finalization(station7Config, geminiService, outputDir);
-
-  const allStationsData = new Map<number, any>();
-
-  try {
-    // --- Station 1: Text Analysis ---
-    logger.info('--- Running Station 1: Text Analysis ---');
-    const s1Input = { fullText, projectName: 'MyProject', proseFilePath: 'dummy.txt' };
-    const { output: s1Output } = await station1.execute(s1Input);
-    allStationsData.set(1, s1Output);
-    logger.info('Station 1 finished.');
-
-    // --- Station 2: Conceptual Analysis ---
-    logger.info('--- Running Station 2: Conceptual Analysis ---');
-    const s2Input = { station1Output: s1Output, fullText };
-    const { output: s2Output } = await station2.execute(s2Input);
-    allStationsData.set(2, s2Output);
-    logger.info('Station 2 finished.');
-
-    // --- Station 3: Network Builder ---
-    logger.info('--- Running Station 3: Network Builder ---');
-    const s3Input = { station1Output: s1Output, station2Output: s2Output, fullText };
-    const { output: s3Output } = await station3.execute(s3Input);
-    allStationsData.set(3, s3Output);
-    logger.info('Station 3 finished.');
-
-    // --- Station 4: Efficiency Metrics ---
-    logger.info('--- Running Station 4: Efficiency Metrics ---');
-    const s4Input = { conflictNetwork: s3Output.conflictNetwork, station3Output: s3Output };
-    const { output: s4Output } = await station4.execute(s4Input);
-    allStationsData.set(4, s4Output);
-    logger.info('Station 4 finished.');
-
-    // --- Station 5: Dynamic, Symbolic & Stylistic Analysis ---
-    logger.info('--- Running Station 5: Dynamic, Symbolic & Stylistic Analysis ---');
-    const s5Input = { conflictNetwork: s3Output.conflictNetwork, station4Output: s4Output, fullText };
-    const { output: s5Output } = await station5.execute(s5Input);
-    allStationsData.set(5, s5Output);
-    logger.info('Station 5 finished.');
-
-    // --- Station 6: Diagnostics & Treatment ---
-    logger.info('--- Running Station 6: Diagnostics & Treatment ---');
-    const s6Input = { conflictNetwork: s3Output.conflictNetwork, station5Output: s5Output };
-    const { output: s6Output } = await station6.execute(s6Input);
-    allStationsData.set(6, s6Output);
-    logger.info('Station 6 finished.');
-
-    // --- Station 7: Finalization & Visualization ---
-    logger.info('--- Running Station 7: Finalization & Visualization ---');
-    const s7Input = { conflictNetwork: s3Output.conflictNetwork, station6Output: s6Output, allPreviousStationsData: allStationsData };
-    const { output: s7Output } = await station7.execute(s7Input);
-    allStationsData.set(7, s7Output);
-    logger.info('Station 7 finished.');
-
-    logger.info('================================================');
-    logger.info('Full Analysis Pipeline Completed Successfully!');
-    logger.info(`Final report and visualizations are available in: ${outputDir}`);
-    logger.info('================================================');
-
-  } catch (error) {
-    logger.error('An error occurred during the pipeline execution:');
-    logger.error(error.message);
-    logger.error(error.stack);
-  }
+export interface PipelineInput {
+  fullText: string;
+  projectName: string;
+  proseFilePath?: string;
 }
 
-// Run the pipeline
-runAllStations().catch(e => logger.error(`Unhandled error in pipeline: ${e.message}`));
+export interface PipelineRunResult {
+  stationOutputs: {
+    station1: Station1Output;
+    station2: Station2Output;
+    station3: Station3Output;
+    station4: Station4Output;
+    station5: Station5Output;
+    station6: Station6Output;
+    station7: Station7Output;
+  };
+  pipelineMetadata: {
+    stationsCompleted: number;
+    totalExecutionTime: number;
+    startedAt: string;
+    finishedAt: string;
+  };
+}
+
+export type StationStatus = 'pending' | 'running' | 'completed' | 'error';
+
+interface AnalysisPipelineConfig {
+  apiKey: string;
+  outputDir?: string;
+  geminiService?: GeminiService;
+}
+
+export class AnalysisPipeline {
+  private readonly geminiService: GeminiService;
+  private readonly stationStatuses = new Map<number, StationStatus>();
+  private readonly station1: Station1TextAnalysis;
+  private readonly station2: Station2ConceptualAnalysis;
+  private readonly station3: Station3NetworkBuilder;
+  private readonly station4: Station4EfficiencyMetrics;
+  private readonly station5: Station5DynamicSymbolicStylistic;
+  private readonly station6: Station6DiagnosticsAndTreatment;
+  private readonly station7: Station7Finalization;
+  private readonly outputDirectory: string;
+
+  constructor(config: AnalysisPipelineConfig) {
+    if (!config.apiKey) {
+      throw new Error('GEMINI_API_KEY is required to initialise the analysis pipeline.');
+    }
+
+    this.geminiService = config.geminiService ?? new GeminiService({
+      apiKey: config.apiKey,
+      defaultModel: GeminiModel.PRO,
+      fallbackModel: GeminiModel.FLASH,
+      maxRetries: 3,
+      timeout: 60_000,
+    });
+
+    this.outputDirectory = config.outputDir ?? path.join(process.cwd(), 'analysis_output');
+    if (!fs.existsSync(this.outputDirectory)) {
+      fs.mkdirSync(this.outputDirectory, { recursive: true });
+    }
+
+    this.station1 = new Station1TextAnalysis(this.createStationConfig<Station1Input, Station1Output>(1, 'Text Analysis'), this.geminiService);
+    this.station2 = new Station2ConceptualAnalysis(this.createStationConfig<Station2Input, Station2Output>(2, 'Conceptual Analysis'), this.geminiService);
+    this.station3 = new Station3NetworkBuilder(this.createStationConfig<Station3Input, Station3Output>(3, 'Network Builder'), this.geminiService);
+    this.station4 = new Station4EfficiencyMetrics(this.createStationConfig<Station4Input, Station4Output>(4, 'Efficiency Metrics'), this.geminiService);
+    this.station5 = new Station5DynamicSymbolicStylistic(this.createStationConfig<Station5Input, Station5Output>(5, 'Dynamic/Symbolic/Stylistic Analysis'), this.geminiService);
+    this.station6 = new Station6DiagnosticsAndTreatment(this.createStationConfig<Station6Input, Station6Output>(6, 'Diagnostics & Treatment'), this.geminiService);
+    this.station7 = new Station7Finalization(
+      this.createStationConfig<Station7Input, Station7Output>(7, 'Finalization & Visualization'),
+      this.geminiService,
+      this.outputDirectory,
+    );
+
+    for (let i = 1; i <= 7; i += 1) {
+      this.stationStatuses.set(i, 'pending');
+    }
+  }
+
+  getStationStatus(): Record<string, string> {
+    const status: Record<string, string> = {};
+    this.stationStatuses.forEach((value, key) => {
+      status[`station${key}`] = value;
+    });
+    return status;
+  }
+
+  async runFullAnalysis(input: PipelineInput): Promise<PipelineRunResult> {
+    const startedAt = Date.now();
+    let stationsCompleted = 0;
+    const stationData = new Map<number, unknown>();
+
+    const runStation = async <TOutput>(
+      stationNumber: number,
+      execute: () => Promise<{ output: TOutput }>,
+    ): Promise<TOutput> => {
+      this.stationStatuses.set(stationNumber, 'running');
+      try {
+        const { output } = await execute();
+        this.stationStatuses.set(stationNumber, 'completed');
+        stationsCompleted += 1;
+        stationData.set(stationNumber, output);
+        return output;
+      } catch (error) {
+        this.stationStatuses.set(stationNumber, 'error');
+        logger.error(`Station ${stationNumber} failed`, {
+          error: error instanceof Error ? error.message : 'Unknown error',
+        });
+        throw error;
+      }
+    };
+
+    const station1Output = await runStation(1, () => this.station1.execute({
+      fullText: input.fullText,
+      projectName: input.projectName,
+      proseFilePath: input.proseFilePath,
+    }));
+
+    const station2Output = await runStation(2, () => this.station2.execute({
+      station1Output,
+      fullText: input.fullText,
+    }));
+
+    const station3Output = await runStation(3, () => this.station3.execute({
+      station1Output,
+      station2Output,
+      fullText: input.fullText,
+    }));
+
+    const station4Output = await runStation(4, () => this.station4.execute({
+      station3Output,
+    }));
+
+    const station5Output = await runStation(5, () => this.station5.execute({
+      conflictNetwork: station3Output.conflictNetwork,
+      station4Output,
+      fullText: input.fullText,
+    }));
+
+    const station6Output = await runStation(6, () => this.station6.execute({
+      conflictNetwork: station3Output.conflictNetwork,
+      station5Output,
+    }));
+
+    const station7Output = await runStation(7, () => this.station7.execute({
+      conflictNetwork: station3Output.conflictNetwork,
+      station6Output,
+      allPreviousStationsData: stationData,
+    }));
+
+    const finishedAt = Date.now();
+
+    return {
+      stationOutputs: {
+        station1: station1Output,
+        station2: station2Output,
+        station3: station3Output,
+        station4: station4Output,
+        station5: station5Output,
+        station6: station6Output,
+        station7: station7Output,
+      },
+      pipelineMetadata: {
+        stationsCompleted,
+        totalExecutionTime: finishedAt - startedAt,
+        startedAt: new Date(startedAt).toISOString(),
+        finishedAt: new Date(finishedAt).toISOString(),
+      },
+    };
+  }
+
+  private createStationConfig<TInput, TOutput>(
+    stationNumber: number,
+    stationName: string,
+  ): StationConfig<TInput, TOutput> {
+    return {
+      stationNumber,
+      stationName,
+      cacheEnabled: false,
+      performanceTracking: true,
+      inputValidation: (input: TInput) => input !== undefined && input !== null,
+      outputValidation: (output: TOutput) => output !== undefined && output !== null,
+    };
+  }
+}

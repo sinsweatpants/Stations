@@ -1,4 +1,4 @@
-import { BaseStation, StationConfig } from '../../core/pipeline/base-station';
+import { BaseStation, type StationConfig } from '../../core/pipeline/base-station';
 import { GeminiService, GeminiModel } from '../../services/ai/gemini-service';
 import { Station1Output } from '../station1/station1-text-analysis';
 
@@ -117,7 +117,7 @@ export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Stati
     };
   }
 
-  private buildContextFromStation1(s1Output: Station1Output): any {
+  private buildContextFromStation1(s1Output: Station1Output): Record<string, unknown> {
     return {
       majorCharacters: s1Output.majorCharacters,
       characterProfiles: Array.from(s1Output.characterAnalysis.entries()).map(([name, analysis]) => ({
@@ -130,7 +130,7 @@ export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Stati
     };
   }
 
-  private async generateStoryStatements(context: any, fullText: string): Promise<string[]> {
+  private async generateStoryStatements(context: Record<string, unknown>, fullText: string): Promise<string[]> {
     const prompt = `
 بصفتك مساعد كتابة سيناريو خبير، ومستندًا إلى ملخص السيناريو الأولي والنص الكامل المرفقين، 
 اقترح **ثلاثة (3)** بدائل متميزة لـ "بيان القصة" (Story Statement).
@@ -165,7 +165,7 @@ export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Stati
     return result.content.story_statement_alternatives || ['فشل توليد بيان القصة'];
   }
 
-  private async generate3DMap(context: any, fullText: string): Promise<ThreeDMapResult> {
+  private async generate3DMap(context: Record<string, unknown>, fullText: string): Promise<ThreeDMapResult> {
     const prompt = `
 بناءً على السياق: ${JSON.stringify(context, null, 2)}
 
@@ -284,11 +284,11 @@ export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Stati
     return result.content.genre_contribution_matrix || {};
   }
 
-  private async generateDynamicTone(hybridGenre: string, context: any, fullText: string): Promise<DynamicToneResult> {
+  private async generateDynamicTone(hybridGenre: string, context: Record<string, unknown>, fullText: string): Promise<DynamicToneResult> {
     return {};
   }
 
-  private async generateArtisticReferences(hybridGenre: string, context: any, fullText: string): Promise<ArtisticReferencesResult> {
+  private async generateArtisticReferences(hybridGenre: string, context: Record<string, unknown>, fullText: string): Promise<ArtisticReferencesResult> {
     return {
       visualReferences: [],
       musicalMood: ''
@@ -308,10 +308,10 @@ export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Stati
     };
   }
 
-  protected extractRequiredData(input: Station2Input): any {
+  protected extractRequiredData(input: Station2Input): Record<string, unknown> {
     return {
-      station1: input.station1Output,
-      fullText: input.fullText
+      majorCharacters: input.station1Output.majorCharacters.slice(0, 5),
+      fullTextLength: input.fullText.length
     };
   }
 

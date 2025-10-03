@@ -1,7 +1,8 @@
-import { BaseStation, StationConfig } from '../../core/pipeline/base-station';
+import { BaseStation, type StationConfig } from '../../core/pipeline/base-station';
 import { GeminiService, GeminiModel } from '../../services/ai/gemini-service';
 import { EfficiencyAnalyzer, EfficiencyMetrics } from '../../analysis_modules/efficiency-metrics';
 import { Station3Output } from '../station3/station3-network-builder';
+import type { ConflictNetwork } from '../../core/models/base-entities';
 
 export interface Station4Input {
   station3Output: Station3Output;
@@ -61,7 +62,7 @@ export class Station4EfficiencyMetrics extends BaseStation<Station4Input, Statio
 
   private async generateRecommendations(
     metrics: EfficiencyMetrics,
-    network: any
+    _network: ConflictNetwork
   ): Promise<{
     priorityActions: string[];
     quickFixes: string[];
@@ -106,31 +107,27 @@ export class Station4EfficiencyMetrics extends BaseStation<Station4Input, Statio
     `;
 
     const result = await this.geminiService.generate<{
-      priority_actions: string[];
-      quick_fixes: string[];
-      structural_revisions: string[];
+      priority_actions?: string[];
+      quick_fixes?: string[];
+      structural_revisions?: string[];
     }>({
       prompt,
       model: GeminiModel.PRO,
       temperature: 0.7
     });
 
-    const content = result.content || {
-      priority_actions: [],
-      quick_fixes: [],
-      structural_revisions: []
-    };
-
     return {
-      priorityActions: content.priority_actions,
-      quickFixes: content.quick_fixes,
-      structuralRevisions: content.structural_revisions
+      priorityActions: result.content.priority_actions ?? [],
+      quickFixes: result.content.quick_fixes ?? [],
+      structuralRevisions: result.content.structural_revisions ?? []
     };
   }
 
-  protected extractRequiredData(input: Station4Input): any {
+  protected extractRequiredData(input: Station4Input): Record<string, unknown> {
     return {
-      networkSummary: input.station3Output.networkSummary
+      charactersCount: input.station3Output.networkSummary.charactersCount,
+      relationshipsCount: input.station3Output.networkSummary.relationshipsCount,
+      conflictsCount: input.station3Output.networkSummary.conflictsCount
     };
   }
 

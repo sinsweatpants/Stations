@@ -1,5 +1,35 @@
-import { BaseStation, StationConfig } from '../../core/pipeline/base-station';
+import { BaseStation, type StationConfig } from '../../core/pipeline/base-station';
 import { GeminiService, GeminiModel } from '../../services/ai/gemini-service';
+
+type MajorCharactersResponse = {
+  major_characters?: string[];
+  raw?: unknown;
+};
+
+type CharacterAnalysisResponse = {
+  personality_traits?: string;
+  motivations_goals?: string;
+  key_relationships_brief?: string;
+  narrative_function?: string;
+  potential_arc_observation?: string;
+  raw?: unknown;
+};
+
+type RelationshipAnalysisResponse = {
+  key_relationships?: Array<{
+    characters?: [string, string];
+    dynamic?: string;
+    narrative_importance?: string;
+  }>;
+  raw?: unknown;
+};
+
+type NarrativeStyleResponse = {
+  overall_tone?: string;
+  pacing_analysis?: string;
+  language_style?: string;
+  raw?: unknown;
+};
 
 export interface Station1Input {
   fullText: string;
@@ -91,15 +121,13 @@ export class Station1TextAnalysis extends BaseStation<Station1Input, Station1Out
 }
     `;
 
-    const result = await this.geminiService.generate<{
-      major_characters: string[];
-    }>({
+    const result = await this.geminiService.generate<MajorCharactersResponse>({
       prompt,
       context: fullText.substring(0, 30000),
       model: GeminiModel.PRO
     });
 
-    return result.content.major_characters || [];
+    return result.content.major_characters ?? [];
   }
 
   private async analyzeCharactersInDepth(
@@ -145,20 +173,18 @@ export class Station1TextAnalysis extends BaseStation<Station1Input, Station1Out
 }
     `;
 
-    const result = await this.geminiService.generate({
+    const result = await this.geminiService.generate<CharacterAnalysisResponse>({
       prompt,
       context: fullText.substring(0, 30000),
       model: GeminiModel.PRO
     });
 
-    const content: any = result.content || {};
-
     return {
-      personalityTraits: content.personality_traits || 'N/A',
-      motivationsGoals: content.motivations_goals || 'N/A',
-      keyRelationshipsBrief: content.key_relationships_brief || 'N/A',
-      narrativeFunction: content.narrative_function || 'N/A',
-      potentialArcObservation: content.potential_arc_observation || 'N/A'
+      personalityTraits: result.content.personality_traits ?? 'N/A',
+      motivationsGoals: result.content.motivations_goals ?? 'N/A',
+      keyRelationshipsBrief: result.content.key_relationships_brief ?? 'N/A',
+      narrativeFunction: result.content.narrative_function ?? 'N/A',
+      potentialArcObservation: result.content.potential_arc_observation ?? 'N/A'
     };
   }
 
@@ -181,19 +207,17 @@ export class Station1TextAnalysis extends BaseStation<Station1Input, Station1Out
 }
     `;
 
-    const result = await this.geminiService.generate({
+    const result = await this.geminiService.generate<RelationshipAnalysisResponse>({
       prompt,
       context: fullText.substring(0, 30000),
       model: GeminiModel.PRO
     });
 
-    const content: any = result.content || { key_relationships: [] };
-
     return {
-      keyRelationships: content.key_relationships.map((rel: any) => ({
-        characters: rel.characters as [string, string],
-        dynamic: rel.dynamic || 'N/A',
-        narrativeImportance: rel.narrative_importance || 'N/A'
+      keyRelationships: (result.content.key_relationships ?? []).map((rel) => ({
+        characters: rel?.characters ?? ['غير معروف', 'غير معروف'],
+        dynamic: rel?.dynamic ?? 'N/A',
+        narrativeImportance: rel?.narrative_importance ?? 'N/A'
       }))
     };
   }
@@ -217,23 +241,25 @@ export class Station1TextAnalysis extends BaseStation<Station1Input, Station1Out
 }
     `;
 
-    const result = await this.geminiService.generate({
+    const result = await this.geminiService.generate<NarrativeStyleResponse>({
       prompt,
       context: fullText.substring(0, 30000),
       model: GeminiModel.PRO
     });
 
-    const content: any = result.content || {};
-
     return {
-      overallTone: content.overall_tone || 'N/A',
-      pacingAnalysis: content.pacing_analysis || 'N/A',
-      languageStyle: content.language_style || 'N/A'
+      overallTone: result.content.overall_tone ?? 'N/A',
+      pacingAnalysis: result.content.pacing_analysis ?? 'N/A',
+      languageStyle: result.content.language_style ?? 'N/A'
     };
   }
 
-  protected extractRequiredData(input: Station1Input): any {
-    return { fullText: input.fullText };
+  protected extractRequiredData(input: Station1Input): Record<string, unknown> {
+    return {
+      fullTextLength: input.fullText.length,
+      projectName: input.projectName,
+      hasProseFilePath: Boolean(input.proseFilePath)
+    };
   }
 
   protected getErrorFallback(): Station1Output {
