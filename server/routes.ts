@@ -7,8 +7,8 @@ import { GeminiService, GeminiModel } from './services/ai/gemini-service';
 import { Station1TextAnalysis, type Station1Input, type Station1Output } from './stations/station1/station1-text-analysis';
 import { Station2ConceptualAnalysis, type Station2Input, type Station2Output } from './stations/station2/station2-conceptual-analysis';
 import { Station3NetworkBuilder, type Station3Input, type Station3Output } from './stations/station3/station3-network-builder';
-import { apiKeyAuth } from './middleware/auth';
-import { aiAnalysisLimiter } from './middleware/rate-limit';
+import { apiKeyAuth, optionalAuth } from './middleware/auth';
+import { apiLimiter, aiAnalysisLimiter, readLimiter } from './middleware/rate-limit';
 import { sanitizeInput, requireJsonContent } from './middleware/sanitize';
 import healthRouter from './routes/health';
 import logger from './utils/logger';
@@ -40,6 +40,7 @@ const station3 = new Station3NetworkBuilder(createStationConfig<Station3Input, S
 
 export async function registerRoutes(app: Express): Promise<Server> {
   app.use('/', healthRouter);
+  app.use('/api', apiLimiter);
 
   app.post(
     '/api/analyze-text',
@@ -157,7 +158,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     },
   );
 
-  app.get('/api/stations-status', (_req, res) => {
+  app.get('/api/stations-status', optionalAuth, readLimiter, (_req, res) => {
     const status = analysisPipeline.getStationStatus();
     const values = Object.values(status);
 
