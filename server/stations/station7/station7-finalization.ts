@@ -1,22 +1,16 @@
-import { BaseStation, StationConfig } from '../../core/pipeline/base-station';
+import { BaseStation, type StationConfig } from '../../core/pipeline/base-station';
 import { ConflictNetwork, Character, Relationship, Conflict } from '../../core/models/base-entities';
 import { GeminiService } from '../../services/ai/gemini-service';
 import { Station6Output } from '../station6/station6-diagnostics-treatment';
 import { promises as fsPromises } from 'fs';
 import * as path from 'path';
-
-// Define a logger placeholder
-const logger = {
-  info: (message: string) => console.log(message),
-  warn: (message: string) => console.warn(message),
-  error: (message: string) => console.error(message),
-};
+import logger from '../../utils/logger';
 
 // Station 7 Interfaces
 interface Station7Input {
   conflictNetwork: ConflictNetwork;
   station6Output: Station6Output;
-  allPreviousStationsData: Map<number, any>;
+  allPreviousStationsData: Map<number, unknown>;
 }
 
 interface Station7Output {
@@ -354,11 +348,12 @@ export class Station7Finalization extends BaseStation<Station7Input, Station7Out
         return visualizationCount + 2; // final report + visualization payload files
     }
 
-    protected extractRequiredData(input: Station7Input): any {
+    protected extractRequiredData(input: Station7Input): Record<string, unknown> {
         return {
-            conflictNetwork: input.conflictNetwork,
-            station6Output: input.station6Output,
-            allPreviousStationsData: input.allPreviousStationsData,
+            charactersCount: input.conflictNetwork.characters.length,
+            conflictsCount: input.conflictNetwork.conflicts.length,
+            station6Issues: input.station6Output.diagnosticsReport.criticalIssues.length,
+            stationsTracked: input.allPreviousStationsData.size,
         };
     }
 

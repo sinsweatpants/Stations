@@ -1,13 +1,7 @@
-import { BaseStation, StationConfig } from '../../core/pipeline/base-station';
+import { BaseStation, type StationConfig } from '../../core/pipeline/base-station';
 import { GeminiService } from '../../services/ai/gemini-service';
 import type { ConflictNetwork } from '../../core/models/base-entities';
-
-// Basic logger
-const logger = {
-  info: (message: string) => console.log(`[INFO] ${message}`),
-  error: (message: string) => console.error(`[ERROR] ${message}`),
-  warn: (message: string) => console.warn(`[WARN] ${message}`)
-};
+import logger from '../../utils/logger';
 
 export interface Station6Input {
   conflictNetwork: ConflictNetwork;

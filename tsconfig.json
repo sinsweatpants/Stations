@@ -19,6 +19,8 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "types": ["node", "vite/client"],
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
     "paths": {
       "@/*": ["./src/*"],
       "@shared/*": ["./shared/*"],

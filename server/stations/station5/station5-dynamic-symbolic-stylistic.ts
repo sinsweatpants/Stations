@@ -1,16 +1,9 @@
-import { BaseStation, StationConfig } from '../../core/pipeline/base-station';
+import { BaseStation, type StationConfig } from '../../core/pipeline/base-station';
 import { ConflictNetwork, Conflict, Character, Relationship, ConflictPhase, NetworkSnapshot } from '../../core/models/base-entities';
 import { GeminiService, GeminiModel } from '../../services/ai/gemini-service';
 import { Station4Output } from '../station4/station4-efficiency-metrics';
 import * as fs from 'fs';
 import * as path from 'path';
-
-// Define a logger placeholder
-const logger = {
-  info: (message: string) => console.log(message),
-  warn: (message: string) => console.warn(message),
-  error: (message: string) => console.error(message),
-};
 
 const safeGet = <T>(array: T[], index: number): T | undefined => {
   if (index < 0 || index >= array.length) {
@@ -1175,11 +1168,12 @@ export class Station5DynamicSymbolicStylistic extends BaseStation<Station5Input,
     };
   }
   
-  protected extractRequiredData(input: Station5Input): any {
+  protected extractRequiredData(input: Station5Input): Record<string, unknown> {
     return {
-      network: input.conflictNetwork,
-      station4Output: input.station4Output,
-      fullText: input.fullText
+      charactersCount: input.conflictNetwork.characters.length,
+      conflictsCount: input.conflictNetwork.conflicts.length,
+      station4Score: input.station4Output.efficiencyMetrics.overallEfficiencyScore,
+      fullTextLength: input.fullText.length
     };
   }
   

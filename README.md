@@ -37,7 +37,7 @@ stations/
 │   │
 │   ├── index.ts                  → نقطة دخول الخادم
 │   ├── routes.ts                 → API endpoints
-│   ├── run-all-stations.ts       → أوركسترا المحطات
+│   ├── run-all-stations.ts       → منسق Pipeline الحديث (7 محطات)
 │   └── storage.ts                → إدارة التخزين
 │
 ├── 🎨 src/                       [واجهة المستخدم - React]
@@ -194,6 +194,7 @@ RTL Support - استخدم dir="rtl" للمحتوى العربي
 
 
 ✅ قواعد API Design
+- تم تحديث توثيق الواجهات في [`API_DOCUMENTATION.md`](./API_DOCUMENTATION.md) مع شرح للوسطاء الجدد (مصادقة، تحديد معدل، تنظيف).
 typescript// ✅ صحيح: API endpoint موثق ومُنظم
 /**
  * POST /api/analyze-full-pipeline
@@ -204,7 +205,7 @@ typescript// ✅ صحيح: API endpoint موثق ومُنظم
  * @returns {Promise<PipelineResult>} نتائج جميع المحطات
  * @throws {400} إذا كان النص قصيراً جداً
  * @throws {500} إذا فشلت أي محطة
- */
+*/
 router.post('/analyze-full-pipeline', async (req, res) => {
   try {
     const { fullText, projectName } = req.body;

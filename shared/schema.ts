@@ -1,10 +1,57 @@
 import { z } from 'zod';
 
+const HTML_TAG_REGEX = /<[^>]*>/g;
+const CONTROL_CHAR_REGEX = /[\u0000-\u001F\u007F]+/g;
+
+function sanitizeScalar(value: string): string {
+  return value
+    .replace(HTML_TAG_REGEX, '')
+    .replace(CONTROL_CHAR_REGEX, '')
+    .replace(/\0/g, '')
+    .trim();
+}
+
+interface SanitizedOptions {
+  min: number;
+  minMessage: string;
+  max?: number;
+  maxMessage?: string;
+}
+
+const sanitizedString = ({ min, minMessage, max, maxMessage }: SanitizedOptions) =>
+  z
+    .string()
+    .trim()
+    .transform(sanitizeScalar)
+    .refine((value) => value.length >= min, {
+      message: minMessage,
+    })
+    .refine((value) => (typeof max === 'number' ? value.length <= max : true), {
+      message: maxMessage ?? 'النص يتجاوز الحد المسموح به',
+    });
+
 // Station 1 Schemas
 export const analyzeTextSchema = z.object({
-  fullText: z.string().min(100, 'النص يجب أن يحتوي على 100 حرف على الأقل'),
-  projectName: z.string().min(1, 'اسم المشروع مطلوب'),
-  proseFilePath: z.string().optional()
+  fullText: sanitizedString({
+    min: 100,
+    minMessage: 'النص يجب أن يحتوي على 100 حرف على الأقل',
+    max: 500_000,
+    maxMessage: 'النص يتجاوز الحد المسموح به (500 ألف حرف)',
+  }),
+  projectName: sanitizedString({
+    min: 1,
+    minMessage: 'اسم المشروع مطلوب',
+    max: 256,
+    maxMessage: 'اسم المشروع طويل جداً',
+  }),
+  proseFilePath: z.preprocess((value) => {
+    if (typeof value !== 'string') {
+      return undefined;
+    }
+
+    const sanitized = sanitizeScalar(value);
+    return sanitized.length === 0 ? undefined : sanitized;
+  }, z.string().max(1024, 'مسار الملف طويل جداً').optional()),
 });
 
 export const characterAnalysisSchema = z.object({

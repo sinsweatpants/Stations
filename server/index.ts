@@ -1,9 +1,20 @@
 import express, { type Request, Response, NextFunction } from "express";
+import helmet from "helmet";
+import cors from "cors";
 import { registerRoutes } from "./routes";
-import { setupVite, serveStatic, log } from "./vite";
+import { setupVite, serveStatic } from "./vite";
+import logger from "./utils/logger";
 
 const app = express();
-app.use(express.json());
+
+app.use(helmet());
+app.use(cors({
+  origin: process.env.ALLOWED_ORIGINS?.split(",").filter(Boolean) || "*",
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "X-API-Key"],
+}));
+
+app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
@@ -26,10 +37,10 @@ app.use((req, res, next) => {
       }
 
       if (logLine.length > 80) {
-        logLine = logLine.slice(0, 79) + "…";
+        logLine = `${logLine.slice(0, 79)}…`;
       }
 
-      log(logLine);
+      logger.info(logLine);
     }
   });
 
@@ -39,12 +50,21 @@ app.use((req, res, next) => {
 (async () => {
   const server = await registerRoutes(app);
 
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
+  app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+    const status = typeof (err as { status?: number }).status === "number"
+      ? (err as { status?: number }).status!
+      : typeof (err as { statusCode?: number }).statusCode === "number"
+        ? (err as { statusCode?: number }).statusCode!
+        : 500;
+    const message = (err as Error).message ?? "Internal Server Error";
+
+    logger.error("Unhandled request error", {
+      status,
+      message,
+      stack: err instanceof Error ? err.stack : undefined,
+    });
 
     res.status(status).json({ message });
-    throw err;
   });
 
   // importantly only setup vite in development and after
@@ -66,6 +86,6 @@ app.use((req, res, next) => {
     host: "0.0.0.0",
     reusePort: true,
   }, () => {
-    log(`serving on port ${port}`);
+    logger.info(`serving on port ${port}`);
   });
 })();
