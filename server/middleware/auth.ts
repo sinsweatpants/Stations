@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import logger from '../utils/logger';
 
 export interface AuthenticatedRequest extends Request {
   apiKey?: string;
@@ -19,7 +20,9 @@ export function apiKeyAuth(req: AuthenticatedRequest, res: Response, next: NextF
   const validApiKeys = (process.env.VALID_API_KEYS || '').split(',').filter(Boolean);
 
   if (validApiKeys.length === 0) {
-    console.warn('⚠️ No API keys configured. Authentication is disabled.');
+    logger.warn('⚠️ No API keys configured. Authentication is disabled.', {
+      context: 'apiKeyAuth'
+    });
     req.apiKey = apiKey;
     next();
     return;

@@ -1,10 +1,10 @@
 import { BaseStation, type StationConfig } from '../../core/pipeline/base-station';
 import { GeminiService, GeminiModel } from '../../services/ai/gemini-service';
-import { 
-  Character, 
-  Relationship, 
-  Conflict, 
-  ConflictNetwork, 
+import {
+  Character,
+  Relationship,
+  Conflict,
+  ConflictNetwork,
   ConflictNetworkImpl,
   RelationshipType,
   RelationshipNature,
@@ -16,6 +16,7 @@ import {
 import { Station1Output } from '../station1/station1-text-analysis';
 import { Station2Output } from '../station2/station2-conceptual-analysis';
 import logger from '../../utils/logger';
+import { Station3Context } from '../../types/contexts';
 
 export interface Station3Input {
   station1Output: Station1Output;
@@ -45,18 +46,21 @@ class RelationshipInferenceEngine {
 
   async inferRelationships(
     characters: Character[],
-    s1RelationshipsHints: any,
-    s2Context: any,
-    fullText: string
+    context: Station3Context,
+    station2Summary: Station2Output
   ): Promise<Relationship[]> {
-    const charactersList = characters.map(c => 
+    const charactersList = characters.map(c =>
       `'${c.name}' (ID: ${c.id})`
     ).join(', ');
+
+    const promptContext = this.buildContextSummary(context, station2Summary);
 
     const prompt = `
 استنادًا إلى السياق المقدم، قم باستنتاج العلاقات الرئيسية بين الشخصيات.
 
 الشخصيات المتاحة: ${charactersList}
+
+ملخص التحليلات السابقة: ${JSON.stringify(promptContext, null, 2)}
 
 لكل علاقة رئيسية:
 1. حدد الشخصيتين (بالاسم أو ID)
@@ -88,7 +92,7 @@ class RelationshipInferenceEngine {
       inferred_relationships: any[];
     }>({
       prompt,
-      context: fullText.substring(0, 25000),
+      context: context.fullText.substring(0, 25000),
       model: GeminiModel.PRO,
       temperature: 0.7
     });
@@ -152,6 +156,47 @@ class RelationshipInferenceEngine {
     const normalized = dirStr?.toUpperCase().replace(/[- ]/g, '_');
     return RelationshipDirection[normalized as keyof typeof RelationshipDirection] || RelationshipDirection.BIDIRECTIONAL;
   }
+
+  private buildContextSummary(
+    context: Station3Context,
+    station2Summary: Station2Output
+  ): Record<string, unknown> {
+    const characterProfiles = Array.from(context.characterProfiles.entries()).map(
+      ([name, profile]) => ({
+        name,
+        personalityTraits: profile?.personalityTraits ?? '',
+        motivationsGoals: profile?.motivationsGoals ?? '',
+        narrativeFunction: profile?.narrativeFunction ?? '',
+        keyRelationshipsBrief: profile?.keyRelationshipsBrief ?? ''
+      })
+    );
+
+    const relationshipHints = (context.relationshipData || [])
+      .filter(item => item && typeof item === 'object' && 'characters' in item)
+      .map(item => {
+        const data = item as {
+          characters?: [string, string];
+          dynamic?: string;
+          narrativeImportance?: string;
+        };
+        return {
+          characters: data.characters ?? [],
+          dynamic: data.dynamic ?? '',
+          narrativeImportance: data.narrativeImportance ?? ''
+        };
+      });
+
+    return {
+      majorCharacters: context.majorCharacters,
+      characterProfiles,
+      relationshipHints,
+      conceptualHighlights: {
+        storyStatement: station2Summary.storyStatement,
+        hybridGenre: station2Summary.hybridGenre,
+        elevatorPitch: station2Summary.elevatorPitch
+      }
+    };
+  }
 }
 
 class ConflictInferenceEngine {
@@ -162,8 +207,8 @@ class ConflictInferenceEngine {
   async inferConflicts(
     characters: Character[],
     relationships: Relationship[],
-    s2Context: any,
-    fullText: string
+    context: Station3Context,
+    station2Summary: Station2Output
   ): Promise<Conflict[]> {
     const charactersSummary = characters.map(c => ({
       id: c.id,
@@ -181,11 +226,15 @@ class ConflictInferenceEngine {
       };
     });
 
+    const conceptualSummary = this.buildConflictContext(context, station2Summary);
+
     const prompt = `
 استنادًا إلى السياق، قم باستنتاج الصراعات الرئيسية (3-5 صراعات).
 
 الشخصيات: ${JSON.stringify(charactersSummary, null, 2)}
 العلاقات: ${JSON.stringify(relationshipsSummary, null, 2)}
+
+ملخص تحليلات المحطات السابقة: ${JSON.stringify(conceptualSummary, null, 2)}
 
 لكل صراع:
 1. اسم الصراع
@@ -219,7 +268,7 @@ class ConflictInferenceEngine {
       inferred_conflicts: any[];
     }>({
       prompt,
-      context: fullText.substring(0, 25000),
+      context: context.fullText.substring(0, 25000),
       model: GeminiModel.PRO,
       temperature: 0.7
     });
@@ -286,6 +335,35 @@ class ConflictInferenceEngine {
     const normalized = phaseStr?.toUpperCase().replace(/[- ]/g, '_');
     return ConflictPhase[normalized as keyof typeof ConflictPhase] || ConflictPhase.EMERGING;
   }
+
+  private buildConflictContext(
+    context: Station3Context,
+    station2Summary: Station2Output
+  ): Record<string, unknown> {
+    const relationshipHints = (context.relationshipData || [])
+      .filter(item => item && typeof item === 'object' && 'characters' in item)
+      .map(item => {
+        const data = item as {
+          characters?: [string, string];
+          dynamic?: string;
+          narrativeImportance?: string;
+        };
+        return {
+          characters: data.characters ?? [],
+          dynamic: data.dynamic ?? '',
+          narrativeImportance: data.narrativeImportance ?? ''
+        };
+      });
+
+    return {
+      majorCharacters: context.majorCharacters,
+      relationshipInsights: relationshipHints,
+      storyStatement: station2Summary.storyStatement,
+      hybridGenre: station2Summary.hybridGenre,
+      genreContributionMatrix: station2Summary.genreContributionMatrix,
+      dynamicTone: station2Summary.dynamicTone
+    };
+  }
 }
 
 export class Station3NetworkBuilder extends BaseStation<Station3Input, Station3Output> {
@@ -303,7 +381,8 @@ export class Station3NetworkBuilder extends BaseStation<Station3Input, Station3O
 
   protected async process(input: Station3Input): Promise<Station3Output> {
     const startTime = Date.now();
-    
+    const context = this.buildContext(input);
+
     // إنشاء الشبكة
     const network = new ConflictNetworkImpl(
       `network_${Date.now()}`,
@@ -317,9 +396,8 @@ export class Station3NetworkBuilder extends BaseStation<Station3Input, Station3O
     // استنتاج العلاقات
     const relationships = await this.relationshipEngine.inferRelationships(
       characters,
-      input.station1Output.relationshipAnalysis,
-      input.station2Output,
-      input.fullText
+      context,
+      input.station2Output
     );
     relationships.forEach(rel => network.addRelationship(rel));
 
@@ -327,8 +405,8 @@ export class Station3NetworkBuilder extends BaseStation<Station3Input, Station3O
     const conflicts = await this.conflictEngine.inferConflicts(
       characters,
       relationships,
-      input.station2Output,
-      input.fullText
+      context,
+      input.station2Output
     );
     conflicts.forEach(conflict => network.addConflict(conflict));
 
@@ -350,6 +428,23 @@ export class Station3NetworkBuilder extends BaseStation<Station3Input, Station3O
         status: 'Success',
         buildTime
       }
+    };
+  }
+
+  private buildContext(input: Station3Input): Station3Context {
+    const relationshipHints = input.station1Output.relationshipAnalysis.keyRelationships.map(
+      relationship => ({
+        characters: relationship.characters,
+        dynamic: relationship.dynamic,
+        narrativeImportance: relationship.narrativeImportance
+      })
+    );
+
+    return {
+      majorCharacters: input.station1Output.majorCharacters,
+      characterProfiles: input.station1Output.characterAnalysis,
+      relationshipData: relationshipHints,
+      fullText: input.fullText
     };
   }
 
