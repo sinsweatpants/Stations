@@ -371,7 +371,7 @@ export class Station3NetworkBuilder extends BaseStation<Station3Input, Station3O
   private conflictEngine: ConflictInferenceEngine;
 
   constructor(
-    config: StationConfig,
+    config: StationConfig<Station3Input, Station3Output>,
     geminiService: GeminiService
   ) {
     super(config, geminiService);

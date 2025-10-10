@@ -17,6 +17,7 @@ export function apiKeyAuth(req: AuthenticatedRequest, res: Response, next: NextF
     return;
   }
 
+   
   const validApiKeys = (process.env.VALID_API_KEYS || '').split(',').filter(Boolean);
 
   if (validApiKeys.length === 0) {
@@ -44,7 +45,8 @@ export function optionalAuth(req: AuthenticatedRequest, res: Response, next: Nex
   const apiKey = req.headers['x-api-key'] as string;
 
   if (apiKey) {
-    const validApiKeys = (process.env.VALID_API_KEYS || '').split(',').filter(Boolean);
+     
+  const validApiKeys = (process.env.VALID_API_KEYS || '').split(',').filter(Boolean);
     if (validApiKeys.includes(apiKey)) {
       req.apiKey = apiKey;
     }

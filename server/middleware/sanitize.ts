@@ -7,19 +7,20 @@ export function sanitizeInput(req: Request, res: Response, next: NextFunction): 
   next();
 }
 
-function sanitizeObject(obj: any): void {
+function sanitizeObject(obj: Record<string, unknown>): void {
   for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
       const value = obj[key];
 
       if (typeof value === 'string') {
         obj[key] = value.replace(/\0/g, '');
 
-        if (obj[key].length > 500000) {
-          obj[key] = obj[key].substring(0, 500000);
+        const sanitizedValue = obj[key];
+        if (typeof sanitizedValue === 'string' && sanitizedValue.length > 500000) {
+          obj[key] = sanitizedValue.substring(0, 500000);
         }
       } else if (typeof value === 'object' && value !== null) {
-        sanitizeObject(value);
+        sanitizeObject(value as Record<string, unknown>);
       }
     }
   }

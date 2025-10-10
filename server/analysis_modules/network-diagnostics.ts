@@ -420,6 +420,7 @@ export class NetworkDiagnostics {
     if (conflict.timestamps.length === 0) return 365; // Very old
     
     const lastUpdate = conflict.timestamps[conflict.timestamps.length - 1];
+    if (!lastUpdate) return 365; // No valid timestamp
     const now = new Date();
     const diffTime = Math.abs(now.getTime() - lastUpdate.getTime());
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -450,6 +451,8 @@ export class NetworkDiagnostics {
       for (let j = i + 1; j < relationships.length; j++) {
         const rel1 = relationships[i];
         const rel2 = relationships[j];
+        
+        if (!rel1 || !rel2) continue; // Skip undefined relationships
         
         if (this.areRelationshipsSimilar(rel1, rel2)) {
           duplicates.push([rel1.id, rel2.id]);

@@ -47,7 +47,7 @@ export interface Station6Output {
 }
 
 export class Station6DiagnosticsAndTreatment extends BaseStation<Station6Input, Station6Output> {
-  constructor(config: StationConfig, geminiService: GeminiService) {
+  constructor(config: StationConfig<Station6Input, Station6Output>, geminiService: GeminiService) {
     super(config, geminiService);
   }
 

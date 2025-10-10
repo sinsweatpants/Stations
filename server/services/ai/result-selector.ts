@@ -27,7 +27,7 @@ export class AIResultSelector {
       return this.selectByScore(validResults, criteria.scoreFunction);
     }
 
-    return Array.from(validResults.values())[0];
+    return Array.from(validResults.values())[0] || null;
   }
 
   private filterValid<T>(

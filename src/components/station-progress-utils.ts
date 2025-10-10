@@ -20,7 +20,7 @@ function findNextStationAfter(
 ): StationDefinition | null {
   for (let i = index + 1; i < stations.length; i += 1) {
     const station = stations[i];
-    if (station.status !== 'completed') {
+    if (station && station.status !== 'completed') {
       return station;
     }
   }
@@ -43,8 +43,9 @@ export function computeStationProgress(
   const activeIndex = stations.findIndex((station) => station.status === 'active');
 
   if (activeIndex >= 0) {
+    const currentStation = stations[activeIndex];
     return {
-      currentStation: stations[activeIndex],
+      currentStation: currentStation || null,
       nextStation: findNextStationAfter(stations, activeIndex),
       phase: 'active',
       allCompleted
@@ -52,8 +53,9 @@ export function computeStationProgress(
   }
 
   if (allCompleted) {
+    const lastStation = stations[stations.length - 1];
     return {
-      currentStation: stations[stations.length - 1],
+      currentStation: lastStation || null,
       nextStation: null,
       phase: 'completed',
       allCompleted: true
@@ -75,7 +77,7 @@ export function computeStationProgress(
   }
 
   return {
-    currentStation: nextPending ?? stations[0],
+    currentStation: (nextPending ?? stations[0]) || null,
     nextStation: nextPending,
     phase: 'pending',
     allCompleted: false

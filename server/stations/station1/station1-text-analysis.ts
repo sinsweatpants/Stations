@@ -73,7 +73,7 @@ export interface Station1Output {
 export class Station1TextAnalysis extends BaseStation<Station1Input, Station1Output> {
   
   constructor(
-    config: StationConfig,
+    config: StationConfig<Station1Input, Station1Output>,
     geminiService: GeminiService
   ) {
     super(config, geminiService);
@@ -143,7 +143,10 @@ export class Station1TextAnalysis extends BaseStation<Station1Input, Station1Out
     const results = await Promise.all(analysisPromises);
 
     characterNames.forEach((name, index) => {
-      analyses.set(name, results[index]);
+      const result = results[index];
+      if (result) {
+        analyses.set(name, result);
+      }
     });
 
     return analyses;
