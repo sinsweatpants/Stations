@@ -26,7 +26,7 @@ export class Station4EfficiencyMetrics extends BaseStation<Station4Input, Statio
   private efficiencyAnalyzer: EfficiencyAnalyzer;
 
   constructor(
-    config: StationConfig,
+    config: StationConfig<Station4Input, Station4Output>,
     geminiService: GeminiService
   ) {
     super(config, geminiService);

@@ -68,6 +68,11 @@ export class EfficiencyAnalyzer {
         const conflict1 = conflicts[i];
         const conflict2 = conflicts[j];
         
+        // Check if conflicts exist and have involvedCharacters
+        if (!conflict1 || !conflict2 || !conflict1.involvedCharacters || !conflict2.involvedCharacters) {
+          continue;
+        }
+        
         // Check if conflicts share characters
         const sharedCharacters = conflict1.involvedCharacters.filter(
           char => conflict2.involvedCharacters.includes(char)
@@ -123,7 +128,7 @@ export class EfficiencyAnalyzer {
     
     let activeCharacters = 0;
     
-    for (const character of network.characters.values()) {
+    for (const character of Array.from(network.characters.values())) {
       const isInConflict = Array.from(network.conflicts.values()).some(
         conflict => conflict.involvedCharacters.includes(character.id)
       );
@@ -145,7 +150,7 @@ export class EfficiencyAnalyzer {
     
     let activeRelationships = 0;
     
-    for (const relationship of network.relationships.values()) {
+    for (const relationship of Array.from(network.relationships.values())) {
       const isRelevantToConflict = Array.from(network.conflicts.values()).some(
         conflict => conflict.relatedRelationships.includes(relationship.id)
       );
@@ -163,7 +168,7 @@ export class EfficiencyAnalyzer {
     
     let activeConflicts = 0;
     
-    for (const conflict of network.conflicts.values()) {
+    for (const conflict of Array.from(network.conflicts.values())) {
       if (conflict.strength >= 5 && conflict.involvedCharacters.length >= 2) {
         activeConflicts++;
       }
@@ -211,6 +216,11 @@ export class EfficiencyAnalyzer {
         const char1 = characters[i];
         const char2 = characters[j];
         
+        // Check if characters exist and have descriptions
+        if (!char1 || !char2 || !char1.description || !char2.description) {
+          continue;
+        }
+        
         // Check if characters have similar narrative functions
         if (char1.description === char2.description) {
           redundantPairs++;
@@ -234,6 +244,12 @@ export class EfficiencyAnalyzer {
         
         const rel1 = relationships[i];
         const rel2 = relationships[j];
+        
+        // Check if relationships exist and have required properties
+        if (!rel1 || !rel2 || !rel1.source || !rel1.target || !rel1.type || 
+            !rel2.source || !rel2.target || !rel2.type) {
+          continue;
+        }
         
         // Check for duplicate relationships
         if ((rel1.source === rel2.source && rel1.target === rel2.target) ||
@@ -261,6 +277,13 @@ export class EfficiencyAnalyzer {
         
         const conflict1 = conflicts[i];
         const conflict2 = conflicts[j];
+        
+        // Check if conflicts exist and have required properties
+        if (!conflict1 || !conflict2 || !conflict1.subject || !conflict1.scope ||
+            !conflict2.subject || !conflict2.scope || !conflict1.involvedCharacters || 
+            !conflict2.involvedCharacters) {
+          continue;
+        }
         
         // Check for similar conflicts
         if (conflict1.subject === conflict2.subject && 
@@ -290,7 +313,10 @@ export class EfficiencyAnalyzer {
     
     let gini = 0;
     for (let i = 0; i < n; i++) {
-      gini += (2 * (i + 1) - n - 1) * sortedValues[i];
+      const value = sortedValues[i];
+      if (value !== undefined) {
+        gini += (2 * (i + 1) - n - 1) * value;
+      }
     }
     
     return gini / (n * sum);

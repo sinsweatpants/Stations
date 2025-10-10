@@ -14,6 +14,7 @@ import healthRouter from './routes/health';
 import logger from './utils/logger';
 import type { StationConfig } from './core/pipeline/base-station';
 
+ 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY ?? '';
 
 if (!GEMINI_API_KEY) {
@@ -52,11 +53,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       try {
         const validatedData = analyzeTextSchema.parse(req.body);
 
-        const station1Result = await station1.execute({
+        const station1Input: Station1Input = {
           fullText: validatedData.fullText,
           projectName: validatedData.projectName,
-          proseFilePath: validatedData.proseFilePath,
-        });
+        };
+        if (validatedData.proseFilePath !== undefined) {
+          station1Input.proseFilePath = validatedData.proseFilePath;
+        }
+        const station1Result = await station1.execute(station1Input);
 
         const station2Result = await station2.execute({
           station1Output: station1Result.output,
@@ -122,11 +126,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       try {
         const validatedData = analyzeTextSchema.parse(req.body);
 
-        const result = await analysisPipeline.runFullAnalysis({
+        const pipelineInput: any = {
           fullText: validatedData.fullText,
           projectName: validatedData.projectName,
-          proseFilePath: validatedData.proseFilePath,
-        });
+        };
+        if (validatedData.proseFilePath !== undefined) {
+          pipelineInput.proseFilePath = validatedData.proseFilePath;
+        }
+        const result = await analysisPipeline.runFullAnalysis(pipelineInput);
 
         res.json({
           success: true,

@@ -6,7 +6,7 @@
 الخادم الخلفي: Express + TypeScript + Gemini AI
 واجهة المستخدم: React 18 + Vite + Tailwind CSS + shadcn/ui
 قاعدة البيانات: Drizzle ORM
-اللغة الأساسية: TypeScript (strict mode)
+اللغة الأساسية: TypeScript (strict mode)...
 
 
 🏗️ البنية المعمارية - خريطة ذهنية

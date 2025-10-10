@@ -401,27 +401,6 @@ export default function HomePage() {
                       </div>
                     </div>
                   )}
-                        </div>
-                      </div>
-                    </AnalysisCard>
-                  </div>
-
-                  <AnalysisCard 
-                    title={language === 'ar' ? 'العلاقات الرئيسية' : 'Key Relationships'}
-                    icon={Network}
-                    badge={`${analysisResult.relationshipAnalysis.keyRelationships.length}`}
-                  >
-                    <div className="space-y-3">
-                      {analysisResult.relationshipAnalysis.keyRelationships.map((rel, idx) => (
-                        <div key={idx} className="p-3 bg-muted rounded-md">
-                          <p className="font-medium">
-                            {rel.characters[0]} ↔ {rel.characters[1]}
-                          </p>
-                          <p className="text-sm text-muted-foreground mt-1">{rel.dynamic}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </AnalysisCard>
                 </>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

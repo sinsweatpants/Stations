@@ -15,13 +15,13 @@ const safeGet = <T>(array: T[], index: number): T | undefined => {
 
 
 // Station 5 Interfaces
-interface Station5Input {
+export interface Station5Input {
   conflictNetwork: ConflictNetwork;
   station4Output: Station4Output;
   fullText: string;
 }
 
-interface Station5Output {
+export interface Station5Output {
   dynamicAnalysisResults: DynamicAnalysisResults;
   episodicIntegrationResults: EpisodicIntegrationResults;
   symbolicAnalysisResults: SymbolicAnalysisResults;
@@ -238,7 +238,7 @@ class DynamicAnalysisEngine {
       });
     }
     
-    for (const conflict of network.conflicts.values()) {
+    for (const conflict of Array.from(network.conflicts.values())) {
       const legacyTimestamp = (conflict as Conflict & {
         timestamp?: Date | Date[];
       }).timestamp;
@@ -341,22 +341,27 @@ class DynamicAnalysisEngine {
     }
     
     for (let i = 1; i < complexityProgression.length; i++) {
-      const change = Math.abs(
-        complexityProgression[i] - complexityProgression[i - 1]
-      );
+      const current = complexityProgression[i];
+      const previous = complexityProgression[i - 1];
+      const snapshot = network.snapshots[i];
+      
+      if (!current || !previous || !snapshot) continue;
+      
+      const change = Math.abs(current - previous);
       
       if (change > 5) {
         transitionPoints.push({
-          timestamp: network.snapshots[i].timestamp,
-          description: network.snapshots[i].description,
+          timestamp: snapshot.timestamp,
+          description: snapshot.description || '',
           impactScore: change
         });
       }
     }
     
-    const overallGrowthRate = complexityProgression.length > 1
-      ? (complexityProgression[complexityProgression.length - 1] - 
-         complexityProgression) / complexityProgression.length
+    const lastComplexity = complexityProgression[complexityProgression.length - 1];
+    const firstComplexity = complexityProgression[0];
+    const overallGrowthRate = complexityProgression.length > 1 && lastComplexity && firstComplexity
+      ? (lastComplexity - firstComplexity) / complexityProgression.length
       : 0;
     
     const stabilityMetrics = this.calculateStabilityMetrics(
@@ -409,7 +414,7 @@ class DynamicAnalysisEngine {
   ): Map<string, CharacterEvolution> {
     const evolutionMap = new Map<string, CharacterEvolution>();
     
-    for (const [charId, character] of network.characters) {
+    for (const [charId, character] of Array.from(network.characters.entries())) {
       const developmentStages: CharacterEvolution['developmentStages'] = [];
       const keyMoments: CharacterEvolution['keyMoments'] = [];
       
@@ -423,7 +428,7 @@ class DynamicAnalysisEngine {
         const conflicts: string[] = [];
         
         if (snapshot.networkState.relationships) {
-          for (const [relId, rel] of snapshot.networkState.relationships) {
+          for (const [relId, rel] of Array.from(snapshot.networkState.relationships.entries())) {
             if (rel.source === charId || rel.target === charId) {
               relationships.push(relId);
             }
@@ -431,7 +436,7 @@ class DynamicAnalysisEngine {
         }
         
         if (snapshot.networkState.conflicts) {
-          for (const [confId, conf] of snapshot.networkState.conflicts) {
+          for (const [confId, conf] of Array.from(snapshot.networkState.conflicts.entries())) {
             if (conf.involvedCharacters.includes(charId)) {
               conflicts.push(confId);
             }
@@ -512,6 +517,8 @@ class DynamicAnalysisEngine {
       const prev = stages[i - 1];
       const curr = stages[i];
       
+      if (!prev || !curr) continue;
+      
       const conflictChange = Math.abs(
         curr.conflicts.length - prev.conflicts.length
       );
@@ -531,7 +538,7 @@ class DynamicAnalysisEngine {
   ): Map<string, ConflictProgression> {
     const progressionMap = new Map<string, ConflictProgression>();
     
-    for (const [confId, conflict] of network.conflicts) {
+    for (const [confId, conflict] of Array.from(network.conflicts.entries())) {
       const phaseTransitions: ConflictProgression['phaseTransitions'] = [];
       const intensityProgression: number[] = [];
       
@@ -700,7 +707,11 @@ class EpisodicIntegrationEngine {
     
     const gaps: number[] = [];
     for (let i = 1; i < episodes.length; i++) {
-      gaps.push(episodes[i] - episodes[i - 1]);
+      const current = episodes[i];
+      const previous = episodes[i - 1];
+      if (current !== undefined && previous !== undefined) {
+        gaps.push(current - previous);
+      }
     }
     
     const avgGap = gaps.reduce((sum, gap) => sum + gap, 0) / gaps.length;
@@ -742,7 +753,7 @@ class EpisodicIntegrationEngine {
         const episodeConflicts: string[] = [];
         const featuredCharacters = new Set<string>();
         
-        for (const [conflictId, assignment] of assignments) {
+        for (const [conflictId, assignment] of Array.from(assignments.entries())) {
           if (assignment.episodes.includes(e)) {
             episodeConflicts.push(conflictId);
             seasonConflicts.add(conflictId);
@@ -782,16 +793,17 @@ class EpisodicIntegrationEngine {
         });
       }
       
-      seasonMap.set(s, {
+      const seasonDetails: any = {
         seasonNumber: s,
         seasonTitle: `Season ${s}`,
         episodes,
         majorConflicts: Array.from(seasonConflicts),
         seasonArc: `Season ${s} arc description`,
-        cliffhanger: s < structure.totalSeasons 
-          ? `Cliffhanger for Season ${s}` 
-          : undefined
-      });
+      };
+      if (s < structure.totalSeasons) {
+        seasonDetails.cliffhanger = `Cliffhanger for Season ${s}`;
+      }
+      seasonMap.set(s, seasonDetails);
     }
     
     return seasonMap;
@@ -802,7 +814,7 @@ class EpisodicIntegrationEngine {
     seasonBreakdown: Map<number, SeasonDetails>
   ): EpisodicBalanceReport {
     const allEpisodes: Episode[] = [];
-    for (const season of seasonBreakdown.values()) {
+    for (const season of Array.from(seasonBreakdown.values())) {
       allEpisodes.push(...season.episodes);
     }
     
@@ -921,7 +933,7 @@ export class Station5DynamicSymbolicStylistic extends BaseStation<Station5Input,
   private episodicEngine: EpisodicIntegrationEngine;
   
   constructor(
-    config: StationConfig,
+    config: StationConfig<Station5Input, Station5Output>,
     geminiService: GeminiService
   ) {
     super(config, geminiService);
@@ -1170,8 +1182,8 @@ export class Station5DynamicSymbolicStylistic extends BaseStation<Station5Input,
   
   protected extractRequiredData(input: Station5Input): Record<string, unknown> {
     return {
-      charactersCount: input.conflictNetwork.characters.length,
-      conflictsCount: input.conflictNetwork.conflicts.length,
+      charactersCount: input.conflictNetwork.characters.size,
+      conflictsCount: input.conflictNetwork.conflicts.size,
       station4Score: input.station4Output.efficiencyMetrics.overallEfficiencyScore,
       fullTextLength: input.fullText.length
     };

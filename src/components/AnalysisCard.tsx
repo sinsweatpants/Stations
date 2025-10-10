@@ -5,6 +5,7 @@ import { LucideIcon } from 'lucide-react';
 interface AnalysisCardProps {
   title: string;
   icon: LucideIcon;
+   
   children: React.ReactNode;
   badge?: string;
 }

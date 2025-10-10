@@ -1,4 +1,4 @@
-import winston from 'winston';
+import * as winston from 'winston';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -25,6 +25,7 @@ const customFormat = printf(({ level, message, timestamp, stack, ...meta }) => {
 });
 
 const logger = winston.createLogger({
+   
   level: process.env.LOG_LEVEL || 'info',
   format: combine(
     errors({ stack: true }),

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 const HTML_TAG_REGEX = /<[^>]*>/g;
+// eslint-disable-next-line no-control-regex
 const CONTROL_CHAR_REGEX = /[\u0000-\u001F\u007F]+/g;
 
 function sanitizeScalar(value: string): string {

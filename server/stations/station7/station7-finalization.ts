@@ -7,13 +7,13 @@ import * as path from 'path';
 import logger from '../../utils/logger';
 
 // Station 7 Interfaces
-interface Station7Input {
+export interface Station7Input {
   conflictNetwork: ConflictNetwork;
   station6Output: Station6Output;
   allPreviousStationsData: Map<number, unknown>;
 }
 
-interface Station7Output {
+export interface Station7Output {
   visualizationResults: VisualizationResults;
   platformAdaptationSuggestions: PlatformAdaptationResults;
   finalReport: FinalAnalysisReport;
@@ -226,14 +226,14 @@ class ExportPackageGenerator {
 
 
 export class Station7Finalization extends BaseStation<Station7Input, Station7Output> {
-    private visualizationEngine: VisualizationEngine;
-    private adaptationEngine: PlatformAdaptationEngine;
-    private reportGenerator: FinalReportGenerator;
-    private exportGenerator: ExportPackageGenerator;
+    private visualizationEngine!: VisualizationEngine;
+    private adaptationEngine!: PlatformAdaptationEngine;
+    private reportGenerator!: FinalReportGenerator;
+    private exportGenerator!: ExportPackageGenerator;
     private outputDir: string;
 
     constructor(
-        config: StationConfig,
+        config: StationConfig<Station7Input, Station7Output>,
         geminiService: GeminiService,
         outputDir: string = 'analysis_output'
     ) {
@@ -350,8 +350,8 @@ export class Station7Finalization extends BaseStation<Station7Input, Station7Out
 
     protected extractRequiredData(input: Station7Input): Record<string, unknown> {
         return {
-            charactersCount: input.conflictNetwork.characters.length,
-            conflictsCount: input.conflictNetwork.conflicts.length,
+            charactersCount: input.conflictNetwork.characters.size,
+            conflictsCount: input.conflictNetwork.conflicts.size,
             station6Issues: input.station6Output.diagnosticsReport.criticalIssues.length,
             stationsTracked: input.allPreviousStationsData.size,
         };

@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import heroImage from '@assets/generated_images/Arabic_manuscript_hero_image_8c9cfc14.png';
+// import heroImage from '@assets/generated_images/Arabic_manuscript_hero_image_8c9cfc14.png';
 
 interface HeroSectionProps {
   onGetStarted: () => void;
@@ -42,7 +42,7 @@ export default function HeroSection({ onGetStarted }: HeroSectionProps) {
       <div 
         className="absolute inset-0 bg-cover bg-center"
         style={{ 
-          backgroundImage: `url(${heroImage})`,
+          backgroundImage: `linear-gradient(135deg, #667eea 0%, #764ba2 100%)`,
         }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/70 to-background" />

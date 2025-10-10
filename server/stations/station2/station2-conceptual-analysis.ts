@@ -69,7 +69,7 @@ export interface Station2Output {
 export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Station2Output> {
   
   constructor(
-    config: StationConfig,
+    config: StationConfig<Station2Input, Station2Output>,
     geminiService: GeminiService
   ) {
     super(config, geminiService);
@@ -97,20 +97,20 @@ export class Station2ConceptualAnalysis extends BaseStation<Station2Input, Stati
       dynamicTone,
       artisticReferences
     ] = await Promise.all([
-      this.generateElevatorPitch(storyStatement),
-      this.generateGenreMatrix(hybridGenre, context),
-      this.generateDynamicTone(hybridGenre, context),
-      this.generateArtisticReferences(hybridGenre, context)
+      this.generateElevatorPitch(storyStatement || ''),
+      this.generateGenreMatrix(hybridGenre || '', context),
+      this.generateDynamicTone(hybridGenre || '', context),
+      this.generateArtisticReferences(hybridGenre || '', context)
     ]);
 
     return {
-      storyStatement,
+      storyStatement: storyStatement || '',
       threeDMap,
-      elevatorPitch,
-      hybridGenre,
-      genreContributionMatrix: genreMatrix,
-      dynamicTone,
-      artisticReferences,
+      elevatorPitch: elevatorPitch || '',
+      hybridGenre: hybridGenre || '',
+      genreContributionMatrix: genreMatrix || {},
+      dynamicTone: dynamicTone || '',
+      artisticReferences: artisticReferences || [],
       metadata: {
         analysisTimestamp: new Date(),
         status: 'Success'

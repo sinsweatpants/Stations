@@ -68,6 +68,7 @@ export class AnalysisPipeline {
       timeout: 60_000,
     });
 
+     
     this.outputDirectory = config.outputDir ?? path.join(process.cwd(), 'analysis_output');
     if (!fs.existsSync(this.outputDirectory)) {
       fs.mkdirSync(this.outputDirectory, { recursive: true });
@@ -123,11 +124,14 @@ export class AnalysisPipeline {
       }
     };
 
-    const station1Output = await runStation(1, () => this.station1.execute({
+    const station1Input: Station1Input = {
       fullText: input.fullText,
       projectName: input.projectName,
-      proseFilePath: input.proseFilePath,
-    }));
+    };
+    if (input.proseFilePath !== undefined) {
+      station1Input.proseFilePath = input.proseFilePath;
+    }
+    const station1Output = await runStation(1, () => this.station1.execute(station1Input));
 
     const station2Output = await runStation(2, () => this.station2.execute({
       station1Output,
